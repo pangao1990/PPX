@@ -1,7 +1,7 @@
 {
   "name": "vue-pywebview-pyinstaller",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "基于Vue3、pywebview和PyInstaller框架，构建macOS和windows平台的客户端。本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
@@ -11,7 +11,7 @@
     "start": "vite build && run-script-os",
     "start:macos": "./pyenv/bin/python -X dev ./pyapp/main.py",
     "start:windows": ".\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
-    "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\main.py",
+    "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainCEF.py",
     "dev": "vite",
     "pre": "shx rm -rf build && vite build && run-script-os",
     "pre:macos": "./pyenv/bin/pyinstaller -w --clean ./pyapp/spec/macos-pre.spec",
