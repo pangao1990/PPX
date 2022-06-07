@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-
+import card from '../../node_modules/vue-amis-sdk/demo/components/amis/carousel.vue'
 defineProps({
-  msg: String
+  msg: String,
 })
 
 let creator = ref('pangao')
@@ -12,13 +12,12 @@ const getOwner = () => {
     creator.value = res
   })
 }
-
 </script>
 
 <template>
   <div>
     <h1>{{ msg }}</h1>
-
+    <card />
     <p>
       基于
       <a href="https://v3.cn.vuejs.org" target="_blank">Vue3</a>
