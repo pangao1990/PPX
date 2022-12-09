@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-FilePath: /PyWebView/vue-pywebview-pyinstaller/pyapp/spec/getSpec.py
+FilePath: /vue-pywebview-pyinstaller/pyapp/spec/getSpec.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2022-03-23 14:42:35
+LastEditTime: 2022-12-09 17:12:21
 Description: 生成 .spec APP配置文件
 '''
 
+import argparse
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,15 +25,20 @@ cryptoKey = '0123456789123456'    # 对Python字节码加密
 appName = cfg.appName    # 项目名称
 version = cfg.appVersion    # 版本号
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--mac", action="store_true", dest="if_mac", help="decrypt")
+args = parser.parse_args()
+ifMac = args.if_mac
+
+logoExt = 'icns' if ifMac else 'ico'
+
 
 # spec配置文件 前半部分通用格式
 def specFirstPart():
     return f'''
 # -*- mode: python ; coding: utf-8 -*-
 
-import json
 import os
-import sys
 
 import PyInstaller.config
 
@@ -47,7 +53,7 @@ if not os.path.exists(cachePath):
 PyInstaller.config.CONF['workpath'] = cachePath
 
 # icon相对路径
-icoPath = os.path.join('..', '..', 'public', 'logo.ico')
+icoPath = os.path.join('..', '..', 'public', 'logo.{logoExt}')
 
 # 项目名称
 appName = '{appName}'
