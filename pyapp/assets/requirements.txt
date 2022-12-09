@@ -1,3 +1,3 @@
-pywebview==3.6.2
-pyinstaller==4.10
-tinyaes==1.0.3
+pywebview==3.7.2
+pyinstaller==5.7.0
+tinyaes==1.0.4
