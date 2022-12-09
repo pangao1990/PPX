@@ -22,7 +22,7 @@
     "build": "shx rm -rf build && vite build && run-script-os",
     "build:macos": "./pyenv/bin/pyinstaller --clean ./pyapp/spec/macos.spec",
     "build:windows": ".\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows.spec",
-    "build:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-cef.spec && shx mv .\\build\\windows-pre-cef .\\buildCEF\\windows-pre-cef",
+    "build:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-cef.spec && shx mv .\\build\\windows-cef .\\buildCEF\\windows-cef",
     "build:folder": "shx rm -rf build && vite build && .\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder.spec",
     "build:folder:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-cef.spec && shx mv .\\build\\windows-folder-cef .\\buildCEF\\windows-folder-cef"
   },
