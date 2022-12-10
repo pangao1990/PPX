@@ -76,7 +76,7 @@ npm run init
 npm run dev
 
 # 开发模式 + 兼容模式，仅win系统（未测试）
-npm run pre:cef
+npm run dev:cef
 ```
 
 HMR 原理：
