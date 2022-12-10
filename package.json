@@ -1,7 +1,7 @@
 {
   "name": "vue-pywebview-pyinstaller",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "基于Vue3、pywebview和PyInstaller框架，构建macOS和windows平台的客户端。本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
