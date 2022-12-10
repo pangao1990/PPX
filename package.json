@@ -12,7 +12,11 @@
     "start:macos": "./pyenv/bin/python -X dev ./pyapp/main.py",
     "start:windows": ".\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
     "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainCEF.py",
-    "dev": "vite",
+    "vite": "vite",
+    "dev": "run-script-os",
+    "dev:macos": "concurrently --kill-others \"vite \" \"nodemon --exec \"\"./pyenv/bin/python -X dev ./pyapp/mainDEV.py\"\"",
+    "dev:windows":"concurrently --kill-others \"vite \" \"nodemon --exec \"\".\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\mainDEV.py\"\"",
+    "dev:cef": "concurrently --kill-others \"vite \" \"nodemon --exec \"\".\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainDEV_CEF.py\"\"",
     "pre": "shx rm -rf build && vite build && run-script-os",
     "pre:macos": "./pyenv/bin/pyinstaller --clean ./pyapp/spec/macos-pre.spec",
     "pre:windows": ".\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-pre.spec",
@@ -31,8 +35,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.2.0",
-    "vite": "^2.8.0",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
     "run-script-os": "^1.1.6",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "vite": "^2.8.0"
   }
 }
