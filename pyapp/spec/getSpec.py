@@ -5,7 +5,7 @@ FilePath: /vue-pywebview-pyinstaller/pyapp/spec/getSpec.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2022-12-09 17:12:21
+LastEditTime: 2022-12-10 21:20:06
 Description: 生成 .spec APP配置文件
 '''
 
@@ -20,6 +20,7 @@ cfg = Config()
 buildPath = 'build'    # 存放最终打包成app的相对路径
 console = False    # 是否展示终端
 mainName = 'main.py'    # 主程序 main.py or mainCEF.py
+addDll = '[]'    # 添加缺失的动态链接库
 cryptoKey = '0123456789123456'    # 对Python字节码加密
 
 appName = cfg.appName    # 项目名称
@@ -67,7 +68,7 @@ block_cipher = pyi_crypto.PyiBlockCipher(key='{cryptoKey}')
 
 a = Analysis(['../{mainName}'],
             pathex=[],
-            binaries=[],
+            binaries={addDll},
             datas=[('../../dist', 'web')],
             hiddenimports=[],
             hookspath=[],
@@ -200,8 +201,27 @@ with open(os.path.join(specDir, 'windows-folder-pre.spec'), 'w+', encoding='utf-
 
 
 mainName = 'mainCEF.py'    # 主程序 main.py or mainCEF.py
-console = False    # 是否展示终端
 buildPath = 'buildCEF'    # 存放最终打包成app的相对路径
+console = False    # 是否展示终端
+# 添加缺失的动态链接库
+addDll = """
+[
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/subprocess.exe','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/libcef.dll','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/chrome_elf.dll','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/v8_context_snapshot.bin','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef.pak','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_100_percent.pak','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_200_percent.pak','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_extensions.pak','./'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './cefpython3'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./cefpython3'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/en-US.pak','./locales'),
+    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/zh-CN.pak','./locales')
+]
+"""
 # windows-pre.spec 带终端
 with open(os.path.join(specDir, 'windows-cef.spec'), 'w+', encoding='utf-8') as f:
     f.write(specFirstPart() + specPackagePartEXE())

@@ -7,7 +7,7 @@
   "scripts": {
     "init": "npm install && run-script-os",
     "init:macos": "python3 pyapp/spec/getSpec.py -m && python3 -m venv pyenv && ./pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/assets/requirements.txt",
-    "init:windows": "python pyapp\\spec\\getSpec.py && python -m venv pyenv\\pyenv && .\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && python -m venv pyenv\\pyenvCEF && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3 && shx mv .\\pyapp\\assets\\hook-cefpython3.py .\\pyenv\\pyenvCEF\\Lib\\site-packages\\PyInstaller\\hooks",
+    "init:windows": "python pyapp\\spec\\getSpec.py && python -m venv pyenv\\pyenv && .\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && python -m venv pyenv\\pyenvCEF && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3",
     "start": "vite build && run-script-os",
     "start:macos": "./pyenv/bin/python -X dev ./pyapp/main.py",
     "start:windows": ".\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
