@@ -1,10 +1,10 @@
 ### 前言
 
-现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-app)。
+现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller)。
 
 ### 应用简介
 
-[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-app) 是一款基于 Vue3、pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台客户端的应用。本应用的视图层采用 HTML+JS+CSS，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller) 是一款基于 Vue3、pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台客户端的应用。本应用的视图层采用 HTML+JS+CSS，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
@@ -36,14 +36,14 @@
 利用 git（[git 安装教程](https://blog.pangao.vip/Git安装教程/)） 下载应用，如下所示：
 
 ```
-git clone https://github.com/pangao1990/vue-pywebview-app.git
+git clone https://github.com/pangao1990/vue-pywebview-pyinstaller.git
 ```
 
-或者，直接在我的 [github](https://github.com/pangao1990/vue-pywebview-app) 下载。
+或者，直接在我的 [github](https://github.com/pangao1990/vue-pywebview-pyinstaller) 下载。
 
 ```
 # 进入项目
-cd vue-pywebview-app
+cd vue-pywebview-pyinstaller
 ```
 
 进入项目，项目清单如下所示：
