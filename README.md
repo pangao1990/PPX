@@ -27,9 +27,7 @@
 #### 运行环境
 
 - npm6.0+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
-- Python3.5-3.8 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
-
-**注意**：在 windows 系统下，由于 Pywebview3 所依赖的 pythonnet 包仅支持 Python3.5-3.8 版本，因此，推荐 win 用户使用 Python3.8 版本。
+- Python3.5-3.9 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
 
 #### 应用下载
 
