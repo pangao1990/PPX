@@ -29,7 +29,7 @@ const getOwner = () => {
       框架，构建macOS和windows平台的客户端。
     </p>
 
-    <p>本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。</p>
+    <p>本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API，支持HMR。</p>
 
     <p>用户名：{{ creator }}</p>
     <button v-if="creator == 'pangao'" type="button" @click="getOwner">获取本机用户名</button>
