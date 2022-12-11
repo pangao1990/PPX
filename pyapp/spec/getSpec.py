@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-FilePath: /vue-pywebview-pyinstaller/pyapp/spec/getSpec.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2022-12-10 21:20:06
+LastEditTime: 2022-12-11 14:06:12
 Description: 生成 .spec APP配置文件
 '''
 

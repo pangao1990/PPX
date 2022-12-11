@@ -1,0 +1,27 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "pyenv",
+    "public",
+    ".vscode",
+    "src",
+    "node_modules/**/node_modules"
+  ],
+  "verbose": true,
+  "execMap": {
+    "py": "run-script-os"
+  },
+  "watch": [
+    "pyapp/"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "py",
+  "events": {
+    "start": "cls || clear",
+    "restart": "cls || clear",
+    "exit": "cls || clear"
+  }
+}

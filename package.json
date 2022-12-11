@@ -1,18 +1,19 @@
 {
   "name": "vue-pywebview-pyinstaller",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "基于Vue3、pywebview和PyInstaller框架，构建macOS和windows平台的客户端。本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
     "init": "npm install && run-script-os",
     "init:macos": "python3 pyapp/spec/getSpec.py -m && python3 -m venv pyenv && ./pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/assets/requirements.txt",
     "init:windows": "python pyapp\\spec\\getSpec.py && python -m venv pyenv\\pyenv && .\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && python -m venv pyenv\\pyenvCEF && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3",
-    "start": "vite build && run-script-os",
-    "start:macos": "./pyenv/bin/python -X dev ./pyapp/main.py",
-    "start:windows": ".\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
-    "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainCEF.py",
+    "start": "run-p dev startos",
     "dev": "vite",
+    "startos": "run-script-os",
+    "startos:macos": "nodemon --exec ./pyenv/bin/python -X dev ./pyapp/main.py",
+    "startos:windows": "nodemon --exec .\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
+    "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainCEF.py",
     "pre": "shx rm -rf build && vite build && run-script-os",
     "pre:macos": "./pyenv/bin/pyinstaller --clean ./pyapp/spec/macos-pre.spec",
     "pre:windows": ".\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-pre.spec",
@@ -33,6 +34,8 @@
     "@vitejs/plugin-vue": "^2.2.0",
     "vite": "^2.9.13",
     "run-script-os": "^1.1.6",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "npm-run-all": "^4.1.5",
+    "nodemon": "^2.0.20"
   }
 }

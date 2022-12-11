@@ -217,10 +217,17 @@ npm run build:folder
 npm run build:folder:cef
 ```
 
+#### HMR 原理
+
+- 使用 npm-run-all 并行启用 vite(自带热更新) 和 pywebview ，达到 HRM 效果
+- 使用 nodemon 监听 `pyapp/**/*.py` 文件，有修改自动重启应用，达到 HRM 效果
+
+\*注：这里感谢 [WnagoiYy](https://github.com/WnagoiYy) 同学的 PR。
+
 ---
 
 更多编程教学请关注公众号：**潘高陪你学编程**
 
-![image](https://cdn.jsdelivr.net/gh/pangao1990/pangao1990.github.io@master/pic/潘高陪你学编程.jpg)
+![image](https://blog.pangao.vip/pic/潘高陪你学编程.jpg)
 
 ---
