@@ -65,26 +65,6 @@ npm run init
 
 项目里多了一个 node_modules 文件夹，用于存放 npm 下载的包；多了一个 pyenv 文件夹，用于存放 Python 虚拟环境。
 
-### 开发模式
-
-输入如下命令，即可启动应用，并支持 vue 热更新：
-
-```
-# 开发模式，支持vue和py的HMR
-npm run dev
-
-# 开发模式 + 兼容模式，仅win系统（未测试）
-npm run dev:cef
-```
-
-HMR 原理：
-
-- 增加 mainDEV.py，窗口的 url 更改为`127.0.0.1:3000/index.html`；
-- 通过 concurrently 并行启动 vite 开发模式（自带热更新）和 pywebview；
-- 使用 nodemon 监听 `pyapp/**/*.py` 文件，有修改自动重启软件。
-
-> 未解决的小 bug：在退出时需要手动关闭 pywebview 窗口
-
 ### 应用运行
 
 输入如下命令，即可启动应用：
@@ -249,8 +229,3 @@ npm run build:folder:cef
 ![image](https://blog.pangao.vip/pic/潘高陪你学编程.jpg)
 
 ---
-
-### 更新日志
-
-- 2022-12-10：修改 Readme.md 的链接；ignore 添加 pyenv 文件夹
-- 2022-12-10：增加 HMR：vue 直接修改即可更新，py 文件修改会重启 pywebview（未测试 macos 和 cef 模式）
