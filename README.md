@@ -113,7 +113,7 @@ macOS 系统的浏览器引擎就没有那么多版本了，由于 macOS 系统�
 
 #### 构建客户端 API
 
-构建客户端的主程序是在 pyapp 文件夹下的 main.py ，如下所示：
+构建客户端的主程序是 main.py ，如下所示：
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-7.png)
 
