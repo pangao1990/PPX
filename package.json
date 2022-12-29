@@ -1,41 +1,35 @@
 {
   "name": "vue-pywebview-pyinstaller",
   "private": true,
-  "version": "1.3.0",
-  "description": "基于Vue3、pywebview和PyInstaller框架，构建macOS和windows平台的客户端。本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。",
+  "version": "2.0.0",
+  "description": "基于pywebview和PyInstaller框架，构建macOS和windows平台的客户端。本应用的视图层支持Vue、React、Angular、HTML中的任意一种，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
     "init": "npm install && run-script-os",
-    "init:macos": "python3 pyapp/spec/getSpec.py -m && python3 -m venv pyenv && ./pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/assets/requirements.txt",
-    "init:windows": "python pyapp\\spec\\getSpec.py && python -m venv pyenv\\pyenv && .\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && python -m venv pyenv\\pyenvCEF && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3",
-    "start": "run-p dev startos",
-    "dev": "vite",
+    "init:macos": "npm install --prefix ./gui && python3 pyapp/spec/getSpec.py --mac && python3 -m venv pyenv && ./pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/assets/requirements.txt",
+    "init:windows": "npm install --prefix .\\gui && python pyapp\\spec\\getSpec.py && python -m venv pyenv\\pyenv && .\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && python -m venv pyenv\\pyenvCEF && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\assets\\requirements.txt && .\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3",
+    "start": "concurrently \"npm run dev --prefix ./gui\" \"npm run startos\"",
     "startos": "run-script-os",
-    "startos:macos": "nodemon --exec ./pyenv/bin/python -X dev ./pyapp/main.py",
-    "startos:windows": "nodemon --exec .\\pyenv\\pyenv\\Scripts\\python -X dev .\\pyapp\\main.py",
-    "start:cef": "vite build && .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\pyapp\\mainCEF.py",
-    "pre": "shx rm -rf build && vite build && run-script-os",
+    "startos:macos": "nodemon --config ./pyapp/nodemon.json --exec ./pyenv/bin/python -X dev ./main.py",
+    "startos:windows": "nodemon --config .\\pyapp\\nodemon.json --exec .\\pyenv\\pyenv\\Scripts\\python -X dev .\\main.py",
+    "start:cef": "concurrently \"npm run dev --prefix ./gui\" \"nodemon --config .\\pyapp\\nodemon.json --exec .\\pyenv\\pyenvCEF\\Scripts\\python -X dev .\\main.py --cef\"",
+    "pre": "shx rm -rf build && npm run build --prefix ./gui && run-script-os",
     "pre:macos": "./pyenv/bin/pyinstaller --clean ./pyapp/spec/macos-pre.spec",
     "pre:windows": ".\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-pre.spec",
-    "pre:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-pre-cef.spec && shx mv .\\build\\windows-pre-cef .\\buildCEF\\windows-pre-cef",
-    "pre:folder": "shx rm -rf build && vite build && .\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-pre.spec",
-    "pre:folder:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-pre-cef.spec && shx mv .\\build\\windows-folder-pre-cef .\\buildCEF\\windows-folder-pre-cef",
-    "build": "shx rm -rf build && vite build && run-script-os",
+    "pre:cef": "shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-pre-cef.spec && shx mv .\\build\\windows-pre-cef .\\buildCEF\\windows-pre-cef",
+    "pre:folder": "shx rm -rf build && npm run build --prefix ./gui && .\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-pre.spec",
+    "pre:folder:cef": "shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-pre-cef.spec && shx mv .\\build\\windows-folder-pre-cef .\\buildCEF\\windows-folder-pre-cef",
+    "build": "shx rm -rf build && npm run build --prefix ./gui && run-script-os",
     "build:macos": "./pyenv/bin/pyinstaller --clean ./pyapp/spec/macos.spec",
     "build:windows": ".\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows.spec",
-    "build:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-cef.spec && shx mv .\\build\\windows-cef .\\buildCEF\\windows-cef",
-    "build:folder": "shx rm -rf build && vite build && .\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder.spec",
-    "build:folder:cef": "shx rm -rf buildCEF && vite build && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-cef.spec && shx mv .\\build\\windows-folder-cef .\\buildCEF\\windows-folder-cef"
-  },
-  "dependencies": {
-    "vue": "^3.2.25"
+    "build:cef": "shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-cef.spec && shx mv .\\build\\windows-cef .\\buildCEF\\windows-cef",
+    "build:folder": "shx rm -rf build && npm run build --prefix ./gui && .\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder.spec",
+    "build:folder:cef": "shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-cef.spec && shx mv .\\build\\windows-folder-cef .\\buildCEF\\windows-folder-cef"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.2.0",
-    "vite": "^2.9.13",
     "run-script-os": "^1.1.6",
     "shx": "^0.3.4",
-    "npm-run-all": "^4.1.5",
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.20"
   }
 }

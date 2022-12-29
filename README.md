@@ -4,13 +4,13 @@
 
 ### 应用简介
 
-[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller) 是一款基于 Vue3、pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台客户端的应用。本应用的视图层采用 HTML+JS+CSS，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
-- 采用 Vue3 框架开发视图层，简洁高效
-- 采用 Python 编程语音开发业务层，模块丰富
-- 本应用已经封装打包环节，一键生成 macOS 和 windows 平台的客户端应用。开发者只需要关注试图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
+- 视图层可使用任意一款你喜欢的前端框架，比如 Vue、React、Angular、HTML 等，迁移无压力
+- 采用 Python 编程语言开发业务层，模块丰富
+- 本应用已经封装打包环节，一键生成 macOS 和 windows 平台的客户端应用。开发者只需要关注视图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
 
 ##### 适用场景
 
@@ -20,14 +20,14 @@
 
 ##### 适用人群
 
-熟悉 Vue3 和 Python 编程的程序员。
+熟悉 Python3 和 任意一款前端框架，如 Vue、React、Angular、HTML 编程的程序员。
 
 ### 应用安装
 
 #### 运行环境
 
-- npm6.0+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
-- Python3.5-3.9 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
+- npm8.0+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
+- Python3.6-3.8 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
 
 #### 应用下载
 
@@ -113,13 +113,9 @@ macOS 系统的浏览器引擎就没有那么多版本了，由于 macOS 系统�
 
 #### 构建客户端 API
 
-构建客户端的主程序是在 pyapp 文件夹下的 main.py 和 mainCEF.py ，如下所示：
+构建客户端的主程序是在 pyapp 文件夹下的 main.py ，如下所示：
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-7.png)
-
-mainCEF.py 脚本的内容和 main.py 几乎一模一样，也就是 新增了一个 cef 模式，用于 windows 系统的兼容模式。
-
-![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-8.png)
 
 main.py 里面主要是依靠 webview.create_window 和 webview.start 这两个 API 来构建客户端。其他的一些 API，我也会在后面的教程中详细介绍。或者可以直接查看 [pywebview 官网](https://pywebview.flowrl.com/guide/api.html) 了解详情。
 
@@ -189,38 +185,59 @@ pywebview 建议 macOS 用 [py2app](https://py2app.readthedocs.io/en/latest/) �
 我就不介绍 pyinstaller 的打包方法了，后面我会出这个框架详细的打包介绍。这里我将打包方法封装在应用中，只需要按命令打包即可。
 
 ```
+# 开发模式
+npm run start
+
+# 开发模式，cef兼容模式【仅win系统】
+npm run start:cef
+
 # 预打包，带console，方便输出日志信息
 npm run pre
 
-# 预打包，带console，兼容模式，仅win系统
+# 预打包，带console，cef兼容模式【仅win系统】
 npm run pre:cef
 
-# 预打包，带console，生成文件夹，仅win系统
+# 预打包，带console，生成文件夹【仅win系统】
 npm run pre:folder
 
-# 预打包，带console，生成文件夹，兼容模式，仅win系统
+# 预打包，带console，生成文件夹，cef兼容模式【仅win系统】
 npm run pre:folder:cef
 
 
 # 正式打包
 npm run build
 
-# 正式打包，兼容模式，仅win系统
+# 正式打包，cef兼容模式【仅win系统】
 npm run build:cef
 
-# 正式打包，生成文件夹，仅win系统
+# 正式打包，生成文件夹【仅win系统】
 npm run build:folder
 
-# 正式打包，生成文件夹，兼容模式，仅win系统
+# 正式打包，生成文件夹，cef兼容模式【仅win系统】
 npm run build:folder:cef
 ```
 
 #### HMR 原理
 
-- 使用 npm-run-all 并行启用 vite(自带热更新) 和 pywebview ，达到 HRM 效果
-- 使用 nodemon 监听 `pyapp/**/*.py` 文件，有修改自动重启应用，达到 HRM 效果
+- 使用 concurrently 并行启用 vite(自带热更新) 和 pywebview
+- 使用 nodemon 监听 `api/*.py` 文件，有修改自动重启应用，达到 HRM 效果
 
 \*注：这里感谢 [WnagoiYy](https://github.com/WnagoiYy) 同学的 PR。
+
+#### 历史版本
+
+##### V2.0.0
+
+- 将 Vue3 框架整体分离至 gui 文件夹，如此一来，你可以随意替换 gui 文件夹下的前端框架，使用 Vue、React、Angular、HTML ，或者你喜欢的其他框架均可
+- 整理框架结构，优化代码逻辑
+
+##### V1.3.0
+
+- 新增热更新
+
+##### V1.0.0
+
+- 初始版本
 
 ---
 

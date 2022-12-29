@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2022-12-11 14:06:12
+LastEditTime: 2022-12-29 16:58:06
 Description: 生成 .spec APP配置文件
 '''
 
@@ -18,7 +18,6 @@ cfg = Config()
 
 buildPath = 'build'    # 存放最终打包成app的相对路径
 console = False    # 是否展示终端
-mainName = 'main.py'    # 主程序 main.py or mainCEF.py
 addDll = '[]'    # 添加缺失的动态链接库
 cryptoKey = '0123456789123456'    # 对Python字节码加密
 
@@ -26,7 +25,7 @@ appName = cfg.appName    # 项目名称
 version = cfg.appVersion    # 版本号
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-m", "--mac", action="store_true", dest="if_mac", help="decrypt")
+parser.add_argument("-m", "--mac", action="store_true", dest="if_mac", help="if_mac")
 args = parser.parse_args()
 ifMac = args.if_mac
 
@@ -53,7 +52,7 @@ if not os.path.exists(cachePath):
 PyInstaller.config.CONF['workpath'] = cachePath
 
 # icon相对路径
-icoPath = os.path.join('..', '..', 'public', 'logo.{logoExt}')
+icoPath = os.path.join('..', '..', 'icon', 'logo.{logoExt}')
 
 # 项目名称
 appName = '{appName}'
@@ -65,10 +64,10 @@ version = '{version}'
 block_cipher = pyi_crypto.PyiBlockCipher(key='{cryptoKey}')
 
 
-a = Analysis(['../{mainName}'],
+a = Analysis(['../../main.py'],
             pathex=[],
             binaries={addDll},
-            datas=[('../../dist', 'web')],
+            datas=[('../../gui/dist', 'web')],
             hiddenimports=[],
             hookspath=[],
             hooksconfig={{}},
@@ -177,61 +176,69 @@ coll = COLLECT(exe,
 # 生成 spec 配置文件
 specDir = os.path.dirname(__file__)
 
-# macos.spec
-with open(os.path.join(specDir, 'macos.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartAPP())
-# windows.spec
-with open(os.path.join(specDir, 'windows.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartEXE())
-# windows-folder.spec
-with open(os.path.join(specDir, 'windows-folder.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specUnpackagePartEXE())
 
-console = True    # 是否展示终端
-# macos-pre.spec 带终端
-with open(os.path.join(specDir, 'macos-pre.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartAPP())
-# windows-pre.spec 带终端
-with open(os.path.join(specDir, 'windows-pre.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartEXE())
-# windows-folder-pre.spec
-with open(os.path.join(specDir, 'windows-folder-pre.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specUnpackagePartEXE())
+if ifMac:
+    console = False    # 是否展示终端
+    # macos.spec
+    with open(os.path.join(specDir, 'macos.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartAPP())
 
+    console = True    # 是否展示终端
+    # macos-pre.spec 带终端
+    with open(os.path.join(specDir, 'macos-pre.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartAPP())
+else:
+    console = False    # 是否展示终端
+    # windows.spec
+    with open(os.path.join(specDir, 'windows.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
+    # windows-folder.spec
+    with open(os.path.join(specDir, 'windows-folder.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specUnpackagePartEXE())
 
-mainName = 'mainCEF.py'    # 主程序 main.py or mainCEF.py
-buildPath = 'buildCEF'    # 存放最终打包成app的相对路径
-console = False    # 是否展示终端
-# 添加缺失的动态链接库
-addDll = """
-[
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/subprocess.exe','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/libcef.dll','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/chrome_elf.dll','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/v8_context_snapshot.bin','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef.pak','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_100_percent.pak','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_200_percent.pak','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_extensions.pak','./'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './cefpython3'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./cefpython3'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/en-US.pak','./locales'),
-    ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/zh-CN.pak','./locales')
-]
-"""
-# windows-pre.spec 带终端
-with open(os.path.join(specDir, 'windows-cef.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartEXE())
-# windows-folder-pre.spec
-with open(os.path.join(specDir, 'windows-folder-cef.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specUnpackagePartEXE())
+    console = True    # 是否展示终端
+    # macos-pre.spec 带终端
+    with open(os.path.join(specDir, 'macos-pre.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartAPP())
+    # windows-pre.spec 带终端
+    with open(os.path.join(specDir, 'windows-pre.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
+    # windows-folder-pre.spec
+    with open(os.path.join(specDir, 'windows-folder-pre.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specUnpackagePartEXE())
 
-console = True    # 是否展示终端
-# windows-pre.spec 带终端
-with open(os.path.join(specDir, 'windows-pre-cef.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specPackagePartEXE())
-# windows-folder-pre.spec
-with open(os.path.join(specDir, 'windows-folder-pre-cef.spec'), 'w+', encoding='utf-8') as f:
-    f.write(specFirstPart() + specUnpackagePartEXE())
+    buildPath = 'buildCEF'    # 存放最终打包成app的相对路径
+    console = False    # 是否展示终端
+    # 添加缺失的动态链接库
+    addDll = """
+    [
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/subprocess.exe','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/libcef.dll','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/chrome_elf.dll','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/v8_context_snapshot.bin','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef.pak','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_100_percent.pak','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_200_percent.pak','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_extensions.pak','./'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './cefpython3'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./cefpython3'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/en-US.pak','./locales'),
+        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/zh-CN.pak','./locales')
+    ]
+    """
+    # windows-pre.spec 带终端
+    with open(os.path.join(specDir, 'windows-cef.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
+    # windows-folder-pre.spec
+    with open(os.path.join(specDir, 'windows-folder-cef.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specUnpackagePartEXE())
+
+    console = True    # 是否展示终端
+    # windows-pre.spec 带终端
+    with open(os.path.join(specDir, 'windows-pre-cef.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
+    # windows-folder-pre.spec
+    with open(os.path.join(specDir, 'windows-folder-pre-cef.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specUnpackagePartEXE())

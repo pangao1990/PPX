@@ -29,7 +29,8 @@ const getOwner = () => {
       框架，构建macOS和windows平台的客户端。
     </p>
 
-    <p>本应用的视图层采用HTML+JS+CSS，业务层采用本地Python+调用远程API。</p>
+    <p>本应用的业务层采用<b>本地Python</b>或调用<b>远程API</b>等方式</p>
+    <p>视图层可使用任意一款你喜欢的前端框架，比如 <b>Vue</b>、<b>React</b>、<b>Angular</b>、<b>HTML</b> 等</p>
 
     <p>用户名：{{ creator }}</p>
     <button v-if="creator == 'pangao'" type="button" @click="getOwner">获取本机用户名</button>
