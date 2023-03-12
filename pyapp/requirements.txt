@@ -1,0 +1,5 @@
+pywebview==4.0.2
+pyinstaller==5.8.0
+tinyaes==1.0.4
+sqlalchemy==2.0.5
+alembic==1.10.2

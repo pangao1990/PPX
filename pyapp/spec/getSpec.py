@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2022-12-29 16:58:06
+LastEditTime: 2023-03-11 22:47:39
 Description: 生成 .spec APP配置文件
 '''
 
@@ -14,15 +14,13 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.config import Config
 
-cfg = Config()
-
 buildPath = 'build'    # 存放最终打包成app的相对路径
 console = False    # 是否展示终端
 addDll = '[]'    # 添加缺失的动态链接库
-cryptoKey = '0123456789123456'    # 对Python字节码加密
+cryptoKey = Config.cryptoKey    # 对Python字节码加密
 
-appName = cfg.appName    # 项目名称
-version = cfg.appVersion    # 版本号
+appName = Config.appName    # 项目名称
+version = Config.appVersion    # 版本号
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-m", "--mac", action="store_true", dest="if_mac", help="if_mac")
@@ -52,7 +50,7 @@ if not os.path.exists(cachePath):
 PyInstaller.config.CONF['workpath'] = cachePath
 
 # icon相对路径
-icoPath = os.path.join('..', '..', 'icon', 'logo.{logoExt}')
+icoPath = os.path.join('..', 'icon', 'logo.{logoExt}')
 
 # 项目名称
 appName = '{appName}'
@@ -67,7 +65,7 @@ block_cipher = pyi_crypto.PyiBlockCipher(key='{cryptoKey}')
 a = Analysis(['../../main.py'],
             pathex=[],
             binaries={addDll},
-            datas=[('../../gui/dist', 'web')],
+            datas=[('../../gui/dist', 'web'), ('../../static', 'static')],
             hiddenimports=[],
             hookspath=[],
             hooksconfig={{}},
@@ -212,20 +210,20 @@ else:
     # 添加缺失的动态链接库
     addDll = """
     [
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/subprocess.exe','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/libcef.dll','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/chrome_elf.dll','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/v8_context_snapshot.bin','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef.pak','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_100_percent.pak','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_200_percent.pak','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_extensions.pak','./'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './cefpython3'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./cefpython3'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/en-US.pak','./locales'),
-        ('../../pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/zh-CN.pak','./locales')
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/subprocess.exe','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/libcef.dll','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/chrome_elf.dll','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/v8_context_snapshot.bin','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef.pak','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_100_percent.pak','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_200_percent.pak','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/cef_extensions.pak','./'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/icudtl.dat', './cefpython3'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/natives_blob.bin','./cefpython3'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/en-US.pak','./locales'),
+        ('../../pyapp/pyenv/pyenvCEF/Lib/site-packages/cefpython3/locales/zh-CN.pak','./locales')
     ]
     """
     # windows-pre.spec 带终端

@@ -1,0 +1,46 @@
+# 执行迁移命令
+、、、
+alembic revision --autogenerate -m "init db"
+、、、
+-m指定此次迁移的注释, alembic会根据这个注释在versions目录生成一个py文件, 用于记录操作
+
+
+# 执行迁移命令
+、、、
+alembic upgrade head
+、、、
+将数据库升级(切换)到最新版本, 该过程会创建没有表。你可以类比 git
+
+
+# 查看迁移历史
+、、、
+alembic history --verbose
+、、、
+我们主要需要关注head即头指针的位置和 Revision ID即该迁移的哈希值, 对应着该版本的指针
+
+
+# 查看当前指针的指向
+、、、
+alembic current
+、、、
+最后一行的值为当前版本的指向
+
+
+# 切换到对应的迁移版本
+、、、
+alembic upgrade <version>    # 向上切换
+alembic downgrade <version>    # 向下切换
+
+alembic upgrade head    # 切换到最新版本
+alembic upgrade base    # 切换到最老版本
+、、、
+通过Parent确定此次迁移的父版本
+
+
+# 生成sql文件
+、、、
+alembic upgrade <version> --sql > migration.sql
+
+alembic upgrade <vsersion>:<vsersion> --sql > migration.sql    # 从特定起始版本生成sql脚本
+、、、
+在某些不适合在线更新的情况，可以采用生成sql脚本的形式，进行离线更新

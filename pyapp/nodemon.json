@@ -1,13 +1,13 @@
 {
   "restartable": "rs",
   "ignore": [
+    "pyenv/",
     "../.git",
     "../.gitgnore",
     "../.vscode",
-    "../gui",
-    "../pyenv",
-    "README.md",
-    "node_modules"
+    "../gui/",
+    "../node_modules/",
+    "../README.md"
   ],
   "verbose": true,
   "execMap": {
@@ -15,7 +15,8 @@
   },
   "watch": [
     "pyapp/",
-    "api/"
+    "api/",
+    "main.py"
   ],
   "env": {
     "NODE_ENV": "development"

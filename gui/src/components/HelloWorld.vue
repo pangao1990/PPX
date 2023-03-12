@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 defineProps({
   msg: String
@@ -7,10 +7,22 @@ defineProps({
 
 let creator = ref('pangao')
 
+onMounted(() => {
+  py2Js() // 挂载函数，供给python调用
+})
+
 const getOwner = () => {
   window.pywebview.api.getOwner().then((res) => {
     creator.value = res
   })
+}
+
+const py2Js = () => {
+  // 挂载函数，供给python调用
+  window['py2js'] = (resJson) => {
+    const res = JSON.parse(resJson)
+    console.log(res)
+  }
 }
 
 </script>

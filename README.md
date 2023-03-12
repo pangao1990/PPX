@@ -219,12 +219,28 @@ npm run build:folder:cef
 
 #### HMR 原理
 
-- 使用 concurrently 并行启用 vite(自带热更新) 和 pywebview
-- 使用 nodemon 监听 `api/*.py` 文件，有修改自动重启应用，达到 HRM 效果
+- 使用 npm-run-all 并行启用 vite(自带热更新) 和 pywebview
+- 使用 nodemon 监听 `api/*` `pyapp/*` `main.py` 等文件，有修改自动重启应用，达到 HRM 效果
 
 \*注：这里感谢 [WnagoiYy](https://github.com/WnagoiYy) 同学的 PR。
 
+#### 注意问题
+
+- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。
+- 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
+
 #### 历史版本
+
+##### V3.0.0
+
+- 新增 SQLite 数据库支持，使用 sqlalchemy 进行 ORM 操作，使用 alembic 进行数据迁移与映射
+- 新增 static 静态文件夹，可以存放 cache 缓存、db 数据库等，这些文件都将被直接打包到程序包中
+- 新增 python 调用 js 函数的示例
+- 在 config.py 中新增配置信息，如代码所在绝对目录等
+- 修复 python 代码无法打印日志的问题
+- 构建程序包时，实时更新打包配置文件 spec
+- 调整项目文件夹结构
+- pywebview 模块升级到 4.0
 
 ##### V2.0.0
 
