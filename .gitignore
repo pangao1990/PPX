@@ -4,6 +4,7 @@ gui/dist
 gui/node_modules
 node_modules
 pyapp/pyenv
+package-lock.json
 
 # Editor directories and files
 .vscode/*

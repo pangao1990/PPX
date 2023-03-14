@@ -39,7 +39,11 @@
     "buildfolderComments": "正式打包-文件夹模式",
     "build:folder": "python pyapp\\spec\\getSpec.py && shx rm -rf build && npm run build --prefix ./gui && .\\pyapp\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder.spec",
     "buildfoldercefComments": "正式打包-cef模式-文件夹模式",
-    "build:folder:cef": "python pyapp\\spec\\getSpec.py && shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-cef.spec && shx mv .\\build\\windows-folder-cef .\\buildCEF\\windows-folder-cef"
+    "build:folder:cef": "python pyapp\\spec\\getSpec.py && shx rm -rf buildCEF && npm run build --prefix ./gui && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-cef.spec && shx mv .\\build\\windows-folder-cef .\\buildCEF\\windows-folder-cef",
+    "alembicComments": "迁移数据库，用法: m=信息备注 npm run alembic",
+    "alembic": "run-script-os",
+    "alembic:macos": "cd ./pyapp/db/ && ../pyenv/bin/alembic revision --autogenerate -m \"${m}\" && ../pyenv/bin/alembic upgrade head && ../pyenv/bin/alembic upgrade head --sql > ../../static/db/migration.sql && ../pyenv/bin/alembic current > ../../static/db/version",
+    "alembic:windows": "cd ./pyapp/db/ && ..\\pyenv\\pyenv\\Scripts\\alembic.exe revision --autogenerate -m \"${m}\" && ..\\pyenv\\pyenv\\Scripts\\alembic.exe upgrade head && ..\\pyenv\\pyenv\\Scripts\\alembic.exe upgrade head --sql > ..\\..\\static\\db\\migration.sql && ..\\pyenv\\pyenv\\Scripts\\alembic.exe current > ..\\..\\static\\db\\version"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",

@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 15:41:46
-LastEditTime: 2023-03-12 21:42:05
+LastEditTime: 2023-03-14 17:21:48
 Description: 生成客户端主程序
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 pywebview 模块。
 '''
@@ -19,12 +19,17 @@ from api.api import API
 from pyapp.config.config import Config
 from pyapp.db.db import DB
 
+
+cfg = Config()    # 配置
 db = DB()    # 数据库类
+api = API()    # 本地接口
+
+cfg.init()
 
 
 def on_shown():
     # print('程序启动')
-    db.connect()    # 连接数据库
+    db.init()    # 初始化数据库
 
 
 def on_loaded():
@@ -38,8 +43,6 @@ def on_closing():
 
 
 def WebViewApp(ifCef=False):
-
-    api = API()    # 本地接口
 
     # 是否为开发环境
     Config.devEnv = sys.flags.dev_mode

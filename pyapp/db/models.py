@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-FilePath: /vue-pywebview-pyinstaller的副本/pyapp/db/models.py
+FilePath: /vue-pywebview-pyinstaller/pyapp/db/models.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:29:49
-LastEditTime: 2023-03-12 22:24:07
+LastEditTime: 2023-03-14 23:35:35
 Description: 创建数据表
-usage: 更新数据表格式后，请按如下操作：
-        1、生成迁移文件
-            alembic revision --autogenerate -m "在此备注更改内容"
-        2、将更改内容更新到数据库
-            alembic upgrade head
-        3、如有更多需求，请查看文件 pyapp/db/alembic/README
+usage: 更新数据表格式后，请按如下操作迁移数据库：
+        m=备注更改内容 npm run alembic
+
+        注意：上述命令仅能迁移打包程序自带数据库(Config.staticDir)。在程序运行初始化时，会自动检测并迁移本地电脑中保存的数据库(Config.storageDir)
 '''
 
 import json
@@ -62,6 +60,7 @@ class StorageVar(BaseModel):
     id = Column(Integer, primary_key=True, autoincrement=True)
     key = Column(String(), doc='键', nullable=False, index=True)
     value = Column(String(), doc='值', server_default='', nullable=False)
+    remark = Column(String(), doc='备注', server_default='', nullable=False)
     created_at = Column(DateTime(), doc='创建时间', comment='创建时间', server_default=func.now())
     updated_at = Column(DateTime(), doc='更新时间', comment='更新时间', server_default=func.now(), onupdate=func.now())
 
