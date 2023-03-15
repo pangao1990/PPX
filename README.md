@@ -215,7 +215,15 @@ npm run build:folder
 
 # 正式打包，生成文件夹，cef兼容模式【仅win系统】
 npm run build:folder:cef
+```
+  
+#### 数据库迁移
 
+在 pyapp/db/models.py 中修改数据库格式后，执行以下命令迁移数据库。
+
+注意：迁移数据库前，需要对 sqlalchemy 数据库对象映射框架有所了解。
+
+```
 # 迁移数据库
 m=备注迁移信息 npm run alembic
 ```
