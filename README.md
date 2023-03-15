@@ -215,6 +215,9 @@ npm run build:folder
 
 # 正式打包，生成文件夹，cef兼容模式【仅win系统】
 npm run build:folder:cef
+
+# 迁移数据库
+m=备注迁移信息 npm run alembic
 ```
 
 #### HMR 原理
