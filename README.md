@@ -230,6 +230,10 @@ npm run build:folder:cef
 - 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 #### 历史版本
+  
+##### V3.1.0
+
+- 优化数据迁移
 
 ##### V3.0.0
 
