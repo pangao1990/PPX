@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 15:41:46
-LastEditTime: 2023-03-14 17:21:48
+LastEditTime: 2023-03-15 22:28:20
 Description: 生成客户端主程序
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 pywebview 模块。
 '''
@@ -39,7 +39,7 @@ def on_loaded():
 
 def on_closing():
     # print('程序关闭')
-    db.close()    # 关闭数据库
+    pass
 
 
 def WebViewApp(ifCef=False):
@@ -58,7 +58,7 @@ def WebViewApp(ifCef=False):
         template = os.path.join(MAIN_DIR, "index.html")    # 设置页面，指向本地
 
     # 创建窗口
-    window = webview.create_window(title=Config.appName, url=template, js_api=api, width=1000, height=700, min_size=(800,600))
+    window = webview.create_window(title=Config.appName, url=template, js_api=api, width=1000, height=700, min_size=(800, 600))
 
     # 获取窗口实例
     API.window = window

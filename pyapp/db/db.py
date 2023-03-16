@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2023-03-14 23:29:04
+LastEditTime: 2023-03-15 22:40:34
 Description: 数据库类
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 sqlalchemy 模块。
 '''
@@ -45,8 +45,7 @@ class DB:
     def connect(self):
         '''数据库连接'''
         engine = create_engine(f'sqlite:///{DB.dbPath}?check_same_thread=False', echo=Config.devEnv)
-        Session = sessionmaker(bind=engine)
-        DB.session = Session()
+        DB.session = sessionmaker(bind=engine)
 
     def close(self):
         '''关闭数据库连接'''
@@ -66,9 +65,10 @@ class DB:
             currentVersion = row.split(' ')[0]
             break
 
-        with DB.session.begin():
+        dbSession = DB.session()
+        with dbSession.begin():
             stmt = text('SELECT version_num FROM alembic_version')
-            res = DB.session.execute(stmt)
+            res = dbSession.execute(stmt)
             oldVersion = res.all()[0][0]    # 正在使用的数据库版本
 
             # 更新数据库结构
@@ -95,9 +95,11 @@ class DB:
                 version2migrationDict[version] = migration
 
                 # 更新数据库结构
-                migrationList = version2migrationDict[versionUpdate].replace('\n', '').split(';')
-                for migration in migrationList:
-                    migration = migration.replace('\n', '')
-                    if migration != '':
-                        stmt = text(migration)
-                        DB.session.execute(stmt)
+                if versionUpdate != '':
+                    migrationList = version2migrationDict[versionUpdate].replace('\n', '').split(';')
+                    for migration in migrationList:
+                        migration = migration.replace('\n', '')
+                        if migration != '':
+                            stmt = text(migration)
+                            dbSession.execute(stmt)
+        dbSession.close()

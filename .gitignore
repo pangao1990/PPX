@@ -2,6 +2,7 @@ build
 dist
 gui/dist
 gui/node_modules
+gui/package-lock.json
 node_modules
 pyapp/pyenv
 package-lock.json

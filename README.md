@@ -216,7 +216,7 @@ npm run build:folder
 # 正式打包，生成文件夹，cef兼容模式【仅win系统】
 npm run build:folder:cef
 ```
-  
+
 #### 数据库迁移
 
 在 pyapp/db/models.py 中修改数据库格式后，执行以下命令迁移数据库。
@@ -228,20 +228,25 @@ npm run build:folder:cef
 m=备注迁移信息 npm run alembic
 ```
 
-#### HMR 原理
+### HMR 原理
 
 - 使用 npm-run-all 并行启用 vite(自带热更新) 和 pywebview
 - 使用 nodemon 监听 `api/*` `pyapp/*` `main.py` 等文件，有修改自动重启应用，达到 HRM 效果
 
 \*注：这里感谢 [WnagoiYy](https://github.com/WnagoiYy) 同学的 PR。
 
-#### 注意问题
+### 注意问题
 
 - 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。
 - 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 #### 历史版本
-  
+
+##### V3.1.1
+
+- 解决数据库操作时，session 冲突的问题
+- 修复了一些已知问题
+
 ##### V3.1.0
 
 - 优化数据迁移

@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-21 16:54:23
-LastEditTime: 2023-03-14 23:40:30
+LastEditTime: 2023-03-15 16:48:01
 Description: 配置文件
 usage:
     from pyapp.config.config import Config
@@ -24,7 +24,7 @@ class Config:
     # 程序基础配置信息
     ##
     appName = 'vue-pywebview-pyinstaller'  # 应用名称
-    appVersion = "3.1.0"  # 应用版本号
+    appVersion = "3.1.1"  # 应用版本号
     appPackage = 'vip.pangao'    # 应用包名，用于在本地电脑生成 vip.pangao.vue-pywebview-pyinstaller 唯一文件夹
 
     ##

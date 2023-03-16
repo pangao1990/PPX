@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2023-03-12 21:43:48
+LastEditTime: 2023-03-15 22:29:38
 Description: 操作数据库类
 usage:
     from pyapp.db.orm import ORM
@@ -16,20 +16,33 @@ usage:
 
 from pyapp.db.models import StorageVar
 from pyapp.db.db import DB
-from sqlalchemy import select
+from sqlalchemy import select, update, insert
 
 
 class ORM:
     '''操作数据库类'''
 
-    session = None
-
     def getStorageVar(self, key):
         '''获取储存变量'''
-        resVal = None
-        with DB.session.begin():
+        resVal = ''
+        dbSession = DB.session()
+        with dbSession.begin():
             stmt = select(StorageVar.value).where(StorageVar.key == key)
-            result = DB.session.execute(stmt)
+            result = dbSession.execute(stmt)
             result = result.one_or_none()
-            resVal = result[0]
+            if result is None:
+                # 新建
+                stmt = insert(StorageVar).values(key=key)
+                dbSession.execute(stmt)
+            else:
+                resVal = result[0]
+        dbSession.close()
         return resVal
+
+    def setStorageVar(self, key, val):
+        '''更新储存变量'''
+        dbSession = DB.session()
+        with dbSession.begin():
+            stmt = update(StorageVar).where(StorageVar.key == key).values(value=val)
+            dbSession.execute(stmt)
+        dbSession.close()
