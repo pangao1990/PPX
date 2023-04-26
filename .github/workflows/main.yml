@@ -41,7 +41,7 @@ jobs:
       - name: 安装Python3环境
         uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
           cache: "pip"
 
       - name: 初始化打包环境
