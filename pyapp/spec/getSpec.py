@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2023-03-14 21:13:46
+LastEditTime: 2023-04-12 19:55:21
 Description: 生成 .spec APP配置文件
 '''
 
@@ -28,6 +28,13 @@ args = parser.parse_args()
 ifMac = args.if_mac
 
 logoExt = 'icns' if ifMac else 'ico'
+
+# 手动将遗漏的模块进行打包
+addModules = ''
+# if ifMac:
+#     addModules = ", ('../../pyapp/pyenv/lib/python3.9/site-packages/requests', 'requests')"
+# else:
+#     addModules = ", ('../../pyapp/pyenv/pyenv/Lib/site-packages/requests', 'requests')"
 
 
 # spec配置文件 前半部分通用格式
@@ -65,7 +72,7 @@ block_cipher = pyi_crypto.PyiBlockCipher(key='{cryptoKey}')
 a = Analysis(['../../main.py'],
             pathex=[],
             binaries={addDll},
-            datas=[('../../gui/dist', 'web'), ('../../static', 'static')],
+            datas=[('../../gui/dist', 'web'), ('../../static', 'static'){addModules}],
             hiddenimports=[],
             hookspath=[],
             hooksconfig={{}},
@@ -195,9 +202,6 @@ else:
         f.write(specFirstPart() + specUnpackagePartEXE())
 
     console = True    # 是否展示终端
-    # macos-pre.spec 带终端
-    with open(os.path.join(specDir, 'macos-pre.spec'), 'w+', encoding='utf-8') as f:
-        f.write(specFirstPart() + specPackagePartAPP())
     # windows-pre.spec 带终端
     with open(os.path.join(specDir, 'windows-pre.spec'), 'w+', encoding='utf-8') as f:
         f.write(specFirstPart() + specPackagePartEXE())

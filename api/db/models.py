@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-FilePath: /vue-pywebview-pyinstaller/pyapp/db/models.py
+FilePath: /PPX/api/db/models.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:29:49
-LastEditTime: 2023-03-14 23:35:35
+LastEditTime: 2023-04-24 13:52:25
 Description: 创建数据表
 usage: 更新数据表格式后，请按如下操作迁移数据库：
         m=备注更改内容 npm run alembic
@@ -15,7 +15,7 @@ usage: 更新数据表格式后，请按如下操作迁移数据库：
 
 import json
 
-from sqlalchemy import DateTime, Numeric, Column, Integer, String, func
+from sqlalchemy import DateTime, Numeric, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -24,6 +24,9 @@ Base = declarative_base()
 class BaseModel(Base):
     '''基类'''
     __abstract__ = True
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    created_at = Column(DateTime(), doc='创建时间', comment='创建时间', server_default=text("(DATETIME(CURRENT_TIMESTAMP, 'localtime'))"))
+    updated_at = Column(DateTime(), doc='更新时间', comment='更新时间', server_default=text("(DATETIME(CURRENT_TIMESTAMP, 'localtime'))"), onupdate=text("(DATETIME(CURRENT_TIMESTAMP, 'localtime'))"))
 
     def _gen_tuple(self):
         # 处理 日期 等无法正常序列化的对象
@@ -54,15 +57,12 @@ class BaseModel(Base):
         return json.dumps(self.toDict())
 
 
-class StorageVar(BaseModel):
+class PPXStorageVar(BaseModel):
     '''储存变量'''
-    __tablename__ = "storage_var"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = "ppx_storage_var"
     key = Column(String(), doc='键', nullable=False, index=True)
-    value = Column(String(), doc='值', server_default='', nullable=False)
+    val = Column(String(), doc='值', server_default='', nullable=False)
     remark = Column(String(), doc='备注', server_default='', nullable=False)
-    created_at = Column(DateTime(), doc='创建时间', comment='创建时间', server_default=func.now())
-    updated_at = Column(DateTime(), doc='更新时间', comment='更新时间', server_default=func.now(), onupdate=func.now())
 
     def __str__(self):
-        return self.key + ' => ' + self.value
+        return self.key + ' => ' + self.val

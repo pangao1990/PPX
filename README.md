@@ -1,10 +1,14 @@
 ### 前言
 
-现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller)。
+**PPX**（曾用名 vue-pywebview-pyinstaller）。第一个 **P** 表示 **P**ython ，当然，也可以表示 **P**angao（潘高，也就是我本人）。第二个 **P** 表示 **P**ywebview ，也可以表示 **P**yinstaller 。第三个 **X** 表示未知，指前端可以使用 Vue、React、Angular、HTML 中的任意一种。
+
+### 搭后语
+
+现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[PPX](https://github.com/pangao1990/vue-pywebview-pyinstaller)。
 
 ### 应用简介
 
-[vue-pywebview-pyinstaller](https://github.com/pangao1990/vue-pywebview-pyinstaller) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[PPX](https://github.com/pangao1990/vue-pywebview-pyinstaller) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
@@ -26,8 +30,14 @@
 
 #### 运行环境
 
-- npm8.0+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
-- Python3.6-3.8 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
+- npm16.14+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
+
+  ```
+  # 推荐使用 pnpm，全局安装，命令如下：
+  npm i -g pnpm
+  ```
+
+- Python3.7-3.9 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
 
 #### 应用下载
 
@@ -54,7 +64,7 @@ cd vue-pywebview-pyinstaller
 
 ```
 # 初始化
-npm run init
+pnpm run init
 ```
 
 没报错信息，则初始化完成，如下所示：
@@ -70,7 +80,7 @@ npm run init
 输入如下命令，即可启动应用：
 
 ```
-npm run start
+pnpm run start
 ```
 
 终端显示如下：
@@ -185,47 +195,53 @@ pywebview 建议 macOS 用 [py2app](https://py2app.readthedocs.io/en/latest/) �
 我就不介绍 pyinstaller 的打包方法了，后面我会出这个框架详细的打包介绍。这里我将打包方法封装在应用中，只需要按命令打包即可。
 
 ```
+# 初始化
+pnpm run init
+
+# 初始化，cef兼容模式
+pnpm run init:cef
+
 # 开发模式
-npm run start
+pnpm run start
 
 # 开发模式，cef兼容模式【仅win系统】
-npm run start:cef
+pnpm run start:cef
 
 # 预打包，带console，方便输出日志信息
-npm run pre
+pnpm run pre
 
 # 预打包，带console，cef兼容模式【仅win系统】
-npm run pre:cef
+pnpm run pre:cef
 
 # 预打包，带console，生成文件夹【仅win系统】
-npm run pre:folder
+pnpm run pre:folder
 
 # 预打包，带console，生成文件夹，cef兼容模式【仅win系统】
-npm run pre:folder:cef
+pnpm run pre:folder:cef
 
 
 # 正式打包
-npm run build
+pnpm run build
 
 # 正式打包，cef兼容模式【仅win系统】
-npm run build:cef
+pnpm run build:cef
 
 # 正式打包，生成文件夹【仅win系统】
-npm run build:folder
+pnpm run build:folder
 
 # 正式打包，生成文件夹，cef兼容模式【仅win系统】
-npm run build:folder:cef
+pnpm run build:folder:cef
 ```
 
 #### 数据库迁移
 
-在 pyapp/db/models.py 中修改数据库格式后，执行以下命令迁移数据库。
+在 api/db/models.py 中修改数据库格式后，执行以下命令迁移数据库。
 
 注意：迁移数据库前，需要对 sqlalchemy 数据库对象映射框架有所了解。
 
 ```
 # 迁移数据库
-m=备注迁移信息 npm run alembic
+m=备注迁移信息 pnpm run alembic
 ```
 
 ### HMR 原理
@@ -237,10 +253,17 @@ m=备注迁移信息 npm run alembic
 
 ### 注意问题
 
-- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。
+- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(不过，基于 Github Action 可实现同时打包两种安装包)
 - 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 #### 历史版本
+
+##### V4.0.0
+
+- 新增 MacOS 环境打包成 .dmg 安装包，Windows 环境打包成 .exe 安装包（基于 Github Action 可实现同时打包两种安装包）
+- 新增自动检测软件升级
+- 改 npm 为 pnpm ，节省磁盘空间并提升安装速度
+- 项目正式改名为 PPX
 
 ##### V3.1.1
 

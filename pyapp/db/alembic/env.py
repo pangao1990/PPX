@@ -20,8 +20,8 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from models import Base
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+from api.db.models import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

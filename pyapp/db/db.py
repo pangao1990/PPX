@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2023-03-15 22:40:34
+LastEditTime: 2023-04-12 20:38:42
 Description: 数据库类
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 sqlalchemy 模块。
 '''
@@ -30,11 +30,30 @@ class DB:
         if not os.path.isdir(dbStorageDir):
             # 新建本地电脑文件夹
             os.makedirs(dbStorageDir)
-        DB.dbPath = os.path.join(dbStorageDir, 'base.db')
-        if not os.path.exists(DB.dbPath) or Config.ifCoverDB:
-            # 数据库不存在时，新建数据库；或者配置信息为强制覆盖时，覆盖数据库
+        DB.dbPath = os.path.join(dbStorageDir, 'base.db')    # 本地数据库
+        dbVerionPath = os.path.join(dbStorageDir, 'version')    # 本地数据库版本
+        appdbVerionPath = os.path.join(Config.staticDir, 'db', 'version')    # 程序包中数据库版本
+        ifCopy = False
+        if not os.path.exists(DB.dbPath):
+            # 数据库不存在时，新建数据库
+            ifCopy = True
+        elif Config.ifCoverDB:
+            # 配置信息为强制覆盖 且 数据库版本为新 时，覆盖数据库
+            if not os.path.exists(dbVerionPath):
+                ifCopy = True
+            else:
+                dbVerion = ''
+                with open(dbVerionPath, 'r') as f:
+                    dbVerion = f.read()
+                appdbVerion = ''
+                with open(appdbVerionPath, 'r') as f:
+                    appdbVerion = f.read()
+                if dbVerion != appdbVerion:
+                    ifCopy = True
+        if ifCopy:
             dbStaticPath = os.path.join(Config.staticDir, 'db', 'base.db')    # 程序包
             copyfile(dbStaticPath, DB.dbPath)
+            copyfile(appdbVerionPath, dbVerionPath)
 
         # 数据库连接
         self.connect()
@@ -64,7 +83,6 @@ class DB:
                 continue
             currentVersion = row.split(' ')[0]
             break
-
         dbSession = DB.session()
         with dbSession.begin():
             stmt = text('SELECT version_num FROM alembic_version')

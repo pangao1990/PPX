@@ -3,24 +3,23 @@ CREATE TABLE alembic_version (
     CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
 );
 
--- Running upgrade  -> f315a762b0fe
+-- Running upgrade  -> 96ee93975f8a
 
-CREATE TABLE storage_var (
+INSERT INTO alembic_version (version_num) VALUES ('96ee93975f8a') RETURNING version_num;
+
+-- Running upgrade 96ee93975f8a  -> a69c80be508b
+
+CREATE TABLE ppx_storage_var (
     id INTEGER NOT NULL, 
     "key" VARCHAR NOT NULL, 
-    value VARCHAR DEFAULT '' NOT NULL, 
-    created_at DATETIME DEFAULT (CURRENT_TIMESTAMP), 
-    updated_at DATETIME DEFAULT (CURRENT_TIMESTAMP), 
+    val VARCHAR DEFAULT '' NOT NULL, 
+    remark VARCHAR DEFAULT '' NOT NULL, 
+    created_at DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')), 
+    updated_at DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')), 
     PRIMARY KEY (id)
 );
 
-CREATE INDEX ix_storage_var_key ON storage_var ("key");
+CREATE INDEX ix_ppx_storage_var_key ON ppx_storage_var ("key");
 
-INSERT INTO alembic_version (version_num) VALUES ('f315a762b0fe') RETURNING version_num;
-
--- Running upgrade f315a762b0fe -> 86c3f491c4cc
-
-ALTER TABLE storage_var ADD COLUMN remark VARCHAR DEFAULT '' NOT NULL;
-
-UPDATE alembic_version SET version_num='86c3f491c4cc' WHERE alembic_version.version_num = 'f315a762b0fe';
+UPDATE alembic_version SET version_num='a69c80be508b' WHERE alembic_version.version_num = 'e0cccc138e5f';
 

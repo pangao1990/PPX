@@ -1,0 +1,34 @@
+
+{
+    "title": "PPX",
+    "icon": "../../icon/logo.icns",
+    "background": "bg.png",
+    "icon-size": 50,
+    "contents": [
+        {
+            "x": 160,
+            "y": 120,
+            "type": "file",
+            "path": "../../../build/PPX.app"
+        },
+        {
+            "x": 430,
+            "y": 120,
+            "type": "link",
+            "path": "/Applications"
+        },
+        {
+            "x": 450,
+            "y": 243,
+            "type": "file",
+            "path": "./潘高的小站.webloc"
+        }
+    ],
+    "window": {
+        "size": {
+            "width": 590,
+            "height": 416
+        }
+    },
+    "format": "UDBZ"
+}
