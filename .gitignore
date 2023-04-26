@@ -4,11 +4,11 @@ gui/dist
 gui/node_modules
 gui/pnpm-lock.yaml
 node_modules
-pyapp/pyenv
 pnpm-lock.yaml
-
-# Editor directories and files
-.vscode
+pyapp/pyenv
+pyapp/spec/*
+!pyapp/spec/getSpec.py
+.vscode/*
 .idea
 .DS_Store
 *.suo
