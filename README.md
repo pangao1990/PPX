@@ -4,11 +4,11 @@
 
 ### 搭后语
 
-现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[PPX](https://github.com/pangao1990/vue-pywebview-pyinstaller)。
+现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[PPX](https://github.com/pangao1990/PPX)。
 
 ### 应用简介
 
-[PPX](https://github.com/pangao1990/vue-pywebview-pyinstaller) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[PPX](https://github.com/pangao1990/PPX) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
@@ -44,14 +44,14 @@
 利用 git（[git 安装教程](https://blog.pangao.vip/Git安装教程/)） 下载应用，如下所示：
 
 ```
-git clone https://github.com/pangao1990/vue-pywebview-pyinstaller.git
+git clone https://github.com/pangao1990/PPX.git
 ```
 
-或者，直接在我的 [github](https://github.com/pangao1990/vue-pywebview-pyinstaller) 下载。
+或者，直接在我的 [github](https://github.com/pangao1990/PPX) 下载。
 
 ```
 # 进入项目
-cd vue-pywebview-pyinstaller
+cd PPX
 ```
 
 进入项目，项目清单如下所示：
@@ -73,7 +73,7 @@ pnpm run init
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-3.png)
 
-项目里多了一个 node_modules 文件夹，用于存放 npm 下载的包；多了一个 pyenv 文件夹，用于存放 Python 虚拟环境。
+项目根目录多了一个 node_modules 文件夹和 pnpm-lock.yaml 文件，用于存放 npm 下载的包。
 
 ### 应用运行
 
@@ -87,7 +87,7 @@ pnpm run start
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-4.png)
 
-同时，会启动一个客户端程序，如下：
+同时，启动一个客户端程序，如下：
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-5.png)
 
@@ -195,20 +195,32 @@ pywebview 建议 macOS 用 [py2app](https://py2app.readthedocs.io/en/latest/) �
 我就不介绍 pyinstaller 的打包方法了，后面我会出这个框架详细的打包介绍。这里我将打包方法封装在应用中，只需要按命令打包即可。
 
 ```
+###########
+# 简单用法 #
+###########
+
 # 初始化
 pnpm run init
-
-# 初始化，cef兼容模式
-pnpm run init:cef
 
 # 开发模式
 pnpm run start
 
-# 开发模式，cef兼容模式【仅win系统】
-pnpm run start:cef
+# 正式打包
+pnpm run build
 
 # 预打包，带console，方便输出日志信息
 pnpm run pre
+
+
+###########
+# 进阶用法 #
+###########
+
+# 初始化，cef兼容模式
+pnpm run init:cef
+
+# 开发模式，cef兼容模式【仅win系统】
+pnpm run start:cef
 
 # 预打包，带console，cef兼容模式【仅win系统】
 pnpm run pre:cef
@@ -218,10 +230,6 @@ pnpm run pre:folder
 
 # 预打包，带console，生成文件夹，cef兼容模式【仅win系统】
 pnpm run pre:folder:cef
-
-
-# 正式打包
-pnpm run build
 
 # 正式打包，cef兼容模式【仅win系统】
 pnpm run build:cef
@@ -253,7 +261,7 @@ m=备注迁移信息 pnpm run alembic
 
 ### 注意问题
 
-- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(不过，基于 Github Action 可实现同时打包两种安装包)
+- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(**不过，基于 Github Action 可实现同时打包两种安装包**)
 - 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 #### 历史版本
