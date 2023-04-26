@@ -53,6 +53,6 @@ jobs:
       - name: 上传打包完成的程序包
         uses: actions/upload-artifact@v3
         with:
-          name: PPX
+          name: Setup
           retention-days: 1
           path: build/*-*_*.*
