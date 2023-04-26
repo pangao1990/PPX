@@ -4,12 +4,13 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-26 20:48:26
-LastEditTime: 2023-04-17 15:23:34
+LastEditTime: 2023-04-26 20:48:18
 Description: 系统类
 usage: 调用window.pywebview.api.<methodname>(<parameters>)从Javascript执行
 '''
 
 import os
+import subprocess
 
 import webview
 
@@ -67,3 +68,13 @@ class System():
         appUpdate = AppUpdate()    # 程序更新类
         res = appUpdate.cancel()
         return res
+
+    def system_pyOpenFile(self, path):
+        '''用电脑默认软件打开本地文件'''
+        # 判断以下当前系统类型
+        if Config.appIsMacOS:
+            path = path.replace("\\", "/")
+            subprocess.call(["open", path])
+        else:
+            path = path.replace("/", "\\")
+            os.startfile(path)

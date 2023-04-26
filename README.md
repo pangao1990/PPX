@@ -264,7 +264,7 @@ m=备注迁移信息 pnpm run alembic
 - 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(**不过，基于 Github Action 可实现同时打包两种安装包**)
 - 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
-#### 历史版本
+### 历史版本
 
 ##### V4.0.0
 
