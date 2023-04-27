@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2023-04-26 16:22:58
+LastEditTime: 2023-04-27 12:26:35
 Description: 生成 .spec APP配置文件
 '''
 
@@ -209,7 +209,6 @@ else:
     with open(os.path.join(specDir, 'windows-folder-pre.spec'), 'w+', encoding='utf-8') as f:
         f.write(specFirstPart() + specUnpackagePartEXE())
 
-    buildPath = 'buildCEF'    # 存放最终打包成app的相对路径
     console = False    # 是否展示终端
     # 添加缺失的动态链接库
     addDll = """
