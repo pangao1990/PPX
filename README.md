@@ -308,6 +308,8 @@ m=备注迁移信息 pnpm run alembic
 
 ---
 
+<br/>
+
 ### 打赏 🥰🥰🥰
 
 <div style="margin-top:20px">
@@ -320,7 +322,7 @@ m=备注迁移信息 pnpm run alembic
 			  <font color="#159718">微信支付</font>
 		  </td>
 		  <td align="center">
-			  <img src="https://pangao1990.gitee.io/images/alipay.png" alt="潘高 支付宝" style="width:240px; height:240px;" />
+			  <img src="https://blog.pangao.vip/images/alipay.png" alt="潘高 支付宝" style="width:240px; height:240px;" />
 			  <br/>
 			  <font color="#217cfb">支付宝</font>
 		  </td>
@@ -330,6 +332,8 @@ m=备注迁移信息 pnpm run alembic
 </div>
 
 ---
+
+<br/>
 
 ### 致谢 🥳🥳🥳
 
@@ -369,7 +373,6 @@ m=备注迁移信息 pnpm run alembic
 
 ---
 
-<br/>
 <br/>
 <p align="center">
   <a href="https://github.com/pangao1990/PPX#">
