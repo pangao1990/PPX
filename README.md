@@ -8,13 +8,13 @@
 
 ### 应用简介
 
-[PPX](https://github.com/pangao1990/PPX) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[PPX](https://github.com/pangao1990/PPX) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 Windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
 - 视图层可使用任意一款你喜欢的前端框架，比如 Vue、React、Angular、HTML 等，迁移无压力
 - 采用 Python 编程语言开发业务层，模块丰富
-- 本应用已经封装打包环节，一键生成 macOS 和 windows 平台的客户端应用。开发者只需要关注视图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
+- 本应用已经封装打包环节，一键生成 macOS 和 Windows 平台的客户端应用。开发者只需要关注视图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
 
 ##### 适用场景
 
@@ -103,9 +103,9 @@ pnpm run start
 
 那么，基于 pywebview 构架构建客户端的成败或质量，就与本地电脑的浏览器引擎息息相关了。
 
-##### windows 系统
+##### Windows 系统
 
-在 windows 系统上，大体上分为两类客户端引擎：正常模式和兼容模式。
+在 Windows 系统上，大体上分为两类客户端引擎：正常模式和兼容模式。
 
 - 正常模式
 
@@ -119,7 +119,7 @@ pnpm run start
 
 macOS 系统的浏览器引擎就没有那么多版本了，由于 macOS 系统的封闭性，在 macOS 系统就只有一种 WebKit 引擎可用。
 
-不过，在 macOS 系统却存在另一个问题。那就是苹果自主研发的 M1 芯片。由于 windows 系统随处可见，我可以找很多电脑测试。mac 电脑我就只有一台 M1 芯片和一个 x86_64 芯片，做不了更多测试。总之，目前我这两台苹果电脑构建的客户端不能交叉使用，原因不明。
+不过，在 macOS 系统却存在另一个问题。那就是苹果自主研发的 M1 芯片。由于 Windows 系统随处可见，我可以找很多电脑测试。mac 电脑我就只有一台 M1 芯片和一个 x86_64 芯片，做不了更多测试。总之，目前我这两台苹果电脑构建的客户端不能交叉使用，原因不明。
 
 #### 构建客户端 API
 
@@ -190,7 +190,7 @@ window.evaluate_js(code, callback=None)允许您使用同步返回的最后一�
 
 #### 打包客户端
 
-pywebview 建议 macOS 用 [py2app](https://py2app.readthedocs.io/en/latest/) 打包，windows 用 [pyinstaller](https://pyinstaller.readthedocs.io/en/stable/) 打包。但是我发现 pyinstaller 也可以很顺畅得打包 macOS 应用，虽然移植有点问题。
+pywebview 建议 macOS 用 [py2app](https://py2app.readthedocs.io/en/latest/) 打包，Windows 用 [pyinstaller](https://pyinstaller.readthedocs.io/en/stable/) 打包。但是我发现 pyinstaller 也可以很顺畅得打包 macOS 应用，虽然移植有点问题。
 
 我就不介绍 pyinstaller 的打包方法了，后面我会出这个框架详细的打包介绍。这里我将打包方法封装在应用中，只需要按命令打包即可。
 
@@ -261,8 +261,8 @@ m=备注迁移信息 pnpm run alembic
 
 ### 注意问题
 
-- 在 windows 系统下，只能打包 exe 等适用于 windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(**不过，基于 Github Action 可实现同时打包两种安装包**)
-- 在 windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
+- 在 Windows 系统下，只能打包 exe 等适用于 Windows 的程序，不能打包 mac 系统下的 app 程序。同理，mac 也是一样。(**不过，基于 Github Action 可实现同时打包两种安装包**)
+- 在 Windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 ### 历史版本
 
