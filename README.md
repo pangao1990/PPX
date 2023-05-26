@@ -266,6 +266,10 @@ m=备注迁移信息 pnpm run alembic
 
 ### 历史版本
 
+##### V4.0.1
+
+- 修复 python 创建 venv 虚拟环境时，pip 不是最新版的问题
+
 ##### V4.0.0
 
 - 新增 MacOS 环境打包成 .dmg 安装包，Windows 环境打包成 .exe 安装包（基于 Github Action 可实现同时打包两种安装包）

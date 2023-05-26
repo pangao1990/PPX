@@ -1,7 +1,7 @@
 {
   "name": "ppx",
   "private": true,
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "PPX是一款基于pywebview和PyInstaller框架，构建macOS和windows平台客户端的应用框架。本框架的视图层支持Vue、React、Angular、HTML中的任意一种，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
@@ -9,10 +9,10 @@
     "init": "pnpm run clean && pnpm install && pnpm run initInstall",
     "clean": "pnpm add -D shx && shx rm -rf build gui/dist gui/node_modules gui/pnpm-lock.yaml pyapp/pyenv pyapp/spec/macos* pyapp/spec/windows* && pnpm prune",
     "initInstall": "run-script-os",
-    "initInstall:macos": "pnpm -C ./gui install && python3 -m venv pyapp/pyenv && ./pyapp/pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/requirements.txt && ./pyapp/pyenv/bin/python ./pyapp/package/exe/getAppISSID.py",
-    "initInstall:windows": "pnpm -C .\\gui install && python -m venv pyapp\\pyenv\\pyenv && .\\pyapp\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\requirements.txt && .\\pyapp\\pyenv\\pyenv\\Scripts\\python .\\pyapp\\package\\exe\\getAppISSID.py",
+    "initInstall:macos": "pnpm -C ./gui install && python3 -m venv pyapp/pyenv && ./pyapp/pyenv/bin/python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && ./pyapp/pyenv/bin/pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ./pyapp/requirements.txt && ./pyapp/pyenv/bin/python ./pyapp/package/exe/getAppISSID.py",
+    "initInstall:windows": "pnpm -C .\\gui install && python -m venv pyapp\\pyenv\\pyenv && .\\pyapp\\pyenv\\pyenv\\Scripts\\python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && .\\pyapp\\pyenv\\pyenv\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\requirements.txt && .\\pyapp\\pyenv\\pyenv\\Scripts\\python .\\pyapp\\package\\exe\\getAppISSID.py",
     "initcefComments": "清空缓存，配置CEF环境",
-    "init:cef": "pnpm install && pnpm -C .\\gui install && python -m venv pyapp\\pyenv\\pyenvCEF && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\requirements.txt && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3 && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python .\\pyapp\\package\\exe\\getAppISSID.py",
+    "init:cef": "pnpm install && pnpm -C .\\gui install && python -m venv pyapp\\pyenv\\pyenvCEF && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\requirements.txt && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3 && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python .\\pyapp\\package\\exe\\getAppISSID.py",
     "startComments": "开发环境",
     "start": "run-p dev startos",
     "dev": "pnpm -C ./gui run dev",
