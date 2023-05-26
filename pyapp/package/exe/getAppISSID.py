@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-04-25 10:25:55
-LastEditTime: 2023-04-25 13:49:06
+LastEditTime: 2023-05-26 10:25:45
 Description: 生成 appISSID 打包唯一编号。
 '''
 import random
@@ -40,6 +40,7 @@ class GetAPPISSID:
 
         # 修改 cryptoKey
         configContent = configContent.replace("cryptoKey = '0123456789123456'", f"cryptoKey = '{self.getCryptoKey()}'")
+        configContent = configContent.replace("cryptoKey = ''", f"cryptoKey = '{self.getCryptoKey()}'")
 
         with open(configPath, 'w', encoding='UTF-8') as f:
             f.write(configContent)
