@@ -25,7 +25,7 @@
 
 <script setup>
 import BtnUpdate from './BtnUpdate.vue'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 defineProps({
   msg: String
@@ -33,22 +33,11 @@ defineProps({
 
 let creator = ref('pangao')
 
-onMounted(() => {
-  py2Js() // 挂载函数，供给python调用
-})
-
 const getOwner = () => {
-  window.pywebview.api.getOwner().then((res) => {
+  // 获取本机用户名
+  window.pywebview.api.system_getOwner().then((res) => {
     creator.value = res
   })
-}
-
-const py2Js = () => {
-  // 挂载函数，供给python调用
-  window['py2js'] = (resJson) => {
-    const res = JSON.parse(resJson)
-    console.log(res)
-  }
 }
 
 </script>

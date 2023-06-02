@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-21 16:54:23
-LastEditTime: 2023-05-26 10:29:36
+LastEditTime: 2023-06-02 08:57:38
 Description: 配置文件
 usage:
     from pyapp.config.config import Config
@@ -25,7 +25,7 @@ class Config:
     ##
     appName = 'PPX'  # 应用名称
     appNameEN = 'ppx'    # 应用名称-英文（用于生成缓存文件夹，必须是英文）
-    appVersion = "V4.0.1"  # 应用版本号
+    appVersion = "V4.1.0"  # 应用版本号
     appDeveloper = "PanGao"  # 应用开发者
     appBlogs = "https://blog.pangao.vip"  # 个人博客
     appPackage = 'vip.pangao'    # 应用包名，用于在本地电脑生成 vip.pangao.ppx 唯一文件夹
@@ -33,7 +33,7 @@ class Config:
     appISSID = 'F35003AB-441A-C0A6-4527-937E6A02F789'    # Inno Setup 打包唯一编号。在执行 pnpm run init 之前，请设置为空，程序会自动生成唯一编号，生成后请勿修改！！！
 
     ##
-    # 系统配置信息
+    # 系统配置信息（不需要修改，可以自动获取）
     ##
     appSystem = platform.system()    # 本机系统类型
     appIsMacOS = appSystem == 'Darwin'    # 是否为macOS系统

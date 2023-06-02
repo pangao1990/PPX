@@ -1,14 +1,14 @@
 ### 前言
 
-**PPX**（曾用名 vue-pywebview-pyinstaller）。第一个 **P** 表示 **P**ython ，当然，也可以表示 **P**angao（潘高，也就是我本人）。第二个 **P** 表示 **P**ywebview ，也可以表示 **P**yinstaller 。第三个 **X** 表示未知，指前端可以使用 Vue、React、Angular、HTML 中的任意一种。
+[**PPX**](https://blog.pangao.vip/docs-ppx/)（曾用名 vue-pywebview-pyinstaller）。第一个 **P** 表示 **P**ython ，当然，也可以表示 **P**angao（潘高，也就是我本人）。第二个 **P** 表示 **P**ywebview ，也可以表示 **P**yinstaller 。第三个 **X** 表示未知，指视图层可以使用 Vue、React、Angular、HTML 中的任意一种。
 
 ### 搭后语
 
-现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[PPX](https://github.com/pangao1990/PPX)。
+现如今，要说比较火的编程语言当属 JavaScript 和 Python 了，这两门语言都可以独立编写前端页面、后端服务器、手机 APP、电脑客户端等等，无所不能。不过，不同的编程语言有不同的侧重点。比如 JavaScript 写网页得心应手，Python 处理大数据信手拈来。那么，能不能取两者的优点，构建一个跨平台客户端框架呢？这就有了今天的主角：[PPX](https://blog.pangao.vip/docs-ppx/)。
 
 ### 应用简介
 
-[PPX](https://github.com/pangao1990/PPX) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 Windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层采用本地 Python。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，选择采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[PPX](https://blog.pangao.vip/docs-ppx/) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 Windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层支持 Python 脚本。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 ##### 应用优势
 
@@ -30,12 +30,7 @@
 
 #### 运行环境
 
-- npm16.14+ ([NodeJs 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
-
-  ```
-  # 推荐使用 pnpm，全局安装，命令如下：
-  npm i -g pnpm
-  ```
+- pnpm 8.x+ ([pnpm 安装教程](https://pnpm.io/zh/installation))
 
 - Python3.7-3.9 ([Python 安装教程](https://blog.pangao.vip/Python环境搭建及模块安装))
 
@@ -43,13 +38,13 @@
 
 利用 git（[git 安装教程](https://blog.pangao.vip/Git安装教程/)） 下载应用，如下所示：
 
-```
+```shell
 git clone https://github.com/pangao1990/PPX.git
 ```
 
-或者，直接在我的 [github](https://github.com/pangao1990/PPX) 下载。
+或者，直接在 [github](https://github.com/pangao1990/PPX) 下载。
 
-```
+```shell
 # 进入项目
 cd PPX
 ```
@@ -62,7 +57,7 @@ cd PPX
 
 下载完毕后，运行初始化命令，程序会自动下载安装对应操作平台的所需依赖软件，如下所示：
 
-```
+```shell
 # 初始化
 pnpm run init
 ```
@@ -73,13 +68,13 @@ pnpm run init
 
 ![image](https://blog.pangao.vip/pic/JavaScript和Python打造跨平台客户端应用——vue-pywebview-pyinstaller-3.png)
 
-项目根目录多了一个 node_modules 文件夹和 pnpm-lock.yaml 文件，用于存放 npm 下载的包。
+项目根目录多了一个 node_modules 文件夹和 pnpm-lock.yaml 文件，用于存放 pnpm 下载的包。
 
 ### 应用运行
 
 输入如下命令，即可启动应用：
 
-```
+```shell
 pnpm run start
 ```
 
@@ -265,6 +260,13 @@ m=备注迁移信息 pnpm run alembic
 - 在 Windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 ### 历史版本
+
+##### V4.1.0
+
+- 修复某些情况下，自动检测软件升级失效的问题
+- 访问网络资源的库由 requests 改为 httpx
+- pywebview 模块升级到 4.1
+- pyinstaller 模块升级到 5.10.1
 
 ##### V4.0.1
 

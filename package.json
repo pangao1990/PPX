@@ -1,7 +1,7 @@
 {
   "name": "ppx",
   "private": true,
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "PPX是一款基于pywebview和PyInstaller框架，构建macOS和windows平台客户端的应用框架。本框架的视图层支持Vue、React、Angular、HTML中的任意一种，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
@@ -33,7 +33,7 @@
     "prefoldercefComments": "预打包-cef模式-文件夹模式",
     "pre:folder:cef": ".\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python pyapp\\spec\\getSpec.py && shx rm -rf build && pnpm -C ./gui run build && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder-pre-cef.spec",
     "buildComments": "正式打包",
-    "build": "shx rm -rf build && pnpm -C ./gui run build && run-script-os",
+    "build": "shx rm -rf build && shx rm -rf dist && pnpm -C ./gui run build && run-script-os && shx rm -rf dist && shx rm -rf build/cache",
     "build:macos": "./pyapp/pyenv/bin/python pyapp/spec/getSpec.py --mac && ./pyapp/pyenv/bin/pyinstaller --clean ./pyapp/spec/macos.spec && pnpm run build:dmg",
     "build:dmg": "shx rm -rf build/*.dmg && ./pyapp/pyenv/bin/python pyapp/package/dmg/getJson.py && appdmg pyapp/package/dmg/dmg.json build/setup.dmg && ./pyapp/pyenv/bin/python pyapp/package/dmg/rename.py",
     "build:windows": ".\\pyapp\\pyenv\\pyenv\\Scripts\\python pyapp\\spec\\getSpec.py && .\\pyapp\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows.spec && pnpm run build:exe",

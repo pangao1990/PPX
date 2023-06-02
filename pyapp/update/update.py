@@ -5,16 +5,16 @@ FilePath: /PPX/pyapp/update/update.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-23 21:24:30
-LastEditTime: 2023-04-26 15:48:31
-Description: 程序升级
-usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 requests 模块。
+LastEditTime: 2023-06-01 15:55:30
+Description: 应用更新
+usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 httpx 模块。
         详细教程请移步至 https://blog.pangao.vip/Python环境搭建及模块安装/
 '''
 
 import os
 import subprocess
 
-import requests
+import httpx
 
 from pyapp.config.config import Config
 
@@ -60,7 +60,7 @@ class AppUpdate:
         '''获取服务端版本信息'''
         try:
             # 3秒后连接超时，3秒后读取超时
-            r = requests.get(Config.appUpdateUrl, timeout=(3, 3))
+            r = httpx.get(Config.appUpdateUrl, timeout=(3, 3))
             resJson = r.json()
             version = resJson['name']    # 版本号
             htmlUrl = resJson['html_url']    # 下载页面
@@ -118,31 +118,39 @@ class AppUpdate:
 
     def __download(self, url, downloadPath, size):
         '''下载大文件'''
-        from api.system import System
-        system = System()
+        from api.api import API
+        api = API()
         AppUpdate.cancelDownload = False
         try:
-            r = requests.get(url, stream=True, timeout=(5, 3600))
-            f = open(downloadPath, "wb")
-            downloadSize = 0
-            infoPy2jsDict = dict()
-            for chunk in r.iter_content(chunk_size=1024):
-                if AppUpdate.cancelDownload:
-                    # 取消下载
-                    return {'status': False, 'msg': '取消更新'}
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
-                downloadSize += 1024
-                infoPy2jsDict['sizeShow'] = self.bytes2Size(downloadSize) + ' / ' + self.bytes2Size(size)
-                infoPy2jsDict['percentage'] = int(downloadSize / size * 100)
-                system.py2js('py2js_updateAppProgress', infoPy2jsDict)
+            with open(downloadPath, "wb") as f:
+                with httpx.Client(follow_redirects=True) as client:
+                    with client.stream("GET", url, timeout=(5, 3600)) as r:
+                        downloadSize = 0
+                        infoPy2jsDict = dict()
+                        # 每块 1KB
+                        for chunk in r.iter_bytes(chunk_size=1024):
+                            if AppUpdate.cancelDownload:
+                                # 取消下载
+                                return {'status': False, 'msg': '取消更新'}
+                            if chunk:
+                                f.write(chunk)
+                                f.flush()
+                            downloadSize += 1024
+                            infoPy2jsDict['sizeShow'] = self.bytes2Size(downloadSize) + ' / ' + self.bytes2Size(size)
+                            infoPy2jsDict['percentage'] = int(downloadSize / size * 100)
+                            api.system_py2js('py2js_updateAppProgress', infoPy2jsDict)
             return {'status': True, 'msg': '下载成功', 'downloadPath': downloadPath}
-        except requests.exceptions.RequestException:
-            # print('e => ', '超时')
+        except httpx.TimeoutException:
+            # print('TimeoutException => ', '超时')
             return {'status': False, 'msg': '连接超时'}
+        except httpx.NetworkError:
+            # print('NetworkError => ', '联网失败')
+            return {'status': False, 'msg': '联网失败'}
+        except httpx.HTTPError as e:
+            # print('HTTPError => ', e)
+            return {'status': False, 'msg': e}
         except Exception as e:
-            # print('e => ', e)
+            # print('Exception => ', e)
             return {'status': False, 'msg': e}
 
     def bytes2Size(self, bytes):

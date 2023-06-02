@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 15:41:46
-LastEditTime: 2023-04-12 13:45:26
+LastEditTime: 2023-05-30 16:12:53
 Description: 生成客户端主程序
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 pywebview 模块。
 '''
@@ -47,7 +47,7 @@ def WebViewApp(ifCef=False):
     # 是否为开发环境
     Config.devEnv = sys.flags.dev_mode
 
-    # 前端页面目录
+    # 视图层页面URL
     if Config.devEnv:
         # 开发环境
         MAIN_DIR = f'http://localhost:{Config.devPort}/'

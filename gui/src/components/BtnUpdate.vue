@@ -142,7 +142,6 @@ const onConfirm = () => {
       state.downloadVisible = false
       if (res.code == 0) {
         ElMessage.success('下载完成')
-        state.downloadVisible = true
         state.btnLoading = false
         window.pywebview.api.system_pyOpenFile(res.downloadPath)
       } else {
