@@ -1,6 +1,6 @@
-pywebview==4.1.0
-pyinstaller==5.10.1
+pywebview==4.4.1
+pyinstaller==6.2.0
 tinyaes==1.0.4
 sqlalchemy==2.0.7
 alembic==1.10.2
-httpx==0.24.0
+httpx==0.26.0

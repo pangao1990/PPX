@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2023-06-01 17:20:51
+LastEditTime: 2024-01-10 16:28:58
 Description: 生成 .spec APP配置文件
 '''
 
@@ -21,7 +21,6 @@ ifMac = args.if_mac
 
 buildPath = 'build'    # 存放最终打包成app的相对路径
 console = False    # 是否展示终端
-cryptoKey = Config.cryptoKey    # 对Python字节码加密
 appName = Config.appName    # 项目名称
 version = Config.appVersion    # 版本号
 logoExt = 'icns' if ifMac else 'ico'
@@ -60,9 +59,6 @@ appName = '{appName}'
 # 版本号
 version = '{version}'
 
-# 对Python字节码加密
-block_cipher = pyi_crypto.PyiBlockCipher(key='{cryptoKey}')
-
 
 a = Analysis(['../../main.py'],
             pathex=[],
@@ -75,10 +71,8 @@ a = Analysis(['../../main.py'],
             excludes=[],
             win_no_prefer_redirects=False,
             win_private_assemblies=False,
-            cipher=block_cipher,
             noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-            cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data)
 
 '''
 

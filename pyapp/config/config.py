@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-21 16:54:23
-LastEditTime: 2023-06-02 08:57:38
+LastEditTime: 2024-01-10 16:28:53
 Description: 配置文件
 usage:
     from pyapp.config.config import Config
@@ -25,7 +25,7 @@ class Config:
     ##
     appName = 'PPX'  # 应用名称
     appNameEN = 'ppx'    # 应用名称-英文（用于生成缓存文件夹，必须是英文）
-    appVersion = "V4.1.0"  # 应用版本号
+    appVersion = "V4.2.0"  # 应用版本号
     appDeveloper = "PanGao"  # 应用开发者
     appBlogs = "https://blog.pangao.vip"  # 个人博客
     appPackage = 'vip.pangao'    # 应用包名，用于在本地电脑生成 vip.pangao.ppx 唯一文件夹
@@ -47,7 +47,6 @@ class Config:
     # 其他配置信息
     ##
     devPort = '5173'    # 开发环境中的前端页面端口
-    cryptoKey = '2338015962873938'    # 对Python字节码加密。在执行 pnpm run init 之前，请设置为空，程序会自动生成密钥
     devEnv = True    # 是否为开发环境，不需要手动更改，在程序运行的时候自动判断
     ifCoverDB = False    # 是否覆盖电脑上存储的数据库，默认不覆盖。只有在数据库改动非常大，不得已的情况下才建议覆盖数据库
 

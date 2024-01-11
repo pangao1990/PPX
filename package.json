@@ -1,7 +1,7 @@
 {
   "name": "ppx",
   "private": true,
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "PPX是一款基于pywebview和PyInstaller框架，构建macOS和windows平台客户端的应用框架。本框架的视图层支持Vue、React、Angular、HTML中的任意一种，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
@@ -15,7 +15,9 @@
     "init:cef": "pnpm install && pnpm -C .\\gui install && python -m venv pyapp\\pyenv\\pyenvCEF && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r .\\pyapp\\requirements.txt && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\pip install -i https://pypi.tuna.tsinghua.edu.cn/simple cefpython3 && .\\pyapp\\pyenv\\pyenvCEF\\Scripts\\python .\\pyapp\\package\\exe\\getAppISSID.py",
     "startComments": "开发环境",
     "start": "run-p dev startos",
+    "devComments": "开发环境-前端",
     "dev": "pnpm -C ./gui run dev",
+    "startosComments": "开发环境-客户端",
     "startos": "run-script-os",
     "startos:macos": "nodemon --config ./pyapp/nodemon.json --exec ./pyapp/pyenv/bin/python -X dev ./main.py",
     "startos:windows": "nodemon --config .\\pyapp\\nodemon.json --exec .\\pyapp\\pyenv\\pyenv\\Scripts\\python -X dev .\\main.py",
