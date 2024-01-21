@@ -30,7 +30,7 @@
 
 #### 运行环境
 
-- Node.js 16.14+ ([pnpm 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
+- Node.js 16.14+ ([Node.js 安装教程](https://blog.pangao.vip/NodeJs安装教程/))
 
 - pnpm 8.x+ ([pnpm 安装教程](https://pnpm.io/zh/installation))
 
