@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2023-04-12 20:50:53
+LastEditTime: 2024-01-22 17:08:27
 Description: 操作数据库类
 usage:
     from api.db.orm import ORM
@@ -27,7 +27,7 @@ class ORM:
         resVal = ''
         dbSession = DB.session()
         with dbSession.begin():
-            stmt = select(PPXStorageVar.value).where(PPXStorageVar.key == key)
+            stmt = select(PPXStorageVar.val).where(PPXStorageVar.key == key)
             result = dbSession.execute(stmt)
             result = result.one_or_none()
             if result is None:
@@ -43,6 +43,6 @@ class ORM:
         '''更新储存变量'''
         dbSession = DB.session()
         with dbSession.begin():
-            stmt = update(PPXStorageVar).where(PPXStorageVar.key == key).values(value=val)
+            stmt = update(PPXStorageVar).where(PPXStorageVar.key == key).values(val=val)
             dbSession.execute(stmt)
         dbSession.close()

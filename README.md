@@ -550,6 +550,10 @@ m=备注迁移信息 pnpm run alembic
 
 ## 历史版本
 
+#### V4.2.1
+
+- 修复自带数据库存储变量命名错误的问题（[issues#33](https://github.com/pangao1990/PPX/issues/33)）
+
 #### V4.2.0
 
 - 删除字节码加密功能（原因见[issues](https://github.com/pyinstaller/pyinstaller/pull/6999)）
