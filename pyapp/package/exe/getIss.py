@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-04-03 17:42:32
-LastEditTime: 2023-04-25 17:05:23
+LastEditTime: 2024-02-24 09:36:56
 Description: 生成 .iss exe安装包配置文件，需要用到 InnoSetup 软件。
 '''
 
@@ -93,5 +93,5 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 # 生成配置文件
 issDir = os.path.dirname(__file__)
-with open(os.path.join(issDir, 'InnoSetup.iss'), 'w+', encoding='utf-8') as f:
+with open(os.path.join(issDir, 'InnoSetup.iss'), 'w+', encoding='gbk') as f:
     f.write(getIss())

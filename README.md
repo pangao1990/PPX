@@ -550,6 +550,10 @@ m=备注迁移信息 pnpm run alembic
 
 ## 历史版本
 
+#### V4.2.2
+
+- 修复在 win 系统下，设置中文软件名时，打包找不到正确路径的问题。
+
 #### V4.2.1
 
 - 修复自带数据库存储变量命名错误的问题（[issues#33](https://github.com/pangao1990/PPX/issues/33)）
