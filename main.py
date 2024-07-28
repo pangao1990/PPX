@@ -68,6 +68,10 @@ def WebViewApp(ifCef=False):
     minWidth = int(initWidth / 2)
     minHeight = int(initHeight / 2)
 
+    # 修复生产环境生成的exe打开白屏的问题
+    import mimetypes
+    mimetypes.add_type('application/javascript', '.js')
+    
     # 创建窗口
     window = webview.create_window(title=Config.appName, url=template, js_api=api, width=initWidth, height=initHeight, min_size=(minWidth, minHeight))
 
