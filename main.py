@@ -4,12 +4,13 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 15:41:46
-LastEditTime: 2023-05-30 16:12:53
+LastEditTime: 2024-07-28 19:44:45
 Description: 生成客户端主程序
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 pywebview 模块。
 '''
 
 import argparse
+import mimetypes
 import os
 import sys
 
@@ -18,7 +19,6 @@ import webview
 from api.api import API
 from pyapp.config.config import Config
 from pyapp.db.db import DB
-
 
 cfg = Config()    # 配置
 db = DB()    # 数据库类
@@ -57,6 +57,9 @@ def WebViewApp(ifCef=False):
         MAIN_DIR = os.path.join(".", "web")
         template = os.path.join(MAIN_DIR, "index.html")    # 设置页面，指向本地
 
+        # 修复某些情况下，打包后软件打开白屏的问题
+        mimetypes.add_type('application/javascript', '.js')
+
     # 系统分辨率
     screens = webview.screens
     screens = screens[0]
@@ -68,10 +71,6 @@ def WebViewApp(ifCef=False):
     minWidth = int(initWidth / 2)
     minHeight = int(initHeight / 2)
 
-    # 修复生产环境生成的exe打开白屏的问题
-    import mimetypes
-    mimetypes.add_type('application/javascript', '.js')
-    
     # 创建窗口
     window = webview.create_window(title=Config.appName, url=template, js_api=api, width=initWidth, height=initHeight, min_size=(minWidth, minHeight))
 
