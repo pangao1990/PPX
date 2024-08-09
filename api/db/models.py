@@ -5,17 +5,17 @@ FilePath: /PPX/api/db/models.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:29:49
-LastEditTime: 2023-04-24 13:52:25
+LastEditTime: 2024-08-09 09:50:03
 Description: 创建数据表
 usage: 更新数据表格式后，请按如下操作迁移数据库：
         m=备注更改内容 npm run alembic
 
-        注意：上述命令仅能迁移打包程序自带数据库(Config.staticDir)。在程序运行初始化时，会自动检测并迁移本地电脑中保存的数据库(Config.storageDir)
+        注意：上述命令仅能迁移打包程序自带数据库(Config.staticDir)。在程序运行初始化时，会自动检测并迁移本地电脑中保存的数据库(Config.appDataDir)
 '''
 
 import json
 
-from sqlalchemy import DateTime, Numeric, Column, Integer, String, text
+from sqlalchemy import Column, DateTime, Integer, Numeric, String, text
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()

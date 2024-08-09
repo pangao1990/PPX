@@ -298,6 +298,9 @@ pnpm run pre:folder
 # 预打包，带console，生成文件夹，cef兼容模式【仅win系统】
 pnpm run pre:folder:cef
 
+# 正式打包，单个exe程序【仅win系统】
+pnpm run build:pure
+
 # 正式打包，cef兼容模式【仅win系统】
 pnpm run build:cef
 
@@ -549,6 +552,12 @@ m=备注迁移信息 pnpm run alembic
 - 在 Windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 ## 历史版本
+
+#### V4.4.0
+
+- Python 的安装源由[清华源](https://pypi.tuna.tsinghua.edu.cn/simple)改为[中科大源](https://pypi.mirrors.ustc.edu.cn/simple/)。
+- 在 win 系统下，执行 `pnpm run build` 打包命令时，PPX 会先生成文件夹式程序（而非是先打包成一个 exe 程序），再打包成安装程序。经测试，打包成文件夹式程序比打包成一个 exe 程序的运行速度会更快些。
+- 明确 `Config.codeDir` 为代码根目录，一般情况下，也是程序所在的绝对目录（但在 build:pure 打包成的独立 exe 程序中，codeDir 是执行代码的缓存根目录，而非程序所在的绝对目录）；明确 `Config.appDataDir` 为电脑上可持久使用的隐藏目录。更多细节请查看 `pyapp/config/config.py` 中的【系统配置信息】部分。
 
 #### V4.3.0
 

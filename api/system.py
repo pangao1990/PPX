@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-26 20:48:26
-LastEditTime: 2023-05-30 15:40:45
+LastEditTime: 2024-08-09 09:50:15
 Description: 系统类
 usage: 调用window.pywebview.api.<methodname>(<parameters>)从Javascript执行
 '''

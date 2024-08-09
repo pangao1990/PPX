@@ -4,13 +4,14 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2023-04-12 20:38:42
+LastEditTime: 2024-08-09 09:49:34
 Description: 数据库类
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 sqlalchemy 模块。
 '''
 
 import os
 from shutil import copyfile
+
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
@@ -26,12 +27,12 @@ class DB:
     def init(self):
         '''初始化数据库'''
         # 迁移数据库到本地电脑
-        dbStorageDir = os.path.join(Config.storageDir, 'static', 'db')    # 本地电脑
-        if not os.path.isdir(dbStorageDir):
+        dbAppDataDir = os.path.join(Config.appDataDir, 'static', 'db')    # 本地电脑
+        if not os.path.isdir(dbAppDataDir):
             # 新建本地电脑文件夹
-            os.makedirs(dbStorageDir)
-        DB.dbPath = os.path.join(dbStorageDir, 'base.db')    # 本地数据库
-        dbVerionPath = os.path.join(dbStorageDir, 'version')    # 本地数据库版本
+            os.makedirs(dbAppDataDir)
+        DB.dbPath = os.path.join(dbAppDataDir, 'base.db')    # 本地数据库
+        dbVerionPath = os.path.join(dbAppDataDir, 'version')    # 本地数据库版本
         appdbVerionPath = os.path.join(Config.staticDir, 'db', 'version')    # 程序包中数据库版本
         ifCopy = False
         if not os.path.exists(DB.dbPath):
