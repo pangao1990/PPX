@@ -4,26 +4,29 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2024-01-10 16:28:58
+LastEditTime: 2024-09-08 20:47:03
 Description: 生成 .spec APP配置文件
 '''
 
 import argparse
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.config import Config
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-m", "--mac", action="store_true", dest="if_mac", help="if_mac")
+parser.add_argument("-l", "--linux", action="store_true", dest="if_linux", help="if_linux")
 args = parser.parse_args()
 ifMac = args.if_mac
+ifLinux = args.if_linux
 
 buildPath = 'build'    # 存放最终打包成app的相对路径
 console = False    # 是否展示终端
 appName = Config.appName    # 项目名称
 version = Config.appVersion    # 版本号
-logoExt = 'icns' if ifMac else 'ico'
+logoExt = 'icns' if ifMac else 'png' if ifLinux else 'ico'
 
 # 添加文件到打包中
 addDll = ''
@@ -181,6 +184,16 @@ if ifMac:
     # macos-pre.spec 带终端
     with open(os.path.join(specDir, 'macos-pre.spec'), 'w+', encoding='utf-8') as f:
         f.write(specFirstPart() + specPackagePartAPP())
+elif ifLinux:
+    console = False    # 是否展示终端
+    # linux.spec
+    with open(os.path.join(specDir, 'linux.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
+
+    console = True    # 是否展示终端
+    # linux-pre.spec 带终端
+    with open(os.path.join(specDir, 'linux-pre.spec'), 'w+', encoding='utf-8') as f:
+        f.write(specFirstPart() + specPackagePartEXE())
 else:
     console = False    # 是否展示终端
     # windows.spec

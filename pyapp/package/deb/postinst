@@ -1,0 +1,15 @@
+# !/bin/bash
+#更新桌面图标数据库
+update-desktop-database /usr/share/applications || true
+#获取当前的用户名
+username=`getent passwd \`who\` | head -n 1 | cut -d : -f 1`
+#判断桌面文件夹是否存在
+if [ -d "/home/${username}/Desktop" ]; then
+echo 'Desktop exist'
+#将你的桌面文件复制到桌面
+cp PPX.desktop /home/${username}/Desktop
+else
+echo '桌面文件夹存在'
+#中文系统自动复制到中文桌面
+cp PPX.desktop /home/${username}/桌面
+fi

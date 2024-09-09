@@ -8,13 +8,13 @@
 
 ## 应用简介
 
-[PPX](https://blog.pangao.vip/docs-ppx/) 基于 pywebview 和 PyInstaller 框架，构建 macOS 和 Windows 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层支持 Python 脚本。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
+[PPX](https://blog.pangao.vip/docs-ppx/) 基于 pywebview 和 PyInstaller 框架，构建 macOS 、 Windows 和 Linux 平台的客户端。本应用的视图层支持 Vue、React、Angular、HTML 中的任意一种，业务层支持 Python 脚本。考虑到某些生物计算场景数据量大，数据私密，因此将数据上传到服务器计算，并不一定是最优解，采用本地 Python 也是一种不错的选择。不过，如果需要调用远程 API，本应用也是支持的。
 
 #### 应用优势
 
 - 视图层可使用任意一款你喜欢的前端框架，比如 Vue、React、Angular、HTML 等，迁移无压力
 - 采用 Python 编程语言开发业务层，模块丰富
-- 本应用已经封装打包环节，一键生成 macOS 和 Windows 平台的客户端应用。开发者只需要关注视图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
+- 本应用已经封装打包环节，一键生成 macOS 、 Windows 和 Linux 平台的客户端应用。开发者只需要关注视图效果和业务逻辑本身，将繁重复杂的打包环节交给本应用处理即可
 
 #### 适用场景
 
@@ -60,7 +60,7 @@ cd PPX
 下载完毕后，运行初始化命令，程序会自动下载安装对应操作平台的所需依赖软件，如下所示：
 
 ```shell
-# 初始化
+# 初始化 (linux系统中需要输入sudo命令密码)
 pnpm run init
 ```
 
@@ -322,8 +322,9 @@ pnpm run build:folder:cef
 
 - 在 `Windows` 环境下打包成 `exe` 格式的可执行文件。
 - 在 `macOS` 环境下打包成 `app` 格式的可执行文件。（用 `x86_64` 芯片打包的应用可以在 `x86_64` 和 `M` 芯片电脑上运行，用 `M` 芯片打包的应用只能在 `M` 芯片电脑上运行）
+- 在 `Linux` 环境下打包成二进制格式的可执行文件。(在特定 CPU 架构下打包就只能在特定 CPU 架构下运行)
 
-打包过程，会先由 `pyapp/spec/getSpec.py` 脚本生成 `windows.spec` 或 `macos.spec` 打包配置文件，之后基于该配置文件进行打包。
+打包过程，会先由 `pyapp/spec/getSpec.py` 脚本生成 `windows.spec` 或 `macos.spec` 或 `linux.spec` 打包配置文件，之后基于该配置文件进行打包。
 
 ::: tip 注意  
 这里需要注意一个问题。因 `Pyinstaller` 的打包机制，可能会造成某些动态库或者 Python 模块并没有被打包进可执行文件。因此，可能出现在生产环境运行没问题。但是打包后，就提示某些动态库或模块丢失。遇到这种情况，就需要在打包配置文件中添加丢失的动态库或模块。  
@@ -359,6 +360,7 @@ addModules = "('../../gui/dist', 'web'), ('../../static', 'static')"
 
 - 在 `Windows` 环境下，基于 [InnoSetup](https://jrsoftware.org/isinfo.php) ，打包成 `exe` 格式的安装程序
 - 在 `macOS` 环境下，基于 [appdmg](https://github.com/LinusU/node-appdmg) ，打包成 `dmg` 格式的安装程序
+- 在 `Linux` 环境下，基于 dpkg ，打包成 `deb` 格式的安装程序
 
 ##### 打包成 exe
 
@@ -436,9 +438,17 @@ appISSID = Config.appISSID    # 安装包唯一GUID
 }
 ```
 
+##### 打包成 deb
+
+打包过程，会先由 `pyapp/package/deb/makeDeb.py` 脚本生成 `control` `postinst` `PPX.desktop` 等打包配置文件，之后基于这些配置文件进行打包。
+
+::: warning 提示  
+PPX 仅在 Ubuntu 22.04.2 版测试成功，其他 Linux 版本还请开发者自行测试。  
+:::
+
 #### 跨平台打包
 
-在本机电脑操作，只能打包出本系统对应的程序包。如果想打包出两种系统的程序包，需要借助 `Github Action` 的能力。
+在本机电脑操作，只能打包出本系统对应的程序包。如果想打包出三种系统的程序包，需要借助 `Github Action` 的能力。
 
 ::: warning 提示  
 这里需要有 Github 操作基础。  
@@ -456,7 +466,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: 拉取项目代码
         uses: actions/checkout@v3
@@ -552,6 +562,12 @@ m=备注迁移信息 pnpm run alembic
 - 在 Windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 ## 历史版本
+
+#### V5.0.0
+
+- 新增支持打包成 Linux 系统可用的程序（仅测试 Ubuntu 22.04.2 版系统）
+- pywebview 模块升级到 5.2
+- pyinstaller 模块升级到 6.10.0
 
 #### V4.4.0
 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PPX
+Comment=Description of MyApp
+Exec=/usr/local/bin/PPX  # 可执行文件的路径
+Icon=/usr/share/icons/myapp.png  # 图标文件的路径
+Terminal=false
+Type=Application
+Categories=Utility;  # 选择适当的类别
