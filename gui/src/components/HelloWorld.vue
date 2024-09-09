@@ -9,7 +9,7 @@
       <a href="https://pyinstaller.readthedocs.io" target="_blank">PyInstaller</a>
       |
       <a href="https://v3.cn.vuejs.org" target="_blank">Vue3</a>
-      框架，构建macOS和windows平台的客户端。
+      框架，构建macOS、Windows和Linux平台的客户端。
     </p>
 
     <p>本应用的业务层采用<b>本地Python</b>或调用<b>远程API</b>等方式</p>
