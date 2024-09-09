@@ -17,7 +17,6 @@ pyappDir = os.path.dirname(os.path.dirname(scriptDir))
 sys.path.append(pyappDir)
 from config.config import Config
 
-cpuArch = Config.cpuArch    # 本机CPU架构
 appName = Config.appName    # 应用名称
 appVersion = Config.appVersion  # 应用版本号
 appVersion = appVersion[1:]    # 去掉第一位V
