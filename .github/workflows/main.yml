@@ -50,22 +50,9 @@ jobs:
       - name: 开始打包
         run: pnpm run build
 
-      - name: 生成系统名称变量
-        id: os-name
-        shell: pwsh
-        run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            $env:OS_NAME = "Windows"
-          } elseif ("${{ runner.os }}" -eq "macOS") {
-            $env:OS_NAME = "macOS"
-          } elseif ("${{ runner.os }}" -eq "Linux") {
-            $env:OS_NAME = "Ubuntu"
-          }
-          echo "OS_NAME=$($env:OS_NAME)" >> $GITHUB_ENV
-
       - name: 上传打包完成的程序包
         uses: actions/upload-artifact@v4
         with:
-          name: Setup_${{ env.OS_NAME }}
+          name: Setup_${{ runner.os }}
           retention-days: 1
           path: build/*-*_*.*

@@ -469,18 +469,18 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: 拉取项目代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 安装node环境
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "19"
+          node-version: 20
 
       - name: 安装pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
-          version: "8.3.1"
+          version: 9
           run_install: false
 
       - name: 获取pnpm仓库目录
@@ -490,7 +490,7 @@ jobs:
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 设置pnpm缓存
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -498,7 +498,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 安装Python3环境
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.9"
           cache: "pip"
@@ -510,9 +510,9 @@ jobs:
         run: pnpm run build
 
       - name: 上传打包完成的程序包
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: Setup
+          name: Setup_${{ runner.os }}
           retention-days: 1
           path: build/*-*_*.*
 ```
@@ -562,6 +562,11 @@ m=备注迁移信息 pnpm run alembic
 - 在 Windows 系统下，请不要使用中文路径，否则可能会出现 cannot call null pointer pointer from cdata 'int(_)(void _, int)' 等错误信息。mac 系统无此问题。
 
 ## 历史版本
+
+#### V5.1.0
+
+- 修复打包成 Linux 系统程序中遇到的一些问题
+- 将 Actions 自动生成的程序包拆分为 3 个不同系统的程序包，方便分批下载
 
 #### V5.0.0
 
