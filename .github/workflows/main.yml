@@ -15,7 +15,7 @@ jobs:
       - name: 安装node环境
         uses: actions/setup-node@v3
         with:
-          node-version: "19"
+          node-version: "20"
 
       - name: 安装pnpm
         uses: pnpm/action-setup@v2
@@ -51,7 +51,7 @@ jobs:
         run: pnpm run build
 
       - name: 上传打包完成的程序包
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Setup
           retention-days: 1
