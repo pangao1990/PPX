@@ -42,7 +42,7 @@
     "build": "shx rm -rf build/* && shx rm -rf dist && pnpm -C ./gui run build && run-script-os && shx rm -rf dist && shx rm -rf build/cache",
     "build:linux": "./pyapp/pyenv/bin/python pyapp/spec/getSpec.py --linux && ./pyapp/pyenv/bin/pyinstaller --clean ./pyapp/spec/linux.spec && shx rm -rf build/linux && ./pyapp/pyenv/bin/python pyapp/package/deb/makeDeb.py",
     "build:macos": "./pyapp/pyenv/bin/python pyapp/spec/getSpec.py --mac && ./pyapp/pyenv/bin/pyinstaller --clean ./pyapp/spec/macos.spec && pnpm run build:dmg",
-    "build:dmg": "shx rm -rf build/*.dmg && ./pyapp/pyenv/bin/python pyapp/package/dmg/getDMG.py && cd ./build && dmgbuild -s ../pyapp/package/dmg/dmg.py PPX PPX.dmg && shx rm -rf macos",
+    "build:dmg": "shx rm -rf build/*.dmg && ./pyapp/pyenv/bin/python pyapp/package/dmg/getDMG.py && cd ./build && ../pyapp/pyenv/bin/dmgbuild -s ../pyapp/package/dmg/dmg.py PPX PPX.dmg && shx rm -rf macos",
     "build:windows": ".\\pyapp\\pyenv\\pyenv\\Scripts\\python pyapp\\spec\\getSpec.py && .\\pyapp\\pyenv\\pyenv\\Scripts\\pyinstaller --clean .\\pyapp\\spec\\windows-folder.spec && shx rm -rf build/windows-folder && pnpm run build:exe",
     "build:exe": "shx rm -rf build/*_Windows.exe && .\\pyapp\\pyenv\\pyenv\\Scripts\\python pyapp\\package\\exe\\getIss.py && pyapp\\package\\exe\\InnoSetup6\\ISCC.exe pyapp\\package\\exe\\InnoSetup.iss  && shx rm -rf build/windows",
     "buildpureComments": "正式打包-单个exe程序",
