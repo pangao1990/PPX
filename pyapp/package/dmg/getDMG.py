@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 09:05:53
-LastEditTime: 2023-03-27 00:04:27
+LastEditTime: 2024-10-22 21:05:38
 Description: 生成 .json dmg配置文件
         详细规范：
             title               （字符串，必填）-已生产的DMG的标题，安装时将显示
@@ -44,54 +44,42 @@ Description: 生成 .json dmg配置文件
                 identifier      （字符串，可选）-显式设置嵌入代码签名中的唯一标识符字符串
 '''
 
-import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+import sys
+
+pyappDir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(pyappDir)
+
 from config.config import Config
 
-appName = Config.appName    # 项目名称
+appName = Config.appName    # 应用名称
+appVersion = Config.appVersion    # 应用版本号
+
+dmgName = f'{appName}-{appVersion}_macOS'
 
 
 # 获取配置文件内容
 def getJson():
-    return '''
-{
-    "title": "''' + appName + '''",
-    "icon": "../../icon/logo.icns",
-    "background": "bg.png",
-    "icon-size": 50,
-    "contents": [
-        {
-            "x": 160,
-            "y": 120,
-            "type": "file",
-            "path": "../../../build/''' + appName + '''.app"
-        },
-        {
-            "x": 430,
-            "y": 120,
-            "type": "link",
-            "path": "/Applications"
-        },
-        {
-            "x": 450,
-            "y": 243,
-            "type": "file",
-            "path": "./潘高的小站.webloc"
-        }
-    ],
-    "window": {
-        "size": {
-            "width": 590,
-            "height": 416
-        }
-    },
-    "format": "UDBZ"
+    return """
+filename = '""" + dmgName + """'
+volume_name = '""" + dmgName + """.dmg'
+format = 'UDBZ'
+files = ['""" + pyappDir + """/../build/""" + appName + """.app', '""" + pyappDir + """/package/dmg/潘高的小站.webloc']
+symlinks = {'Applications': '/Applications'}
+icon_locations = {
+    '""" + appName + """.app': (160, 120),
+    'Applications': (430, 120),
+    '潘高的小站.webloc': (450, 243)
 }
-'''
+window_rect = ((200, 200), (590, 416))
+icon_size = 60
+text_size = 12
+badge_icon = '""" + pyappDir + """/icon/logo.icns'
+background = '""" + pyappDir + """/package/dmg/bg.png'
+"""
 
 
 # 生成配置文件
 jsonDir = os.path.dirname(__file__)
-with open(os.path.join(jsonDir, 'dmg.json'), 'w+', encoding='utf-8') as f:
+with open(os.path.join(jsonDir, 'dmg.py'), 'w+', encoding='utf-8') as f:
     f.write(getJson())

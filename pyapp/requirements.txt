@@ -3,5 +3,6 @@ pyinstaller==6.10.0
 tinyaes==1.1.0
 sqlalchemy==2.0.7
 alembic==1.10.2
-httpx==0.26.0
+httpx==0.27.2
+dmgbuild==1.6.2; sys_platform == 'darwin'
 pygobject==3.48.2; sys_platform == 'linux'

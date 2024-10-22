@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-21 16:54:23
-LastEditTime: 2024-09-24 11:26:58
+LastEditTime: 2024-10-22 21:20:32
 Description: 配置文件
 usage:
     from pyapp.config.config import Config
@@ -25,7 +25,7 @@ class Config:
     ##
     appName = 'PPX'  # 应用名称
     appNameEN = 'ppx'    # 应用名称-英文（用于生成缓存文件夹，必须是英文）
-    appVersion = "V5.1.0"  # 应用版本号
+    appVersion = "V5.2.0"  # 应用版本号
     appDeveloper = "PanGao"  # 应用开发者
     appBlogs = "https://blog.pangao.vip"  # 个人博客
     appPackage = 'vip.pangao'    # 应用包名，用于在本地电脑生成 vip.pangao.ppx 唯一文件夹
