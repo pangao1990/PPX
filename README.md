@@ -545,6 +545,11 @@ m=备注迁移信息 pnpm run alembic
 
 ## 历史版本
 
+#### V5.2.1
+
+- pywebview 模块升级到 5.3.2
+- pyinstaller 模块升级到 6.11.0
+
 #### V5.2.0
 
 - 在 `macOS` 环境下，打包程序由 [appdmg](https://github.com/LinusU/node-appdmg) 改换成 [dmgbuild](https://github.com/dmgbuild/dmgbuild)
