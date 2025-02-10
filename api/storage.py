@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-25 19:39:03
-LastEditTime: 2023-03-25 20:11:10
+LastEditTime: 2024-12-17 14:06:00
 Description: 操作存储在数据库中的数据
 usage: 调用window.pywebview.api.storage.<methodname>(<parameters>)从Javascript执行
 '''
@@ -12,7 +12,7 @@ usage: 调用window.pywebview.api.storage.<methodname>(<parameters>)从Javascrip
 from api.db.orm import ORM
 
 
-class Storage:
+class Storage():
     '''存储类'''
 
     orm = ORM()    # 操作数据库类

@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-26 20:48:26
-LastEditTime: 2024-09-08 20:36:03
+LastEditTime: 2025-02-10 14:25:13
 Description: 系统类
 usage: 调用window.pywebview.api.<methodname>(<parameters>)从Javascript执行
 '''
@@ -52,8 +52,7 @@ class System():
     def system_cancelDownloadNewVersion(self):
         '''取消下载新版本'''
         appUpdate = AppUpdate()    # 程序更新类
-        res = appUpdate.cancel()
-        return res
+        appUpdate.cancel()
 
     def system_getOwner(self):
         # 获取本机用户名
@@ -89,3 +88,14 @@ class System():
                     'path': res
                 })
         return resList
+
+    def system_pySelectDirDialog(self, directory=''):
+        '''选择文件夹对话框'''
+        result = System._window.create_file_dialog(dialog_type=webview.FOLDER_DIALOG, directory=directory)
+        if result is not None and len(result) > 0:
+            if isinstance(result, tuple) or isinstance(result, list):
+                return result[0]
+            else:
+                return result
+        else:
+            return ''

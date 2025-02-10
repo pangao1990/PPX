@@ -545,6 +545,11 @@ m=备注迁移信息 pnpm run alembic
 
 ## 历史版本
 
+#### V5.2.2
+
+- pywebview 模块升级到 5.4
+- pyinstaller 模块升级到 6.12.0
+
 #### V5.2.1
 
 - pywebview 模块升级到 5.3.2

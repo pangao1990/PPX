@@ -1,6 +1,6 @@
 
-filename = 'PPX-V5.2.0_macOS'
-volume_name = 'PPX-V5.2.0_macOS.dmg'
+filename = 'PPX-V5.2.2_macOS'
+volume_name = 'PPX-V5.2.2_macOS.dmg'
 format = 'UDBZ'
 files = ['/Users/lpjy/VScodeProjects/Python/PPX/PPX/pyapp/../build/PPX.app', '/Users/lpjy/VScodeProjects/Python/PPX/PPX/pyapp/package/dmg/潘高的小站.webloc']
 symlinks = {'Applications': '/Applications'}

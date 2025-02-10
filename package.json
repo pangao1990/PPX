@@ -1,7 +1,7 @@
 {
   "name": "ppx",
   "private": true,
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "PPX是一款基于pywebview和PyInstaller框架，构建macOS、Windows和Linux平台客户端的应用框架。本框架的视图层支持Vue、React、Angular、HTML中的任意一种，业务层采用本地Python+调用远程API。",
   "author": "潘高 <pangao1990@qq.com>",
   "scripts": {
