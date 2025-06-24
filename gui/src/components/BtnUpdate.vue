@@ -52,7 +52,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
-import { reactive, onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 
 const state = reactive({
   checkVisible: false,
@@ -70,19 +70,11 @@ const state = reactive({
 
 onMounted(() => {
   setPy2Js() // 来自py的调用
-
-  state.timer = setInterval(() => {
-    if (window.pywebview != undefined) {
-      onCheckUpdate(true) // 程序第一次打开，自动检测更新
-      clearInterval(state.timer)
-      state.timer = ''
-    }
-  }, 100)
 })
 
-onUnmounted(() => {
-  clearInterval(state.timer)
-  state.timer = ''
+// 监听pywebview是否已经准备好了
+window.addEventListener('pywebviewready', async () => {
+  onCheckUpdate(true) // 程序第一次打开，自动检测更新
 })
 
 const setPy2Js = () => {

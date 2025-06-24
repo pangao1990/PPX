@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:08:30
-LastEditTime: 2024-01-22 17:08:27
+LastEditTime: 2025-06-24 09:29:27
 Description: 操作数据库类
 usage:
     from api.db.orm import ORM
@@ -14,35 +14,20 @@ usage:
     print('author', author)
 '''
 
-from api.db.models import PPXStorageVar
-from pyapp.db.db import DB
-from sqlalchemy import select, update, insert
+from pyapp.config.config import Config
 
 
 class ORM:
-    '''操作数据库类'''
+    '''数据库操作类'''
 
-    def getStorageVar(self, key):
-        '''获取储存变量'''
-        resVal = ''
-        dbSession = DB.session()
-        with dbSession.begin():
-            stmt = select(PPXStorageVar.val).where(PPXStorageVar.key == key)
-            result = dbSession.execute(stmt)
-            result = result.one_or_none()
-            if result is None:
-                # 新建
-                stmt = insert(PPXStorageVar).values(key=key)
-                dbSession.execute(stmt)
-            else:
-                resVal = result[0]
-        dbSession.close()
-        return resVal
+    def __init__(self, *args, **kwargs):
+        if Config.typeDB == 'sql':
+            from api.db.sql.orm import ORM as sqlORM
+            self._impl = sqlORM(*args, **kwargs)
+        else:
+            from api.db.json.orm import ORM as jsonORM
+            self._impl = jsonORM(*args, **kwargs)
 
-    def setStorageVar(self, key, val):
-        '''更新储存变量'''
-        dbSession = DB.session()
-        with dbSession.begin():
-            stmt = update(PPXStorageVar).where(PPXStorageVar.key == key).values(val=val)
-            dbSession.execute(stmt)
-        dbSession.close()
+    def __getattr__(self, name):
+        '''将属性访问委托给具体的数据库实现类'''
+        return getattr(self._impl, name)

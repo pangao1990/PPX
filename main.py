@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-23 15:41:46
-LastEditTime: 2024-09-08 20:29:41
+LastEditTime: 2025-06-24 08:56:56
 Description: 生成客户端主程序
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 pywebview 模块。
 '''
@@ -12,12 +12,12 @@ usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安
 import argparse
 import mimetypes
 import os
-import sys
 
 import webview
 
 from api.api import API
 from pyapp.config.config import Config
+
 from pyapp.db.db import DB
 
 cfg = Config()    # 配置
@@ -42,10 +42,10 @@ def on_closing():
     pass
 
 
-def WebViewApp(ifCef=False):
+def WebViewApp(ifDev=False, ifCef=False):
 
     # 是否为开发环境
-    Config.devEnv = sys.flags.dev_mode
+    Config.devEnv = ifDev
 
     # 视图层页面URL
     if Config.devEnv:
@@ -92,9 +92,11 @@ def WebViewApp(ifCef=False):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--dev", action="store_true", dest="if_dev", help="if_dev")
     parser.add_argument("-c", "--cef", action="store_true", dest="if_cef", help="if_cef")
     args = parser.parse_args()
 
+    ifDev = args.if_dev    # 是否开启开发环境
     ifCef = args.if_cef    # 是否开启cef模式
 
-    WebViewApp(ifCef)
+    WebViewApp(ifDev, ifCef)

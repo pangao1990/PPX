@@ -5,7 +5,7 @@ FilePath: /PPX/api/db/models.py
 Author: 潘高
 LastEditors: 潘高
 Date: 2023-03-12 20:29:49
-LastEditTime: 2024-08-09 09:50:03
+LastEditTime: 2025-02-11 15:01:01
 Description: 创建数据表
 usage: 更新数据表格式后，请按如下操作迁移数据库：
         m=备注更改内容 npm run alembic
@@ -60,7 +60,7 @@ class BaseModel(Base):
 class PPXStorageVar(BaseModel):
     '''储存变量'''
     __tablename__ = "ppx_storage_var"
-    key = Column(String(), doc='键', nullable=False, index=True)
+    key = Column(String(), doc='键', nullable=False, index=True, unique=True)
     val = Column(String(), doc='值', server_default='', nullable=False)
     remark = Column(String(), doc='备注', server_default='', nullable=False)
 
