@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2022-03-21 16:54:23
-LastEditTime: 2025-06-24 13:41:39
+LastEditTime: 2025-06-25 10:54:23
 Description: 配置文件
 usage:
     from pyapp.config.config import Config
@@ -25,7 +25,7 @@ class Config:
     ##
     appName = 'PPX'  # 应用名称
     appNameEN = 'ppx'    # 应用名称-英文（用于生成缓存文件夹，必须是英文）
-    appVersion = "V5.3.0"  # 应用版本号
+    appVersion = "V5.3.1"  # 应用版本号
     appDeveloper = "PanGao"  # 应用开发者
     appBlogs = "https://blog.pangao.vip"  # 个人博客
     appPackage = 'vip.pangao'    # 应用包名，用于在本地电脑生成 vip.pangao.ppx 唯一文件夹
@@ -48,9 +48,9 @@ class Config:
     ##
     devPort = '5173'    # 开发环境中的前端页面端口
     devEnv = True    # 是否为开发环境，不需要手动更改，在程序运行的时候自动判断
-    ifCoverDB = False    # 是否覆盖电脑上存储的数据库，默认不覆盖。只有在数据库改动非常大，不得已的情况下才建议覆盖数据库
+    ifCoverDB = False    # 是否覆盖电脑上存储的数据库，默认不覆盖。只有在变更数据库密码或者数据库改动非常大，不得已的情况下才建议覆盖数据库
     typeDB = 'json'    # 数据库类型，目前支持: json, sql
-    pwDB = b'U80hP8WZ9rhfRbn22mseNjlDvGGAbISEeSkRyDmlw2k='    # 数据库密码，typeDB=json时有效。若要重置密码，请在执行 pnpm run init 之前，设置为空，程序会自动生成密码，生成后请勿修改！！！
+    pwDB = b'XnDRG0k1Q7hz-FxOyIRlGnUlRS6kTaUq_6ZwJbirkwY='    # 数据库密码，typeDB=json时有效。若要重置密码，请在执行 pnpm run init 之前，设置为空，程序会自动生成密码，生成后请勿修改！！！
 
     ##
     # 函数

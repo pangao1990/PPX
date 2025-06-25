@@ -4,7 +4,7 @@
 Author: 潘高
 LastEditors: 潘高
 Date: 2025-06-18 17:11:35
-LastEditTime: 2025-06-18 17:21:16
+LastEditTime: 2025-06-25 10:52:19
 Description: 生成 数据库密码
 '''
 
@@ -28,10 +28,16 @@ class GetKeyDB:
             configContent = f.read()
 
         # 写入 pwDB
-        configContent = configContent.replace("pwDB = b''", f"pwDB = {self.getkey()}")
+        if (configContent.find("pwDB = b''") > -1):
+            configContent = configContent.replace("pwDB = b''", f"pwDB = {self.getkey()}")
 
-        with open(configPath, 'w', encoding='UTF-8') as f:
-            f.write(configContent)
+            with open(configPath, 'w', encoding='UTF-8') as f:
+                f.write(configContent)
+
+            # 删除旧的数据库
+            dbPath = Path(Path(__file__).absolute().parent.parent.parent.parent.joinpath('static', 'db', 'json', 'base.json'))
+            if dbPath.exists():
+                dbPath.unlink()
 
 
 if __name__ == '__main__':
