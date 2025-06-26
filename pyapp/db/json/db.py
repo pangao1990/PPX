@@ -3,15 +3,14 @@
 '''
 Author: 潘高
 LastEditors: 潘高
-Date: 2023-03-12 20:08:30
-LastEditTime: 2025-06-24 11:07:03
+Date: 2025-06-26 14:00:35
+LastEditTime: 2025-06-26 14:54:07
 Description: 数据库类 - TinyDB
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 tinydb, cryptography 模块。
 '''
 
 import json
 import os
-from shutil import copyfile
 
 from cryptography.fernet import Fernet
 from tinydb import TinyDB
@@ -29,35 +28,25 @@ class DB:
     def init(self):
         '''初始化数据库'''
         # 如果没有数据库，则新建数据库
-        dbStaticPath = os.path.join(Config.staticDir, 'db', 'json', 'base.json')    # 程序包
-        if not os.path.exists(dbStaticPath):
-            # 创建
-            with SessionDB(dbStaticPath) as db:
-                # 创建一个空的表，名称为 ppx_storage_var
-                db.table(Models.PPXStorageVar)
-
-        # 迁移数据库到本地电脑
         dbAppDataDir = os.path.join(Config.appDataDir, 'static', 'db', 'json')    # 本地电脑
         if not os.path.isdir(dbAppDataDir):
             # 新建本地电脑文件夹
             os.makedirs(dbAppDataDir)
         DB.dbPath = os.path.join(dbAppDataDir, 'base.json')    # 本地数据库
-        ifCopy = False
-        if not os.path.exists(DB.dbPath):
-            # 数据库不存在时，新建数据库
-            ifCopy = True
-        elif Config.ifCoverDB:
-            # 配置信息为强制覆盖时，覆盖数据库
-            ifCopy = True
-        if ifCopy:
-            copyfile(dbStaticPath, DB.dbPath)
+
+        if not os.path.exists(DB.dbPath) or Config.ifCoverDB:
+            # 数据库不存在时，新建数据库 or 配置信息为强制覆盖时，覆盖数据库
+            with SessionDB() as db:
+                # 创建一个空的表，名称为 ppx_storage_var
+                db.table(Models.PPXStorageVar)
 
 
 # 加密数据库
 class SessionDB:
     def __init__(self, file_path=None):
         if file_path is None:
-            file_path = DB.dbPath
+            # 默认使用电脑上的缓存的数据
+            file_path = os.path.join(Config.appDataDir, 'static', 'db', 'json', 'base.json')
         self.file_path = file_path
         self._db = None
         self.cipher = Fernet(Config.pwDB)    # 密钥
@@ -73,8 +62,9 @@ class SessionDB:
             with open(self.file_path, 'rb') as f:
                 encrypted_data = f.read()
                 data = self._decrypt(encrypted_data)
-        except (FileNotFoundError, json.JSONDecodeError):
+        except Exception as e:
             data = {}
+            print(f'SessionDB Error => {e}')
         self._db = TinyDB(storage=MemoryStorage)
         self._db.storage.write(data)
         return self._db
