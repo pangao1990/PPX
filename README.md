@@ -579,6 +579,14 @@ m=备注迁移信息 pnpm run alembic
 
 ## 历史版本
 
+#### V5.3.3
+
+- 对 TinyDB 数据库，区分测试环境和生产环境。测试环境保存在 Config.staticDir 目录下；生产环境保存在 Config.appDataDir 目录下。
+
+#### V5.3.2
+
+- 优化访问 TinyDB 数据库的逻辑。
+
 #### V5.3.1
 
 - 修复某些情况下，访问 TinyDB 数据库时，访问密码错误的问题。

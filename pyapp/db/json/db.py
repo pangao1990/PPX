@@ -3,8 +3,8 @@
 '''
 Author: 潘高
 LastEditors: 潘高
-Date: 2025-06-26 14:00:35
-LastEditTime: 2025-06-26 14:54:07
+Date: 2025-06-24 15:44:44
+LastEditTime: 2025-06-26 15:46:23
 Description: 数据库类 - TinyDB
 usage: 运行前，请确保本机已经搭建Python3开发环境，且已经安装 tinydb, cryptography 模块。
 '''
@@ -28,11 +28,17 @@ class DB:
     def init(self):
         '''初始化数据库'''
         # 如果没有数据库，则新建数据库
-        dbAppDataDir = os.path.join(Config.appDataDir, 'static', 'db', 'json')    # 本地电脑
-        if not os.path.isdir(dbAppDataDir):
+        if Config.devEnv:
+            # 开发环境
+            dbDir = os.path.join(Config.staticDir, 'db', 'json')
+        else:
+            # 生产环境
+            dbDir = os.path.join(Config.appDataDir, 'static', 'db', 'json')
+
+        if not os.path.isdir(dbDir):
             # 新建本地电脑文件夹
-            os.makedirs(dbAppDataDir)
-        DB.dbPath = os.path.join(dbAppDataDir, 'base.json')    # 本地数据库
+            os.makedirs(dbDir)
+        DB.dbPath = os.path.join(dbDir, 'base.json')    # 本地数据库
 
         if not os.path.exists(DB.dbPath) or Config.ifCoverDB:
             # 数据库不存在时，新建数据库 or 配置信息为强制覆盖时，覆盖数据库
@@ -45,8 +51,13 @@ class DB:
 class SessionDB:
     def __init__(self, file_path=None):
         if file_path is None:
-            # 默认使用电脑上的缓存的数据
-            file_path = os.path.join(Config.appDataDir, 'static', 'db', 'json', 'base.json')
+            if Config.devEnv:
+                # 开发环境
+                dbDir = os.path.join(Config.staticDir, 'db', 'json')
+            else:
+                # 生产环境
+                dbDir = os.path.join(Config.appDataDir, 'static', 'db', 'json')
+            file_path = os.path.join(dbDir, 'base.json')
         self.file_path = file_path
         self._db = None
         self.cipher = Fernet(Config.pwDB)    # 密钥
