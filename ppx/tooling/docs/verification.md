@@ -121,3 +121,5 @@ V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress �
 发布后已从 GitHub 公网重新下载全部五个 Release 文件，大小与 SHA-256 均与 GitHub digest 和本地最终文件一致。公开清单包含两个 `6.0.0` 包；应用更新检查返回“6.0.0 已是最新版本”。使用公开资产验证 Windows x64、macOS arm64、Linux x64 的安装包选择正确，Intel Mac 与 Linux arm64 不会误选其他架构。
 
 文档提交 `8232e00` 已通过 [GitHub Pages Deploy](https://github.com/pangao1990/docs-ppx/actions/runs/33965082085)。本地构建检查 48 页、1605 个内链通过，线上浏览器逐页访问 47 个内容页面未发现 HTTP 或脚本错误。客户端发布后再通过 29 个常规交互和 9 个异常恢复检查点。一次外链断言因测试脚本写死旧开发端口而失败，修正脚本为检查当前页面地址后完整复跑通过；该改动未进入生产包。
+
+包介绍页复查：npm 实际加载了原版 LOGO、微信支付、支付宝与公众号四张图片。PyPI 已正确渲染介绍内容和图片引用，但本次网络访问其 `pypi-camo.freetls.fastly.net` 图片代理连接超时，导致图片及维护者头像未显示；原始图片地址返回 HTTP 200。这是当前检查网络下的外部图片加载限制，不影响 wheel/sdist 安装，不能写成 PyPI 图片展示已全部通过。
