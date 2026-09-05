@@ -632,7 +632,7 @@ git diff --check
 - GUI 生产构建；
 - 两个包的版本、许可证、依赖和发布内容一致性检查。
 
-当前回归套件包含 53 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。客户端还需逐项执行[交互验收清单](ppx/tooling/docs/desktop-qa.md)，单元测试通过不能代替实际点击。详细的本轮运行证据和平台限制见[验证记录](ppx/tooling/docs/verification.md)。CI 配置覆盖 Python 3.9、3.11、3.13 和 Node.js 22、24；配置存在不等于该提交已经通过远端 CI。Windows 与 Linux 必须继续由 GitHub Actions 和真机完成构建及安装验收，不能用 macOS 上的模拟元数据测试代替。
+当前回归套件包含 54 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。客户端还需逐项执行[交互验收清单](ppx/tooling/docs/desktop-qa.md)，单元测试通过不能代替实际点击。详细的本轮运行证据和平台限制见[验证记录](ppx/tooling/docs/verification.md)。CI 配置覆盖 Python 3.9、3.11、3.13 和 Node.js 22、24；配置存在不等于该提交已经通过远端 CI。Windows 与 Linux 必须继续由 GitHub Actions 和真机完成构建及安装验收，不能用 macOS 上的模拟元数据测试代替。
 
 完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传 `6.0.0` 是不可撤销操作。
 

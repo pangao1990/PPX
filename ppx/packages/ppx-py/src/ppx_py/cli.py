@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from typing import List, Optional
 
 from . import __version__
@@ -77,6 +78,11 @@ def make_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    # Windows redirects stdout/stderr using the legacy system code page.
+    # CLI output is UTF-8 so Chinese diagnostics also work in pipes and logs.
+    for stream in (sys.stdout, sys.stderr):
+        if stream is not None and hasattr(stream, "reconfigure") and not stream.isatty():
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     args = make_parser().parse_args(argv)
     return int(args.handler(args))
 

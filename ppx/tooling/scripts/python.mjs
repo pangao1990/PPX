@@ -11,7 +11,7 @@ const executable = process.env.PPX_PYTHON || (existsSync(localPython)
   : process.platform === 'win32' ? 'python' : 'python3')
 const result = spawnSync(executable, process.argv.slice(2), {
   cwd: root,
-  env: process.env,
+  env: { ...process.env, PYTHONUTF8: process.env.PYTHONUTF8 ?? '1' },
   stdio: 'inherit'
 })
 if (result.error) {
