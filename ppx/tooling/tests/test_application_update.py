@@ -68,6 +68,16 @@ class ApplicationUpdateTests(unittest.TestCase):
         finally:
             self.updater._download_lock.release()
 
+    def test_release_labels_preserve_filenames_without_cross_architecture_downloads(self):
+        asset = {"name": "PPX-V6.0.0_macOS.dmg", "label": "PPX-V6.0.0_macOS.dmg (arm64)"}
+        with patch.object(platform, "system", return_value="Darwin"):
+            with patch.object(platform, "machine", return_value="x86_64"):
+                self.assertIsNone(self.updater.select_asset([asset]))
+            with patch.object(platform, "machine", return_value="arm64"):
+                self.assertEqual(self.updater.select_asset([asset]), asset)
+                conflict = {"name": "App_macOS_x64.dmg", "label": "arm64"}
+                self.assertIsNone(self.updater.select_asset([conflict]))
+
     def test_cancel_during_release_check_prevents_download(self):
         def check():
             self.updater.cancel()

@@ -2,11 +2,11 @@
   "name": "ppx-js",
   "version": "6.0.0",
   "type": "module",
-  "description": "Stable JavaScript RPC client for PPX V6",
+  "description": "JavaScript RPC client and events for PPX desktop applications",
   "license": "AGPL-3.0-only",
   "author": "潘高 <pangao1990@qq.com>",
   "keywords": ["ppx", "pywebview", "rpc", "desktop"],
-  "homepage": "https://github.com/pangao1990/PPX#readme",
+  "homepage": "https://blog.pangao.vip/docs-ppx/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pangao1990/PPX.git",

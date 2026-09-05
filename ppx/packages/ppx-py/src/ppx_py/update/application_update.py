@@ -137,18 +137,23 @@ class ApplicationUpdater:
         current = next((key for key, aliases in groups.items() if machine in aliases), None)
         matching, generic = [], []
         for asset in candidates:
-            name = asset["name"].lower()
+            # GitHub asset labels allow publishers to keep existing filenames
+            # while declaring the actual CPU architecture of each installer.
+            name = (asset["name"] + " " + str(asset.get("label") or "")).lower()
             # Boundaries avoid treating x86_64 as x86 or darwin as win.
             recognized = {
                 key for key, aliases in groups.items()
-                if any(re.search(r"(?:^|[_.-])" + re.escape(alias) + r"(?:[_.-]|$)", name)
+                if any(re.search(r"(?:^|[\s_.()-])" + re.escape(alias) + r"(?:[\s_.()-]|$)", name)
                        for alias in aliases)
             }
             if "x64" in recognized:
                 recognized.discard("x86")
+            universal = bool(re.search(r"(?:^|[\s_.()-])universal(?:2)?(?:[\s_.()-]|$)", name))
+            if len(recognized) > 1 and not universal:
+                continue
             if current in recognized:
                 matching.append(asset)
-            elif not recognized or re.search(r"(?:^|[_.-])universal(?:2)?(?:[_.-]|$)", name):
+            elif not recognized or universal:
                 generic.append(asset)
         return next(iter(matching or generic), None)
 

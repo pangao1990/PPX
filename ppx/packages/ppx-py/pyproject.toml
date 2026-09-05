@@ -27,7 +27,7 @@ ppx = "ppx_py.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/pangao1990/PPX"
-Documentation = "https://github.com/pangao1990/PPX#readme"
+Documentation = "https://blog.pangao.vip/docs-ppx/"
 Repository = "https://github.com/pangao1990/PPX.git"
 Issues = "https://github.com/pangao1990/PPX/issues"
 

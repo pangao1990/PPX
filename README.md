@@ -9,7 +9,7 @@ PPX 是一个用 Python、pywebview、PyInstaller 和 Web 前端构建 Windows�
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22.13%2B-339933.svg)](https://nodejs.org/)
 
-> **当前状态：** `main` 正在准备 PPX V6.0.0。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
+> **当前状态：** `main` 已提供 PPX 6.0.0 源码。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
 
 **快速入口：** [完整文档](https://blog.pangao.vip/docs-ppx/v6/guide/introduction) · [十分钟快速上手](https://blog.pangao.vip/docs-ppx/v6/guide/quick-start) · [V5 文档](https://blog.pangao.vip/docs-ppx/v5/) · [变更记录](CHANGELOG.md) · [问题反馈](https://github.com/pangao1990/PPX/issues)
 
@@ -609,7 +609,7 @@ if (result.code === 0) {
 - 校验成功后原子改名；
 - 支持进度事件和取消下载。
 
-同一更新器一次只执行一个下载任务。明确标记为其他 CPU 架构的资产不会被当作兜底包；发布通用包时需由发布者确保兼容。下载调用关闭 RPC 默认总超时，网络连接和读取仍分别有 5 秒、15 秒超时。取消会在当前读取结束后生效，重试不会清除取消请求。
+同一更新器一次只执行一个下载任务。更新器同时读取安装包文件名和 GitHub asset label：沿用 `PPX-V6.0.0_macOS.dmg` 等旧命名时，请在 label 中注明 `(arm64)` 或 `(x64)`。明确标记为其他 CPU 架构或架构标记矛盾的资产不会被当作兜底包；发布通用包时需由发布者确保兼容。下载调用关闭 RPC 默认总超时，网络连接和读取仍分别有 5 秒、15 秒超时。取消会在当前读取结束后生效，重试不会清除取消请求。
 
 PPX 不会绕过操作系统权限，也不会把“下载成功”误报成“安装成功”。静默安装、覆盖策略、代码签名和回滚仍由应用发布者按平台设计。
 
@@ -632,7 +632,7 @@ git diff --check
 - GUI 生产构建；
 - 两个包的版本、许可证、依赖和发布内容一致性检查。
 
-当前回归套件包含 55 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。2026-09-05，源码提交 `2fe6d91` 已通过 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33962115357)：Python 3.10 / 3.11 / 3.13 × Node.js 22 / 24 六组质量检查、Python/前端依赖审计，以及 Windows、macOS、Linux 安装包构建与校验均成功。客户端仍需按[交互验收清单](ppx/tooling/docs/desktop-qa.md)完成目标系统的安装、升级和卸载验收，不能把 CI 构建成功当作三端真机全部验收完成。详细范围见[验证记录](ppx/tooling/docs/verification.md)。
+当前回归套件包含 56 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。2026-09-05，源码提交 `2fe6d91` 已通过 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33962115357)：Python 3.10 / 3.11 / 3.13 × Node.js 22 / 24 六组质量检查、Python/前端依赖审计，以及 Windows、macOS、Linux 安装包构建与校验均成功。客户端仍需按[交互验收清单](ppx/tooling/docs/desktop-qa.md)完成目标系统的安装、升级和卸载验收，不能把 CI 构建成功当作三端真机全部验收完成。详细范围见[验证记录](ppx/tooling/docs/verification.md)。
 
 完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传 `6.0.0` 是不可撤销操作。
 
@@ -722,7 +722,6 @@ pnpm run check
 		  </td>
 	  </tr>
   </table>
-  </div>
 </div>
 
 ---
@@ -771,6 +770,6 @@ pnpm run check
 <br/>
 <p align="center">
   <a href="https://github.com/pangao1990/PPX#">
-    <img src="http://randojs.com/images/backToTopButton.png" alt="Back to top" height="29"/>
+    返回顶部
   </a>
 </p>

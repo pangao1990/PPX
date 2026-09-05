@@ -48,3 +48,11 @@ python -m twine upload dist/release/ppx_py-6.0.0*
 ```
 
 PyPI 和 npm 同一版本均不能覆盖。正式上传前必须把 V6.0.0 当作一次不可撤销发布来检查；若上传后发现问题，只能发布更高版本，不能重新上传 6.0.0。
+
+## 通过 GitHub Actions 发布到 PyPI
+
+保留原有 `build` 工作流的在线三端打包，同时提供独立的 `publish-pypi` 手动工作流。普通 push 不会触发 PyPI 上传。
+
+在 PyPI 可信发布者页面绑定项目 `ppx-py`、GitHub 所有者 `pangao1990`、仓库 `PPX`、工作流 `publish-pypi.yml`、环境 `pypi`。在 GitHub 仓库设置创建同名环境并限制为 `main` 分支；推荐设置维护者审批。
+
+发布时先等待 `build` 的六组检查和三端打包全部成功，再在同一个 `main` 提交上运行 `publish-pypi`，输入成功运行的数字 ID。工作流核对仓库、分支、事件、源码提交和结果，构建并检查 wheel/sdist，再使用 PyPI 官方 OIDC 发布，不保存长期上传 token。若 `main` 又有新提交，必须先完成新提交的 `build`，不能借用旧运行通过检查。

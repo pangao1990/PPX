@@ -99,3 +99,7 @@ Windows 后续打包发现 `subprocess` 无法直接定位 `pnpm.cmd`。已让�
 V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress 渲染规则修正地址，历史 Markdown 原文保持不变。修复后检查的 24 个外部目标均可访问。
 
 三个 GitHub Artifact 已实际下载，ZIP 的 SHA-256 与 GitHub 提供的 digest 一致；包内安装文件也分别与 `SHA256SUMS` 一致。名称为 `Setup_Windows_X64`、`Setup_macOS_ARM64`、`Setup_Linux_X64`，本地留存在忽略目录 `output/playwright/ci-artifacts/`。这些是 CI 候选安装包，尚未创建公开 Release。
+
+## 注册表发布前复查
+
+新增安装包架构标签回归测试：保留旧文件名时，更新器同时读取 GitHub asset label，拒绝下载架构不匹配或标记矛盾的安装包。本地 56 项 Python、11 项 JavaScript 测试以及生产构建通过；本节新增修复的远端结果另行记录，不沿用此前 CI 的结果。
