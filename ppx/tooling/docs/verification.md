@@ -1,6 +1,9 @@
-# 本地验证记录
+# 本地与远端验证记录
 
 日期：2026-09-05。此记录说明本次修改的实际验证范围；通过本地测试不代表已经通过所有平台的发布验收。
+
+最终源码提交 `2fe6d91` 的 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33962115357) 已全部通过：六组 Python/Node 质量检查，以及 Windows x64、macOS arm64、Linux x64 三个安装包任务。教程仓库提交 `617d673` 的 [Deploy](https://github.com/pangao1990/docs-ppx/actions/runs/33961884835) 已成功上线。以下结果仅对应本次验证的代码、依赖与环境。
+
 
 ## 自动化检查
 
@@ -70,9 +73,9 @@ git diff --check
 
 ## 尚未覆盖的发布条件
 
-本轮没有运行 Windows/Linux 真机安装、覆盖升级、卸载，也没有替代远端 CI 的完整 Python/Node 版本矩阵。macOS 构建产物未做 Developer ID 签名和公证；本地构建通过不等于可以绕过 Gatekeeper 公开分发。
+本轮没有运行 Windows/Linux 真机安装、覆盖升级、卸载；远端 CI 已完成完整的 Python/Node 版本矩阵和三端安装包生成。macOS 构建产物未做 Developer ID 签名和公证；本地构建通过不等于可以绕过 Gatekeeper 公开分发。
 
-2026-09-05 上线复查后，教程仓库提交 `71dc5b4` 已推送，[GitHub Pages 部署成功](https://github.com/pangao1990/docs-ppx/actions/runs/33960956269)。客户端已同步在线文档入口。框架包未向 PyPI/npm 发布，也未创建 Release。真实公网 Release 下载、系统安装权限、签名与应用数据迁移仍需使用应用自己的发布渠道完成验收。不要将该记录表述为“所有系统没有任何 bug”。
+2026-09-05 上线复查后，教程仓库提交 `617d673` 已推送，[GitHub Pages 部署成功](https://github.com/pangao1990/docs-ppx/actions/runs/33961884835)。客户端已同步在线文档入口。框架包未向 PyPI/npm 发布，也未创建 Release。真实公网 Release 下载、系统安装权限、签名与应用数据迁移仍需使用应用自己的发布渠道完成验收。不要将该记录表述为“所有系统没有任何 bug”。
 
 ## 推送前全访问复查
 
@@ -90,3 +93,9 @@ git diff --check
 安全复查中 GitHub 识别出 Pillow 11.3.0 的已知漏洞，已升级到修复版本 12.3.0，并同步将最低 Python 版本提高到 3.10。新增 Python 依赖审计作为远端质量闸门；旧 Python 3.9 的通过记录不再代表当前支持范围。
 
 Windows 后续打包发现 `subprocess` 无法直接定位 `pnpm.cmd`。已让构建、初始化和更新统一使用解析后的 pnpm 路径，新增实际执行临时前端启动器并传播失败退出码的回归测试。最终本地 Python 55 项、JavaScript 11 项通过。Python 审计未发现已知第三方依赖漏洞；尚未发布到 PyPI 的本地 `ppx-py` 无法进行注册表漏洞比对，仍由源码检查和回归测试验证。
+
+最终本地环境使用 OpenSSL 3.0.16，Pillow 12.3.0、setuptools 84.0.0 与 pip 26.2.1。GitHub Dependabot 未关闭告警为 0，远端 Python 与前端审计均通过。安全依赖升级后的 macOS 应用已实际启动，显示 Python 已连接，返回“你好，上线复查 ✅！”，最新版在线文档和 V5 归档入口均能打开系统浏览器。最终 wheel/sdist 通过元数据检查，wheel/tgz 在新的隔离环境中完成新建项目、初始化、GUI 构建和真实业务 API 调用。
+
+V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress 渲染规则修正地址，历史 Markdown 原文保持不变。修复后检查的 24 个外部目标均可访问。
+
+三个 GitHub Artifact 已实际下载，ZIP 的 SHA-256 与 GitHub 提供的 digest 一致；包内安装文件也分别与 `SHA256SUMS` 一致。名称为 `Setup_Windows_X64`、`Setup_macOS_ARM64`、`Setup_Linux_X64`，本地留存在忽略目录 `output/playwright/ci-artifacts/`。这些是 CI 候选安装包，尚未创建公开 Release。
