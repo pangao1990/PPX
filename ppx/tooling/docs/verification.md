@@ -4,7 +4,7 @@
 
 ## 自动化检查
 
-本机为 macOS arm64，使用项目 `.venv` 的 Python 3.9 和 Node.js 24.14。执行：
+本机为 macOS arm64。最初使用 Python 3.9，安全审计后已将项目 `.venv` 升级到 Python 3.13.5，使用 Pillow 12.3.0 和 Node.js 24.14。最终支持 Python 3.10+。执行：
 
 ```bash
 pnpm check
@@ -18,7 +18,7 @@ git diff --check
 结果：
 
 - doctor：17 项通过，0 项失败。
-- Python：54 项测试通过。
+- Python：55 项测试通过。
 - JavaScript：11 项测试通过。
 - Vue 生产构建、发布源码一致性检查通过。
 - Python 依赖一致性检查通过。
@@ -76,7 +76,7 @@ git diff --check
 
 ## 推送前全访问复查
 
-- 再次通过 54 项 Python、11 项 JavaScript 测试、依赖一致性与前端安全审计。
+- 再次通过 55 项 Python、11 项 JavaScript 测试、依赖一致性与前端安全审计。
 - 浏览器逐页访问 47 个内容页面（另有 404 页面），检查 112 个资源地址；首页、搜索结果跳转、V5 往返、深色主题和窄屏菜单可用。
 - 修正首页遗漏的旧源码链接，统一指向公开的 `V5.3.4` 标签；移除 Git 中的 VitePress 缓存，并加入忽略规则。
 - 原生客户端再次验证中文与空格文件名多选，结果路径正确。
@@ -85,4 +85,8 @@ git diff --check
 
 ## 远端检查与修复
 
-首次运行六组 Python/Node 矩阵、macOS 与 Linux 安装包均通过。Windows 测试发现英文系统使用 cp1252 输出中文诊断时抛出 `UnicodeEncodeError`。本机用同编码重现后，已将 CLI 重定向输出设为 UTF-8，并让构建脚本默认使用 UTF-8；新增回归测试覆盖帮助与创建项目，54 项 Python 测试通过。修复后的三端工作流结果以 GitHub Actions 对应提交为准。
+首次运行六组 Python/Node 矩阵、macOS 与 Linux 安装包均通过。Windows 测试发现英文系统使用 cp1252 输出中文诊断时抛出 `UnicodeEncodeError`。本机用同编码重现后，已将 CLI 重定向输出设为 UTF-8，并让构建脚本默认使用 UTF-8；新增回归测试覆盖帮助与创建项目，55 项 Python 测试通过。修复后的三端工作流结果以 GitHub Actions 对应提交为准。
+
+安全复查中 GitHub 识别出 Pillow 11.3.0 的已知漏洞，已升级到修复版本 12.3.0，并同步将最低 Python 版本提高到 3.10。新增 Python 依赖审计作为远端质量闸门；旧 Python 3.9 的通过记录不再代表当前支持范围。
+
+Windows 后续打包发现 `subprocess` 无法直接定位 `pnpm.cmd`。已让构建、初始化和更新统一使用解析后的 pnpm 路径，新增实际执行临时前端启动器并传播失败退出码的回归测试。最终本地 Python 55 项、JavaScript 11 项通过。Python 审计未发现已知第三方依赖漏洞；尚未发布到 PyPI 的本地 `ppx-py` 无法进行注册表漏洞比对，仍由源码检查和回归测试验证。

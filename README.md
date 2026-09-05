@@ -6,7 +6,7 @@ PPX 是一个用 Python、pywebview、PyInstaller 和 Web 前端构建 Windows�
 
 [![Build](https://github.com/pangao1990/PPX/actions/workflows/main.yml/badge.svg)](https://github.com/pangao1990/PPX/actions/workflows/main.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22.13%2B-339933.svg)](https://nodejs.org/)
 
 > **当前状态：** `main` 正在准备 PPX V6.0.0。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
@@ -149,7 +149,7 @@ ppx/
 
 | 工具 | 最低要求 | 用途 |
 | --- | --- | --- |
-| Python | 3.9+ | Python 业务、pywebview、PyInstaller、PPX CLI |
+| Python | 3.10+ | Python 业务、pywebview、PyInstaller、PPX CLI |
 | Node.js | 22.13+ | Web 前端工具链 |
 | pnpm | 11.x | 前端依赖与工作区管理 |
 
@@ -569,7 +569,7 @@ CI 成功不等于正式发布完成。macOS 还需要 Developer ID 签名和公
 
 1. 将已检查的代码提交并推送到自己的 GitHub 仓库；推送 `main` 或向 `main` 提交 PR 会自动运行。
 2. 也可以进入仓库 **Actions → build → Run workflow**，选择分支，点击 **Run workflow** 手动打包。首次使用 fork 时，需先在 Actions 页面启用工作流；手动入口需要工作流已存在于默认分支。
-3. 等待 Python 3.9 / 3.11 / 3.13 与 Node.js 22 / 24 的质量矩阵通过，再由 Windows、macOS、Ubuntu runner 分别打包。
+3. 等待 Python 3.10 / 3.11 / 3.13 与 Node.js 22 / 24 的质量矩阵通过，再由 Windows、macOS、Ubuntu runner 分别打包。
 4. 在成功运行记录底部的 **Artifacts** 下载 `Setup_Windows_架构`、`Setup_macOS_架构`、`Setup_Linux_架构`。每份包含安装包和 `SHA256SUMS`，保留 14 天。下载 Artifacts 通常需要登录 GitHub。
 5. 解压后在对应系统安装、启动并完成[客户端验收](ppx/tooling/docs/desktop-qa.md)。需要长期公开下载时，再将已验收安装包上传至 GitHub Release。
 
@@ -632,7 +632,7 @@ git diff --check
 - GUI 生产构建；
 - 两个包的版本、许可证、依赖和发布内容一致性检查。
 
-当前回归套件包含 54 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。客户端还需逐项执行[交互验收清单](ppx/tooling/docs/desktop-qa.md)，单元测试通过不能代替实际点击。详细的本轮运行证据和平台限制见[验证记录](ppx/tooling/docs/verification.md)。CI 配置覆盖 Python 3.9、3.11、3.13 和 Node.js 22、24；配置存在不等于该提交已经通过远端 CI。Windows 与 Linux 必须继续由 GitHub Actions 和真机完成构建及安装验收，不能用 macOS 上的模拟元数据测试代替。
+当前回归套件包含 55 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。客户端还需逐项执行[交互验收清单](ppx/tooling/docs/desktop-qa.md)，单元测试通过不能代替实际点击。详细的本轮运行证据和平台限制见[验证记录](ppx/tooling/docs/verification.md)。CI 配置覆盖 Python 3.10、3.11、3.13 和 Node.js 22、24；配置存在不等于该提交已经通过远端 CI。Windows 与 Linux 必须继续由 GitHub Actions 和真机完成构建及安装验收，不能用 macOS 上的模拟元数据测试代替。
 
 完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传 `6.0.0` 是不可撤销操作。
 

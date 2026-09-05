@@ -4,7 +4,7 @@ V6.0.0 最终只发布 `ppx-py` 和 `ppx-js`。旧的 `ppx-core`、`ppx-build`�
 
 ## 发布闸门
 
-发布前必须满足：Python 3.9/3.11/3.13 单测通过；Node 测试、GUI 构建和 audit 通过；wheel/tgz 可在全新环境安装；Windows、macOS、Linux 分别产出并验证安装包；三台真实系统完成安装、启动、RPC 与升级检查；README、开发文档和变更记录一致。
+发布前必须满足：Python 3.10/3.11/3.13 单测通过；Node 测试、GUI 构建和 audit 通过；wheel/tgz 可在全新环境安装；Windows、macOS、Linux 分别产出并验证安装包；三台真实系统完成安装、启动、RPC 与升级检查；README、开发文档和变更记录一致。
 
 以下命令用于完成发布闸门后的人工发布；本地检查与打包不会自动执行上传。
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+import shutil
 import sys
 
 from ..packaging import create_installer, create_spec
@@ -14,7 +15,7 @@ def run(args: object) -> int:
     settings = load_settings(root)
     if not getattr(args, "skip_frontend", False):
         result = subprocess.run(
-            ["pnpm", "-C", settings.paths.frontend, "run", "build"], cwd=root, check=False
+            [shutil.which("pnpm") or "pnpm", "-C", settings.paths.frontend, "run", "build"], cwd=root, check=False
         )
         if result.returncode:
             return result.returncode

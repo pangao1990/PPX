@@ -12,7 +12,7 @@ defineEmits(['open-external'])
     <section class="card">
       <h2>1. 准备源码与开发环境</h2>
       <p>安装包用于体验应用；开发需要包含 <code>ppx.toml</code>、<code>api/</code>、<code>gui/</code> 和 <code>ppx/</code> 的本版本源码。</p>
-      <p>准备 Python 3.9 或更高版本、Node.js 22.13 或更高版本，以及 pnpm 11。在项目根目录先创建虚拟环境。</p>
+      <p>准备 Python 3.10 或更高版本、Node.js 22.13 或更高版本，以及 pnpm 11。在项目根目录先创建虚拟环境。</p>
       <p>macOS / Linux：</p>
       <pre>python3 -m venv .venv</pre>
       <p>Windows：</p>

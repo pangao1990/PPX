@@ -7,6 +7,7 @@ import hashlib
 import os
 import re
 import subprocess
+import shutil
 import sys
 import tempfile
 from dataclasses import dataclass
@@ -257,7 +258,7 @@ def apply_plan(root: Path, plan: UpdatePlan) -> None:
         ], root)
         python_updated = True
         _run([
-            "pnpm", "--dir", settings.paths.frontend, "add", "--save-exact", "--ignore-scripts",
+            shutil.which("pnpm") or "pnpm", "--dir", settings.paths.frontend, "add", "--save-exact", "--ignore-scripts",
             f"ppx-js@{plan.javascript}",
         ], root)
         _replace_framework_versions(root / "ppx.toml", plan)
@@ -287,7 +288,7 @@ def apply_plan(root: Path, plan: UpdatePlan) -> None:
             ], cwd=root, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if (root / "pnpm-lock.yaml").is_file():
             subprocess.run(
-                ["pnpm", "install", "--frozen-lockfile", "--ignore-scripts"],
+                [shutil.which("pnpm") or "pnpm", "install", "--frozen-lockfile", "--ignore-scripts"],
                 cwd=root,
                 check=False,
                 stdout=subprocess.DEVNULL,

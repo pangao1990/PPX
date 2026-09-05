@@ -54,11 +54,11 @@ class ProjectStructureTests(unittest.TestCase):
             (root / "api/requirements.txt").write_text("numpy==2.0.0\n", encoding="utf-8")
             with patch("ppx_py.scaffold.subprocess.run", return_value=SimpleNamespace(returncode=0)) as run, patch(
                 "ppx_py.commands.doctor.run", return_value=0
-            ) as doctor:
+            ) as doctor, patch("ppx_py.scaffold.shutil.which", return_value="C:/tools/pnpm.cmd"):
                 self.assertEqual(initialize_project(root), 0)
             self.assertEqual(run.call_count, 2)
             self.assertEqual(run.call_args_list[0].args[0][1:4], ["-m", "pip", "install"])
-            self.assertEqual(run.call_args_list[1].args[0], ["pnpm", "install"])
+            self.assertEqual(run.call_args_list[1].args[0], ["C:/tools/pnpm.cmd", "install"])
             doctor.assert_called_once()
 
 

@@ -1,3 +1,6 @@
+import os
+from types import SimpleNamespace
+
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,6 +13,20 @@ from ppx_py.scaffold import create_project
 
 
 class PackagingTests(unittest.TestCase):
+    def test_build_resolves_frontend_launcher_and_propagates_its_exit_code(self):
+        from ppx_py.commands import build
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = create_project("Build Demo", directory)
+            launcher = root / ("pnpm.cmd" if os.name == "nt" else "pnpm")
+            launcher.write_text("@exit /b 17\n" if os.name == "nt" else "#!/bin/sh\nexit 17\n", encoding="ascii")
+            launcher.chmod(0o755)
+            with patch.object(build, "find_project_root", return_value=root), patch.object(
+                build.shutil, "which", return_value=str(launcher)
+            ), patch.object(build, "create_spec") as spec:
+                self.assertEqual(build.run(SimpleNamespace()), 17)
+                spec.assert_not_called()
+
     def test_generates_private_entry_and_platform_specs(self):
         for system, marker in (("Darwin", "BUNDLE("), ("Windows", "COLLECT("), ("Linux", "a.binaries,")):
             with self.subTest(system=system), tempfile.TemporaryDirectory() as directory:

@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.9", "3.11", "3.13"]
+        python: ["3.10", "3.11", "3.13"]
         node: [22, 24]
     steps:
       - name: 拉取项目代码
@@ -45,6 +45,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: 安装项目依赖
         run: |
+          python -m pip install --upgrade pip==26.2.1
           pnpm install --frozen-lockfile
           python -m pip install -e ppx/packages/ppx-py -r api/requirements.txt
       - name: 检查并测试
@@ -54,6 +55,11 @@ jobs:
       - name: 审计前端依赖
         if: matrix.python == '3.11' && matrix.node == 22
         run: pnpm audit --audit-level=high --registry=https://registry.npmjs.org
+      - name: 审计 Python 依赖
+        if: matrix.python == '3.11' && matrix.node == 22
+        run: |
+          python -m pip install pip-audit==2.10.1
+          python -m pip_audit --progress-spinner off
 
   build:
     name: package-${{ matrix.os }}
@@ -100,6 +106,7 @@ jobs:
           }
       - name: 安装项目依赖
         run: |
+          python -m pip install --upgrade pip==26.2.1
           pnpm install --frozen-lockfile
           python -m pip install -e ppx/packages/ppx-py -r api/requirements.txt
           python -m pip check

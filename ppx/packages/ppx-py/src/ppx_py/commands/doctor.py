@@ -56,7 +56,7 @@ def collect_checks(root: Path) -> List[Check]:
     settings = load_settings(root)
     checks = [
         Check(settings.project.project_format == 6, "项目格式", f"V{settings.project.project_format}"),
-        Check(sys.version_info >= (3, 9), "Python", sys.version.split()[0]),
+        Check(sys.version_info >= (3, 10), "Python", sys.version.split()[0]),
     ]
     node = _command_version("node", ["--version"])
     pnpm = _command_version("pnpm", ["--version"])

@@ -4,7 +4,7 @@ PPX 的 Python 运行时、命令行与三端打包器。开发者通过 `ppx ne
 
 ## 安装与创建项目
 
-需要 Python 3.9+。前端工具链需要 Node.js 22.13+ 与 pnpm 11.x。
+需要 Python 3.10+。前端工具链需要 Node.js 22.13+ 与 pnpm 11.x。
 
 ```bash
 python -m pip install ppx-py==6.0.0

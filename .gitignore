@@ -4,6 +4,7 @@ gui/dist
 gui/node_modules
 node_modules
 .venv/
+.venv-*/
 __pycache__/
 *.py[cod]
 *.egg-info/

@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 
 try:
     import tomllib
-except ModuleNotFoundError:  # pragma: no cover - Python 3.9/3.10
+except ModuleNotFoundError:  # pragma: no cover - Python 3.10
     import tomli as tomllib
 
 from .settings import Settings

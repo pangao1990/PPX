@@ -209,7 +209,7 @@ def initialize_project(root: Optional[Path] = None) -> int:
         )
         if result.returncode:
             return result.returncode
-    result = subprocess.run(["pnpm", "install"], cwd=project_root, check=False)
+    result = subprocess.run([shutil.which("pnpm") or "pnpm", "install"], cwd=project_root, check=False)
     if result.returncode:
         return result.returncode
     from .commands.doctor import run
