@@ -11,6 +11,8 @@ PPX 是一个用 Python、pywebview、PyInstaller 和 Web 前端构建 Windows�
 
 > **当前状态：** `main` 已提供 PPX 6.0.0 源码。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
 
+**安装与下载：** [ppx-py · PyPI](https://pypi.org/project/ppx-py/) · [ppx-js · npm](https://www.npmjs.com/package/ppx-js) · [桌面安装包](https://github.com/pangao1990/PPX/releases/tag/V6.0.0)
+
 **快速入口：** [完整文档](https://blog.pangao.vip/docs-ppx/v6/guide/introduction) · [十分钟快速上手](https://blog.pangao.vip/docs-ppx/v6/guide/quick-start) · [V5 文档](https://blog.pangao.vip/docs-ppx/v5/) · [变更记录](CHANGELOG.md) · [问题反馈](https://github.com/pangao1990/PPX/issues)
 
 ## 前言
@@ -181,7 +183,7 @@ source .venv/bin/activate
 
 ### 2. 安装框架并创建项目
 
-6.0.0 正式发布到 PyPI/npm 后使用：
+从官方 PyPI 安装：
 
 ```bash
 python -m pip install ppx-py==6.0.0
@@ -214,7 +216,7 @@ ppx dev --skip-frontend
 
 ### 4. 从源码运行本仓库
 
-在两个包正式发布前，或参与框架开发时：
+参与框架开发、修改框架源码时：
 
 ```bash
 git clone https://github.com/pangao1990/PPX.git
@@ -575,7 +577,7 @@ CI 成功不等于正式发布完成。macOS 还需要 Developer ID 签名和公
 
 Windows 任务准备 Inno Setup 6；Linux 任务准备 GTK/WebKitGTK、可供当前 Python 使用的 PyGObject 和 dpkg。构建任务安装 `api/requirements.txt` 中的业务依赖。缺少安装包时上传步骤直接失败，不会产生空的“成功”产物。
 
-Linux runner 固定为 Ubuntu 24.04；产物的架构以 Artifact 名称为准，不代表通用包。更早发行版与其他 CPU 架构需要在相应环境另行构建和验收。工作流只构建并上传临时候选文件，不自动发布 npm/PyPI 或 GitHub Release。
+Linux runner 固定为 Ubuntu 24.04；产物的架构以 Artifact 名称为准，不代表通用包。更早发行版与其他 CPU 架构需要在相应环境另行构建和验收。`build` 工作流只构建并上传临时候选文件，不自动发布包或 GitHub Release。另有独立的 `publish-pypi` 手动工作流，使用 PyPI 可信发布，并强制核对同一提交的三端构建结果；详见[两包发布说明](ppx/tooling/docs/publishing.md)。
 
 ## 成品应用更新
 
@@ -632,7 +634,7 @@ git diff --check
 - GUI 生产构建；
 - 两个包的版本、许可证、依赖和发布内容一致性检查。
 
-当前回归套件包含 56 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。2026-09-05，源码提交 `2fe6d91` 已通过 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33962115357)：Python 3.10 / 3.11 / 3.13 × Node.js 22 / 24 六组质量检查、Python/前端依赖审计，以及 Windows、macOS、Linux 安装包构建与校验均成功。客户端仍需按[交互验收清单](ppx/tooling/docs/desktop-qa.md)完成目标系统的安装、升级和卸载验收，不能把 CI 构建成功当作三端真机全部验收完成。详细范围见[验证记录](ppx/tooling/docs/verification.md)。
+当前回归套件包含 56 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。2026-09-05，源码提交 `66ed38d` 已通过 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33963464721)：Python 3.10 / 3.11 / 3.13 × Node.js 22 / 24 六组质量检查、Python/前端依赖审计，以及 Windows、macOS、Linux 安装包构建与校验均成功。客户端仍需按[交互验收清单](ppx/tooling/docs/desktop-qa.md)完成目标系统的安装、升级和卸载验收，不能把 CI 构建成功当作三端真机全部验收完成。详细范围见[验证记录](ppx/tooling/docs/verification.md)。
 
 完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传 `6.0.0` 是不可撤销操作。
 

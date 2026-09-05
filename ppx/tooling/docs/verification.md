@@ -26,7 +26,7 @@ git diff --check
 - Vue 生产构建、发布源码一致性检查通过。
 - Python 依赖一致性检查通过。
 - macOS 调试 `.app`、正式 `.app` 和 `PPX-V6.0.0_macOS.dmg` 生成成功，DMG 校验通过。
-- Vanilla、Vue、React 三种 `ppx new` 模板在临时目录中分别安装依赖并完成构建；未发布的 `ppx-js` 使用本地包引用。
+- Vanilla、Vue、React 三种 `ppx new` 模板在临时目录中分别安装依赖并完成构建；该轮 `ppx-js` 使用本地包引用。
 - 候选 wheel/sdist/tgz 通过发布产物检查，wheel/sdist 通过 `twine check`。在不继承系统包的独立虚拟环境安装候选 wheel，并在仓库外的临时目录创建新项目，使用候选 tgz 完成 `ppx init`、17 项 doctor 检查和 GUI 构建；实际注册业务模块后的 `user.greet` 返回正确结果。
 - `pnpm audit` 未发现已知漏洞；应用和文档站工作流通过 actionlint。远端运行状态在下方单独记录；工作流静态检查不等于三端打包已通过。
 
@@ -75,7 +75,7 @@ git diff --check
 
 本轮没有运行 Windows/Linux 真机安装、覆盖升级、卸载；远端 CI 已完成完整的 Python/Node 版本矩阵和三端安装包生成。macOS 构建产物未做 Developer ID 签名和公证；本地构建通过不等于可以绕过 Gatekeeper 公开分发。
 
-2026-09-05 上线复查后，教程仓库提交 `617d673` 已推送，[GitHub Pages 部署成功](https://github.com/pangao1990/docs-ppx/actions/runs/33961884835)。客户端已同步在线文档入口。框架包未向 PyPI/npm 发布，也未创建 Release。真实公网 Release 下载、系统安装权限、签名与应用数据迁移仍需使用应用自己的发布渠道完成验收。不要将该记录表述为“所有系统没有任何 bug”。
+2026-09-05 上线复查后，教程仓库提交 `617d673` 已推送，[GitHub Pages 部署成功](https://github.com/pangao1990/docs-ppx/actions/runs/33961884835)。客户端已同步在线文档入口。框架包与 Release 的公开发布验收见本文末尾记录。真实公网 Release 下载、系统安装权限、签名与应用数据迁移仍需使用应用自己的发布渠道完成验收。不要将该记录表述为“所有系统没有任何 bug”。
 
 ## 推送前全访问复查
 
@@ -92,14 +92,32 @@ git diff --check
 
 安全复查中 GitHub 识别出 Pillow 11.3.0 的已知漏洞，已升级到修复版本 12.3.0，并同步将最低 Python 版本提高到 3.10。新增 Python 依赖审计作为远端质量闸门；旧 Python 3.9 的通过记录不再代表当前支持范围。
 
-Windows 后续打包发现 `subprocess` 无法直接定位 `pnpm.cmd`。已让构建、初始化和更新统一使用解析后的 pnpm 路径，新增实际执行临时前端启动器并传播失败退出码的回归测试。最终本地 Python 55 项、JavaScript 11 项通过。Python 审计未发现已知第三方依赖漏洞；尚未发布到 PyPI 的本地 `ppx-py` 无法进行注册表漏洞比对，仍由源码检查和回归测试验证。
+Windows 后续打包发现 `subprocess` 无法直接定位 `pnpm.cmd`。已让构建、初始化和更新统一使用解析后的 pnpm 路径，新增实际执行临时前端启动器并传播失败退出码的回归测试。最终本地 Python 55 项、JavaScript 11 项通过。Python 审计未发现已知第三方依赖漏洞；该轮本地 `ppx-py` 由源码检查和回归测试验证，发布后的注册表安装另行复测。
 
 最终本地环境使用 OpenSSL 3.0.16，Pillow 12.3.0、setuptools 84.0.0 与 pip 26.2.1。GitHub Dependabot 未关闭告警为 0，远端 Python 与前端审计均通过。安全依赖升级后的 macOS 应用已实际启动，显示 Python 已连接，返回“你好，上线复查 ✅！”，最新版在线文档和 V5 归档入口均能打开系统浏览器。最终 wheel/sdist 通过元数据检查，wheel/tgz 在新的隔离环境中完成新建项目、初始化、GUI 构建和真实业务 API 调用。
 
 V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress 渲染规则修正地址，历史 Markdown 原文保持不变。修复后检查的 24 个外部目标均可访问。
 
-三个 GitHub Artifact 已实际下载，ZIP 的 SHA-256 与 GitHub 提供的 digest 一致；包内安装文件也分别与 `SHA256SUMS` 一致。名称为 `Setup_Windows_X64`、`Setup_macOS_ARM64`、`Setup_Linux_X64`，本地留存在忽略目录 `output/playwright/ci-artifacts/`。这些是 CI 候选安装包，尚未创建公开 Release。
+三个 GitHub Artifact 已实际下载，ZIP 的 SHA-256 与 GitHub 提供的 digest 一致；包内安装文件也分别与 `SHA256SUMS` 一致。名称为 `Setup_Windows_X64`、`Setup_macOS_ARM64`、`Setup_Linux_X64`，本地留存在忽略目录 `output/playwright/ci-artifacts/`。这些是该轮 CI 的安装包；公开 Release 使用包含最终架构修复的新构建，见下方记录。
 
 ## 注册表发布前复查
 
 新增安装包架构标签回归测试：保留旧文件名时，更新器同时读取 GitHub asset label，拒绝下载架构不匹配或标记矛盾的安装包。本地 56 项 Python、11 项 JavaScript 测试以及生产构建通过；本节新增修复的远端结果另行记录，不沿用此前 CI 的结果。
+
+
+## 公开包发布验收
+
+2026-09-05，最终代码提交 `66ed38d` 的 [build 工作流](https://github.com/pangao1990/PPX/actions/runs/33963464721) 全部成功：Python 3.10 / 3.11 / 3.13 × Node 22 / 24 六组质量检查、依赖审计，以及 Windows x64、macOS arm64、Linux x64 安装包构建与校验均通过。该提交包含 56 项 Python 和 11 项 JavaScript 测试。
+
+- [ppx-py 6.0.0](https://pypi.org/project/ppx-py/6.0.0/) 已通过 [PyPI 可信发布工作流](https://github.com/pangao1990/PPX/actions/runs/33963776890) 上传 wheel/sdist。独立环境从官方 PyPI 安装后，56 项 Python 测试和 `pip check` 通过；24 个 Python 源文件与最终提交逐字节一致。
+- [ppx-js 6.0.0](https://www.npmjs.com/package/ppx-js/v/6.0.0) 已发布。公开 tgz 的完整性摘要与本地验收包一致；安装后的 JavaScript 文件与最终提交一致，11 项 JavaScript 测试通过。
+- 使用公开包新建 Vue 项目、初始化依赖、17 项 doctor 检查和 GUI 生产构建全部通过，不再依赖本地 wheel/tgz 引用。
+- [V6.0.0 Release](https://github.com/pangao1990/PPX/releases/tag/V6.0.0) 已公开。保留旧安装包文件名，asset label 分别声明 Windows x64、macOS arm64、Linux x64；附带 `ppx-update.json` 与 `SHA256SUMS`。五个 GitHub asset 的摘要均与本地文件一致。
+
+注册表里的 `6.0.0` 不再覆盖；后续文档同步仍保持项目版本为 `6.0.0`。Windows/Linux 真机交互、覆盖安装与卸载，以及正式代码签名和 macOS 公证仍属于未覆盖范围，不能表述为所有平台绝对没有 bug。
+
+旧的 PyPI 项目 `ppx-core`、`ppx-build` 和 npm 包 `ppx-bridge` 已删除；公开版本查询均返回 404。PyPI 项目管理列表已确认仅保留新的 `ppx-py` 与原有无关项目。
+
+发布后已从 GitHub 公网重新下载全部五个 Release 文件，大小与 SHA-256 均与 GitHub digest 和本地最终文件一致。公开清单包含两个 `6.0.0` 包；应用更新检查返回“6.0.0 已是最新版本”。使用公开资产验证 Windows x64、macOS arm64、Linux x64 的安装包选择正确，Intel Mac 与 Linux arm64 不会误选其他架构。
+
+文档提交 `8232e00` 已通过 [GitHub Pages Deploy](https://github.com/pangao1990/docs-ppx/actions/runs/33965082085)。本地构建检查 48 页、1605 个内链通过，线上浏览器逐页访问 47 个内容页面未发现 HTTP 或脚本错误。客户端发布后再通过 29 个常规交互和 9 个异常恢复检查点。一次外链断言因测试脚本写死旧开发端口而失败，修正脚本为检查当前页面地址后完整复跑通过；该改动未进入生产包。

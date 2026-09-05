@@ -1,49 +1,41 @@
-# 上线步骤与当前状态
+# 发布状态与后续维护
 
-检查日期：2026-09-05。本地检查、远端 CI 和教程部署已通过；仍需完成的正式分发验收列在下方。
+检查日期：2026-09-05。当前代码、教程和两个框架包均已公开，项目版本保持 `6.0.0`。
 
-## 当前已完成
+## 正式分发入口
 
-- 客户端恢复原版 LOGO，图像与旧版文件 SHA-256 一致；保留原版安装图标。
-- 客户端与介绍站风格统一，品牌和普通页面不再刻意附加版本标记；实际版本号、兼容说明和旧 URL 保留。
-- Python / JavaScript 回归、GUI 构建、依赖一致性、安全审计、发布包元数据检查。
-- 源码提交 `2fe6d91` 的 [build 工作流全部通过](https://github.com/pangao1990/PPX/actions/runs/33962115357)：六组质量检查、依赖审计、三端安装包生成与校验。
-- 新版介绍站提交 `617d673` 已[部署成功](https://github.com/pangao1990/docs-ppx/actions/runs/33961884835)，客户端已同步最新文档与 V5 归档入口。
-- macOS 客户端交互与安装包验证；三个远端 Artifact 已下载，归档与安装文件的 SHA-256 均核验一致，详细范围见 [验证记录](verification.md)。
-- V5 原文档和归档入口保留；源码使用已经公开的 `V5.3.4` 标签。
+| 内容 | 入口 |
+| --- | --- |
+| Python 框架包 | [ppx-py 6.0.0](https://pypi.org/project/ppx-py/6.0.0/) |
+| JavaScript 框架包 | [ppx-js 6.0.0](https://www.npmjs.com/package/ppx-js/v/6.0.0) |
+| 三端示例安装包与更新清单 | [V6.0.0 Release](https://github.com/pangao1990/PPX/releases/tag/V6.0.0) |
+| 最新教程 | [PPX 文档](https://blog.pangao.vip/docs-ppx/) |
+| V5 教程 | [V5 归档](https://blog.pangao.vip/docs-ppx/v5/) |
+| V5 源码 | [V5.3.4 标签](https://github.com/pangao1990/PPX/tree/V5.3.4) |
 
-## 还不能省略的验收
+原版 LOGO、品牌配色、V5 原文和归档入口均保留。当前框架只依赖 `ppx-py` 与 `ppx-js`，旧三包不再用于当前项目。
 
-- Windows/Linux 真机体验仍需单独验收；三端 CI 成功生成安装包不等于已完成安装、交互、升级与卸载测试。
-- 正式分发前完成 macOS Developer ID 签名/公证及 Windows 签名方案。
-- 公网更新下载、安装、覆盖升级及卸载需要在三套目标系统实际验证。
-- 截至本次检查，PyPI 的 `ppx-py==6.0.0`、npm 的 `ppx-js@6.0.0` 尚无公开版本。发布前仍须确认账号拥有包名权限，且版本未被占用。
+## 已完成的验证
 
-## 建议的执行顺序
+最终代码 `66ed38d` 已通过 [build 工作流](https://github.com/pangao1990/PPX/actions/runs/33963464721)：六组 Python/Node 组合、依赖审计和三个安装包任务全部成功。公开包在独立环境安装后，通过 56 项 Python、11 项 JavaScript 测试、新建项目、初始化、环境诊断和前端构建。详细证据与范围见[验证记录](verification.md)。
 
-1. **核对两个仓库的改动。** 应用与 VitePress 文档是独立仓库，应分别提交。特别检查本次结构迁移涉及的删除和新增文件，勿只提交已跟踪文件而漏掉 `ppx/`、锁文件、新组件或文档。
-2. **保留旧版。** 公开的 `V5.3.4` 标签已可访问，不要删除或移动它。本地 `v5` 维护分支若需公开，可在核对指向后单独推送；目前 README 不依赖该分支才能访问旧源码。
-3. **提交候选代码并运行 Actions。** 推送到 `main` 自动触发，或者在工作流已进入默认分支后通过 **Actions → build → Run workflow** 手动触发。查看质量矩阵和三个打包任务，必须全部通过。
-4. **下载三个 Artifact。** 从运行记录下载 `Setup_系统_架构`，解压并核对 `SHA256SUMS`。候选保留 14 天；它们还不是公开 Release。
-5. **完成三端安装验收。** 按 [交互验收清单](desktop-qa.md)逐项点击，验证实际业务依赖、权限、文件选择、存储、退出与更新。Linux 候选以 Ubuntu 24.04 为构建基线；不能直接宣称兼容更旧发行版。发现问题先修复再重新生成候选。
-6. **发布两个框架包。** 按 [两包发布说明](publishing.md)从最终提交重新生成 wheel/sdist/tgz，校验并在全新环境安装。先发布 `ppx-py`，从 PyPI 安装验证；再发布 `ppx-js`，从 npm 安装验证。同版本不可覆盖。
-7. **上线介绍站。** 在文档仓库确认 GitHub Pages 使用 GitHub Actions，推送文档并检查 Deploy 工作流。线上逐个验证新文档、搜索、资源和 V5 归档入口。注意应用仓库与文档仓库的部署是两个操作。
-8. **同步状态并生成最终客户端。** 客户端的在线文档入口已随介绍站部署完成同步；后续发布仍须重新构建、复测。README 的“准备发布”提示应在框架包真实可安装后修改。确保最后的提交、测试记录和安装包来自同一份代码。
-9. **创建 GitHub Release。** 两个包都可公开安装、最终客户端通过验收后，为对应提交创建匹配 `ppx-update.json` 的版本标签，上传三端签名安装包、更新清单和校验值。当前更新器会检查 GitHub asset 的 SHA-256 digest，不能只上传一个校验文本就认为客户端验证已满足。
-10. **发送 Issue 回复。** 三条历史问题分别处理；不要因为新版本完成就把未复现问题标记为已修复。草稿供维护者核对后亲自点击 Comment，是否关闭 Issue 也由维护者决定。
+Release 安装包延续旧版文件名，通过 asset label 标明架构。macOS 包仅适用于 Apple Silicon / arm64；Windows 和 Linux 包为 x64。Linux 使用 Ubuntu 24.04 构建基线，其他架构和更早发行版需另行构建验证。
 
-若采用分阶段上线，每个阶段都应保留准确的状态说明。
+## 仍需按目标系统完成的验收
 
-## 仅供本地预检的命令
+- Windows/Linux 真机安装、逐项交互、覆盖升级和卸载；CI 成功生成安装包不能替代真机测试。
+- 正式代码签名、macOS Developer ID 公证，以及对应系统的来源验证。
+- 使用应用自己的数据和升级渠道验证权限、数据迁移与回滚。
 
-```bash
-pnpm check
-node ppx/tooling/scripts/python.mjs -m pip check
-pnpm audit --audit-level high --registry=https://registry.npmjs.org
-pnpm build
-pnpm verify:installer
-node ppx/tooling/scripts/python.mjs ppx/tooling/scripts/installer_checksum.py
-git diff --check
-```
+当前公开安装包没有完成代码签名/公证，应在下载说明中如实标明，不能宣称所有系统已经完成验收或绝对没有 bug。
 
-在文档仓库另行执行 `pnpm check`。以上命令不发布包、不推送 Git、不创建 Release。
+## 后续发版步骤
+
+1. 分别检查应用仓库与 VitePress 文档仓库，完整提交代码、资源与锁文件；保留 `V5.3.4` 标签和 V5 原文。
+2. 运行 `pnpm check`，检查依赖和许可证。推送 `main` 后等待 `build` 的六组质量检查和三个打包任务全部成功；也可在 **Actions → build → Run workflow** 在线打包。
+3. 下载 `Setup_系统_架构` Artifacts 并核对 `SHA256SUMS`，按[客户端交互清单](desktop-qa.md)完成目标系统验收。
+4. 按[两包发布说明](publishing.md)验收最终 wheel/sdist/tgz。Python 包可通过独立的 `publish-pypi` 工作流上传，必须填写同一提交成功的 build 运行 ID；JavaScript 包使用 npm 官方发布流程。
+5. 从公开 PyPI/npm 重新安装并测试，随后创建对应 Release，上传三端安装包、架构标签、更新清单及校验值。客户端会校验 GitHub asset 的 SHA-256 digest。
+6. 文档仓库执行 `pnpm check`，提交并推送，等待 GitHub Pages 的 Deploy 成功；逐页验证线上内容、资源、搜索及 V5 往返。
+7. 同步 README、变更记录与实际测试结果。PyPI/npm 不允许覆盖已经发布的同版本，`6.0.0` 的文档修订不会重新上传这两个包。
+8. 历史 Issue 回复仍由维护者审核草稿并亲自点击 Comment；是否关闭问题也由维护者决定。
