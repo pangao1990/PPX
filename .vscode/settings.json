@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/__pycache__": true,
+    "build": true,
+    "dist": true,
+    "node_modules": true,
+    "gui/dist": true,
+    "gui/node_modules": true,
+    ".venv": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/dist/**": true,
+    "**/node_modules/**": true,
+    "**/.venv/**": true
+  },
+  "python.analysis.extraPaths": [
+    "./ppx/packages/ppx-py/src"
+  ]
+}

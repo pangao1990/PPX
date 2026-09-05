@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ppx-py"
+version = "6.0.0"
+description = "PPX Python runtime, developer CLI and cross-platform packager"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "AGPL-3.0-only"
+license-files = ["LICENSE"]
+authors = [{ name = "潘高", email = "pangao1990@qq.com" }]
+dependencies = [
+  "httpx==0.28.1",
+  "packaging==26.3",
+  "pillow==11.3.0",
+  "pywebview==6.2.1",
+  "pyinstaller==6.22.2",
+  "tomli==2.4.1; python_version < '3.11'",
+  "dmgbuild==1.6.5; sys_platform == 'darwin'",
+  "pyobjc-core==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+  "pyobjc-framework-Cocoa==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+  "pyobjc-framework-Quartz==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+  "pyobjc-framework-Security==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+  "pyobjc-framework-UniformTypeIdentifiers==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+  "pyobjc-framework-WebKit==11.1; sys_platform == 'darwin' and python_version < '3.10'",
+]
+
+[project.scripts]
+ppx = "ppx_py.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/pangao1990/PPX"
+Documentation = "https://github.com/pangao1990/PPX#readme"
+Repository = "https://github.com/pangao1990/PPX.git"
+Issues = "https://github.com/pangao1990/PPX/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+ppx_py = ["template/assets/*"]

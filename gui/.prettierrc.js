@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   overrides: [
     {
       files: '.prettierrc',
@@ -7,7 +7,7 @@ module.exports = {
       }
     }
   ],
-  printWidth: 500, // 一行最多 500 字符
+  printWidth: 100, // 保持示例源码易于阅读
   tabWidth: 2, // 使用 2 个空格缩进
   semi: false, // 句尾省略分号
   singleQuote: true, // 使用单引号而不是双引号

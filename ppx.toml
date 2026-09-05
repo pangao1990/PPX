@@ -1,0 +1,50 @@
+[project]
+name = "PPX"
+slug = "ppx"
+version = "6.0.0"
+identifier = "vip.pangao"
+developer = "PanGao"
+description = "PPX cross-platform desktop application"
+website = "https://blog.pangao.vip"
+windowsAppId = "F35003AB-441A-C0A6-4527-937E6A02F789"
+format = 6
+
+[python]
+modules = ["api.api"]
+
+[paths]
+frontend = "gui"
+resources = "api/resources"
+assets = "ppx/assets"
+
+[window]
+widthRatio = 0.6667
+heightRatio = 0.8
+minWidthRatio = 0.5
+minHeightRatio = 0.5
+resizable = true
+fullscreen = false
+alwaysOnTop = false
+confirmClose = false
+backgroundColor = "#FFFFFF"
+
+[development]
+port = 5173
+
+[storage]
+filename = "storage-v6.json"
+
+[applicationUpdate]
+enabled = true
+releaseUrl = "https://api.github.com/repos/pangao1990/PPX/releases/latest"
+
+[compatibility]
+pythonApi = "6.0"
+javascriptApi = "6.0"
+dataSchema = "1"
+
+[framework]
+python = "6.0.0"
+javascript = "6.0.0"
+channel = "stable"
+releaseUrl = "https://api.github.com/repos/pangao1990/PPX/releases/latest"

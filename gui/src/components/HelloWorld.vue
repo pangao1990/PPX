@@ -26,6 +26,7 @@
 <script setup>
 import BtnUpdate from './BtnUpdate.vue'
 import { ref } from 'vue'
+import { ppx } from 'ppx-js'
 
 defineProps({
   msg: String
@@ -33,11 +34,9 @@ defineProps({
 
 let creator = ref('pangao')
 
-const getOwner = () => {
+const getOwner = async () => {
   // 获取本机用户名
-  window.pywebview.api.system_getOwner().then((res) => {
-    creator.value = res
-  })
+  creator.value = await ppx.call('system.getOwner')
 }
 
 </script>

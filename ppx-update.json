@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "releaseVersion": "6.0.0",
+  "channel": "stable",
+  "requires": {
+    "projectFormat": 6,
+    "pythonApi": "6.0",
+    "javascriptApi": "6.0",
+    "dataSchema": "1"
+  },
+  "provides": {
+    "pythonApi": "6.0",
+    "javascriptApi": "6.0",
+    "dataSchema": "1"
+  },
+  "packages": {
+    "ppx-py": "6.0.0",
+    "ppx-js": "6.0.0"
+  }
+}

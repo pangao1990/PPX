@@ -1,0 +1,32 @@
+{
+  "name": "ppx-js",
+  "version": "6.0.0",
+  "type": "module",
+  "description": "Stable JavaScript RPC client for PPX V6",
+  "license": "AGPL-3.0-only",
+  "author": "潘高 <pangao1990@qq.com>",
+  "keywords": ["ppx", "pywebview", "rpc", "desktop"],
+  "homepage": "https://github.com/pangao1990/PPX#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pangao1990/PPX.git",
+    "directory": "ppx/packages/ppx-js"
+  },
+  "bugs": "https://github.com/pangao1990/PPX/issues",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "types": "./src/index.d.ts",
+  "files": ["src"],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

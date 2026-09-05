@@ -1,8 +1,0 @@
-Package: PPX
-Version: 1.0.0
-Section: base
-Priority: optional
-Architecture: all
-Depends: python3
-Maintainer: PanGao
-Description: https://blog.pangao.vip

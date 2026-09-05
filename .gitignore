@@ -2,13 +2,14 @@ build
 dist
 gui/dist
 gui/node_modules
-gui/pnpm-lock.yaml
 node_modules
-pnpm-lock.yaml
-pyapp/pyenv
-pyapp/spec/*
-!pyapp/spec/getSpec.py
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
 .vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -16,3 +17,7 @@ pyapp/spec/*
 *.njsproj
 *.sln
 *.sw?
+
+# Local browser verification artifacts
+.playwright-cli/
+output/playwright/

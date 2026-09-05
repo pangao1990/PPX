@@ -1,0 +1,12 @@
+# 此文件由 ppx update 管理，请勿手动修改。
+lockVersion = 1
+projectFormat = 6
+
+[framework]
+python = "6.0.0"
+javascript = "6.0.0"
+
+[compatibility]
+pythonApi = "6.0"
+javascriptApi = "6.0"
+dataSchema = "1"

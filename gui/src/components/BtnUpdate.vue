@@ -1,184 +1,198 @@
-<template>
-  <div>
-    <el-tooltip content="检测更新" placement="bottom" effect="light">
-      <el-button key="plain" size="small" link @click="onCheckUpdate(false)">
-        <SvgIcon :name="state.btnLoading ? 'ele-Loading' : 'icon-Update'" :size="20" :class="{ 'is-loading': state.btnLoading }"></SvgIcon>
-      </el-button>
-    </el-tooltip>
-
-    <el-dialog v-model="state.checkVisible" title="检测更新" top="30vh" draggable destroy-on-close :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" :center="false">
-      <div>
-        <SvgIcon v-if="state.code == 1" name="ele-SuccessFilled" :size="18" color="#67C23A" style="top:4px"></SvgIcon>
-        <SvgIcon v-else-if="state.code == 0" name="ele-WarningFilled" :size="18" color="#E6A23C" style="top:4px"></SvgIcon>
-        <SvgIcon v-else-if="state.code == -1" name="ele-CircleCloseFilled" :size="18" color="#F56C6C" style="top:4px"></SvgIcon>
-        {{ state.msg }}
-      </div>
-      <div v-if="state.code == 0 && state.body != ''" class="update-info">
-        <div v-for="item in state.body">{{ item }}</div>
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-link v-if="state.htmlUrl != ''" class="float-l mt10" type="info" @click="onOpenLink">手动更新</el-link>
-          <el-button v-if="state.code == 0" @click="state.checkVisible = false">取消</el-button>
-          <el-button type="primary" @click="onConfirm">确认</el-button>
-        </span>
-      </template>
-    </el-dialog>
-
-    <el-dialog v-model="state.downloadVisible" title="下载更新" align-center draggable destroy-on-close :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
-      <div>
-        <div class="mb6">
-          <SvgIcon name="ele-Loading" :size="14" class="is-loading mr2" style="top:2px" color="#337ecc"></SvgIcon>
-          正在下载更新...
-        </div>
-        <el-progress :text-inside="true" :stroke-width="25" :percentage="state.downloadPercentage">
-          <span>{{ state.downloadSizeShow }}</span>
-        </el-progress>
-      </div>
-      <div v-if="state.htmlUrl != ''" class="tip">
-        若网速不理想，请尝试
-        <span><el-link type="primary" @click="onOpenLink" class="tip-sd">手动更新</el-link></span>
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <!-- <el-link v-if="state.htmlUrl != ''" class="float-l mt10" type="info" @click="onOpenLink">手动更新</el-link> -->
-          <el-button @click="onCancel">取消</el-button>
-          <el-button type="primary" @click="onBack">后台更新</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
-</template>
-
 <script setup>
+import { onMounted, onUnmounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { reactive, onMounted } from 'vue'
+import 'element-plus/es/components/message/style/css'
+import { ppx } from 'ppx-js'
 
+const props = defineProps({ disabled: Boolean })
 const state = reactive({
-  checkVisible: false,
-  btnLoading: false,
-  code: 0, // 0=>有新版本; -1=>联网失败; 1=>已经是最新版本
-  msg: '',
-  htmlUrl: '', // 手动更新网址
-  body: [], // 版本介绍
-  downloadVisible: false,
-  downloadSizeShow: '', // 下载过程中大小数值展示
-  downloadPercentage: 0, // 下载过程中大小百分比
-  backUpdate: false, // 是否后台更新
-  timer: '',
+  checking: false,
+  canDownload: false,
+  downloading: false,
+  cancelling: false,
+  visible: false,
+  code: 1,
+  message: '',
+  body: '',
+  url: '',
+  path: '',
+  percentage: 0,
+  size: ''
 })
-
+let unsubscribe = () => {}
 onMounted(() => {
-  setPy2Js() // 来自py的调用
+  unsubscribe = ppx.on('applicationUpdate.progress', (progress) => {
+    if (!state.downloading) return
+    state.percentage = Math.max(0, Math.min(100, Number(progress.percentage) || 0))
+    state.size = progress.sizeShow || ''
+  })
 })
+onUnmounted(() => unsubscribe())
 
-// 监听pywebview是否已经准备好了
-window.addEventListener('pywebviewready', async () => {
-  onCheckUpdate(true) // 程序第一次打开，自动检测更新
-})
-
-const setPy2Js = () => {
-  // 来自py的调用
-  window['py2js_updateAppProgress'] = (res) => {
-    const resDict = JSON.parse(res)
-    // console.log('js', resDict)
-    state.downloadSizeShow = resDict['sizeShow']
-    state.downloadPercentage = resDict['percentage']
+async function check() {
+  if (props.disabled || state.checking) return
+  if (state.downloading || state.path) {
+    state.visible = true
+    return
+  }
+  state.checking = true
+  try {
+    const result = await ppx.call('applicationUpdate.check')
+    state.code = result.code
+    state.canDownload = result.code === 0
+    state.message = result.msg
+    state.body = result.body || ''
+    state.url = result.htmlUrl || ''
+    state.visible = true
+  } catch (error) {
+    ElMessage.error(error.message)
+  } finally {
+    state.checking = false
   }
 }
-
-// 检测更新
-const onCheckUpdate = (init = false) => {
-  if (state.backUpdate) {
-    // 从后台更新恢复过来
-    state.downloadVisible = true
-    state.btnLoading = false
-  } else {
-    // 第一次打开
-    state.btnLoading = true
-    window.pywebview.api.system_checkNewVersion().then((res) => {
-      // console.log(init, res)
-      // 程序第一次打开，自动检测更新 或 手动点击检测更新
-      if (!init || res.code == 0) {
-        state.code = res.code
-        state.msg = res.msg
-        if (res.htmlUrl != undefined) {
-          state.htmlUrl = res.htmlUrl
-        }
-        if (res.body != undefined) {
-          let body = res.body
-          body = body.replaceAll('\r', '')
-          state.body = body.split('\n')
-        }
-        state.checkVisible = true
-      }
-      state.btnLoading = false
-    })
+async function download() {
+  if (state.downloading) return
+  state.downloading = true
+  state.percentage = 0
+  state.size = '正在连接更新服务器…'
+  state.path = ''
+  try {
+    // Downloads can exceed the normal 30-second RPC budget; cancellation is a separate RPC.
+    const result = await ppx.call('applicationUpdate.download', null, { timeoutMs: 0 })
+    state.message = result.msg
+    state.code = result.code
+    if (result.code === 1) state.canDownload = false
+    if (result.code === 0) {
+      state.path = result.downloadPath
+      state.percentage = 100
+      state.message = '下载完成，SHA-256 校验已通过。点击“打开安装包”继续安装。'
+    }
+  } catch (error) {
+    state.code = -2
+    state.message = error.message
+  } finally {
+    state.downloading = false
+    state.cancelling = false
+    state.visible = true
   }
 }
-
-// 手动更新
-const onOpenLink = () => {
-  // console.log(state.htmlUrl)
-  window.pywebview.api.system_pyOpenFile(state.htmlUrl)
-  state.checkVisible = false
-}
-
-// 确认更新 - 检查更新
-const onConfirm = () => {
-  state.checkVisible = false
-  if (state.code == 0) {
-    state.downloadVisible = true
-    window.pywebview.api.system_downloadNewVersion().then((res) => {
-      // console.log('res', res)
-      state.downloadVisible = false
-      if (res.code == 0) {
-        ElMessage.success('下载完成')
-        state.btnLoading = false
-        window.pywebview.api.system_pyOpenFile(res.downloadPath)
-      } else {
-        ElMessage.error(res.msg)
-      }
-    })
+async function cancel() {
+  if (state.cancelling) return
+  state.cancelling = true
+  try {
+    await ppx.call('applicationUpdate.cancel')
+    state.size = '正在取消，等待当前网络读取结束…'
+  } catch (error) {
+    state.cancelling = false
+    ElMessage.error(error.message)
   }
 }
-
-// 取消更新 - 下载更新
-const onCancel = () => {
-  state.backUpdate = false
-  state.downloadVisible = false
-  state.btnLoading = false
-  window.pywebview.api.system_cancelDownloadNewVersion()
+async function open(path) {
+  try {
+    const opened = await ppx.call('system.openPath', { path })
+    if (!opened) ElMessage.error('系统未能打开该位置，请手动打开。')
+  } catch (error) {
+    ElMessage.error(error.message)
+  }
 }
-
-// 后台更新 - 下载更新
-const onBack = () => {
-  state.backUpdate = true
-  state.downloadVisible = false
-  state.btnLoading = true
+function closeResult() {
+  state.visible = false
 }
 </script>
 
+<template>
+  <button class="text-button update-button" :disabled="disabled || state.checking" @click="check">
+    {{
+      state.checking
+        ? '检查中…'
+        : state.downloading
+          ? '查看下载进度'
+          : state.path
+            ? '更新已下载'
+            : '检查应用更新 ↗'
+    }}
+  </button>
+  <el-dialog
+    v-model="state.visible"
+    :title="state.downloading ? '下载应用更新' : '应用更新'"
+    align-center
+    :close-on-click-modal="false"
+    :show-close="!state.downloading"
+    :close-on-press-escape="!state.downloading"
+  >
+    <template v-if="state.downloading">
+      <p class="update-description" role="status">{{ state.size }}</p>
+      <el-progress :percentage="state.percentage" :stroke-width="10" />
+      <p class="update-caption">下载完成后会校验安装包，随后由你选择是否打开安装。</p>
+    </template>
+    <template v-else>
+      <p class="update-description" role="status">{{ state.message }}</p>
+      <pre v-if="state.body && !state.path" class="release-notes">{{ state.body }}</pre>
+      <code v-if="state.path" class="download-path">{{ state.path }}</code>
+    </template>
+    <template #footer>
+      <div class="update-actions">
+        <button v-if="state.url && !state.downloading" class="text-button" @click="open(state.url)">
+          查看发布页面 ↗
+        </button>
+        <template v-if="state.downloading"
+          ><button class="button" :disabled="state.cancelling" @click="cancel">
+            {{ state.cancelling ? '取消中…' : '取消下载' }}</button
+          ><button class="button primary" @click="state.visible = false">后台下载</button></template
+        >
+        <template v-else
+          ><button class="button" @click="closeResult">
+            {{ state.canDownload && !state.path ? '稍后再说' : '关闭' }}</button
+          ><button v-if="state.path" class="button primary" @click="open(state.path)">
+            打开安装包</button
+          ><button v-else-if="state.canDownload" class="button primary" @click="download">
+            {{ state.code === 0 ? '下载更新' : '重新下载' }}
+          </button></template
+        >
+      </div>
+    </template>
+  </el-dialog>
+</template>
+
 <style scoped>
-.update-info {
-  margin-left: 20px;
-  margin-top: 10px;
-  padding: 10px;
-  color: #909399;
+.update-button {
+  white-space: nowrap;
+}
+.update-description {
+  font-size: 14px;
+  color: #515e6a;
+  margin-bottom: 18px;
+}
+.update-caption {
   font-size: 12px;
-  overflow: scroll;
-  background-color: #F2F3F5;
-  max-height: 50px;
+  margin-top: 16px;
 }
-
-.tip {
-  margin-top: 10px;
-  color: #A8ABB2;
-  font-size: 11px;
+.release-notes {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 35vh;
+  overflow: auto;
+  background: #f5f7f8;
+  padding: 15px;
+  border-radius: 8px;
+  font: 12px/1.9 inherit;
+  color: #6f7982;
 }
-
-.tip-sd {
+.download-path {
+  display: block;
+  overflow-wrap: anywhere;
   font-size: 11px;
-  top: -1px;
+  padding: 12px;
+  background: #f5f7f8;
+  border-radius: 6px;
+}
+.update-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.update-actions > .text-button {
+  margin-right: auto;
 }
 </style>

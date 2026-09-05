@@ -1,58 +1,127 @@
 name: build
+
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  quality:
+    name: test-python-${{ matrix.python }}-node-${{ matrix.node }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        python: ["3.9", "3.11", "3.13"]
+        node: [22, 24]
     steps:
       - name: 拉取项目代码
-        uses: actions/checkout@v4
-
-      - name: 安装node环境
-        uses: actions/setup-node@v4
+        uses: actions/checkout@v7
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
-
-      - name: 安装pnpm
-        uses: pnpm/action-setup@v4
-        id: pnpm-install
+          node-version: ${{ matrix.node }}
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 11.25.0
           run_install: false
-
-      - name: 获取pnpm仓库目录
-        id: pnpm-cache
-        shell: bash
+      - name: 安装 Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 安装项目依赖
         run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+          pnpm install --frozen-lockfile
+          python -m pip install -e ppx/packages/ppx-py -r api/requirements.txt
+      - name: 检查并测试
+        run: pnpm run check
+      - name: 检查 Python 依赖一致性
+        run: python -m pip check
+      - name: 审计前端依赖
+        if: matrix.python == '3.11' && matrix.node == 22
+        run: pnpm audit --audit-level=high --registry=https://registry.npmjs.org
 
-      - name: 设置pnpm缓存
-        uses: actions/cache@v4
+  build:
+    name: package-${{ matrix.os }}
+    needs: quality
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-24.04]
+    steps:
+      - name: 拉取项目代码
+        uses: actions/checkout@v7
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: 安装Python3环境
-        uses: actions/setup-python@v5
+          node-version: 22
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v6
         with:
-          python-version: "3.9"
-          cache: "pip"
-
-      - name: 初始化打包环境
-        run: pnpm run init
-
-      - name: 开始打包
-        run: pnpm run build
-
-      - name: 上传打包完成的程序包
-        uses: actions/upload-artifact@v4
+          version: 11.25.0
+          run_install: false
+      - name: 安装 Python
+        uses: actions/setup-python@v7
         with:
-          name: Setup_${{ runner.os }}
-          retention-days: 1
-          path: build/*-*_*.*
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            ppx/packages/ppx-py/pyproject.toml
+            api/requirements.txt
+      - name: 安装 Linux 图形与打包依赖
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libgirepository1.0-dev libcairo2-dev pkg-config dpkg-dev
+          python -m pip install 'PyGObject==3.50.0'
+      - name: 准备 Windows 安装器
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: 安装项目依赖
+        run: |
+          pnpm install --frozen-lockfile
+          python -m pip install -e ppx/packages/ppx-py -r api/requirements.txt
+          python -m pip check
+      - name: 验证 Linux 渲染后端
+        if: runner.os == 'Linux'
+        run: |
+          python -c "import gi; gi.require_version('Gtk', '3.0'); gi.require_version('WebKit2', '4.1'); from gi.repository import Gtk, WebKit2"
+      - name: 检查环境和运行自动化测试
+        run: |
+          pnpm run doctor
+          pnpm run test:python
+      - name: 生成当前系统安装包
+        run: python -m ppx_py.cli build
+      - name: 校验安装包并生成 SHA-256
+        run: |
+          pnpm run verify:installer
+          python ppx/tooling/scripts/installer_checksum.py
+      - name: 上传安装包（保留 14 天）
+        uses: actions/upload-artifact@v7
+        with:
+          name: Setup_${{ runner.os }}_${{ runner.arch }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            build/*.exe
+            build/*.dmg
+            build/*.deb
+            build/SHA256SUMS

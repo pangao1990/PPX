@@ -1,0 +1,14 @@
+packages:
+  - gui
+  - ppx/packages/ppx-js
+
+allowBuilds:
+  '@parcel/watcher': true
+
+minimumReleaseAgeExclude:
+  - sass@1.104.0
+
+overrides:
+  picomatch: 2.3.2
+  postcss: 8.5.26
+  shell-quote: 1.10.0
