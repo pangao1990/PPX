@@ -147,14 +147,16 @@ class SystemServiceTests(unittest.TestCase):
             configured = replace(settings, window=replace(settings.window, software_rendering=enabled))
             with patch.dict(sys.modules, {"webview": fake_webview}), patch(
                 "ppx_py.application.platform.system", return_value="Linux"
-            ), patch.dict(os.environ, {}, clear=True):
+            ), patch.dict(os.environ):
+                os.environ.pop("WEBKIT_DISABLE_COMPOSITING_MODE", None)
+                os.environ.pop("WEBKIT_DISABLE_DMABUF_RENDERER", None)
                 Application(configured).run(dev=True)
                 self.assertEqual(os.environ.get("WEBKIT_DISABLE_COMPOSITING_MODE"), "1" if enabled else None)
                 self.assertEqual(os.environ.get("WEBKIT_DISABLE_DMABUF_RENDERER"), "1" if enabled else None)
         configured = replace(settings, window=replace(settings.window, software_rendering=True))
         with patch.dict(sys.modules, {"webview": fake_webview}), patch(
             "ppx_py.application.platform.system", return_value="Linux"
-        ), patch.dict(os.environ, {"WEBKIT_DISABLE_DMABUF_RENDERER": "0"}, clear=True):
+        ), patch.dict(os.environ, {"WEBKIT_DISABLE_DMABUF_RENDERER": "0"}):
             Application(configured).run(dev=True)
             self.assertEqual(os.environ["WEBKIT_DISABLE_DMABUF_RENDERER"], "0")
 
