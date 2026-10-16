@@ -79,7 +79,7 @@ def _frontend_files(slug: str, frontend: str) -> dict[str, str]:
             "button:disabled{opacity:.5;cursor:wait}p{line-height:1.8;overflow-wrap:anywhere}\n"
         ),
     }
-    dependencies = {"ppx-js": "6.0.0"}
+    dependencies = {"ppx-js": "6.0.1"}
     development = {"vite": "8.2.2"}
     entry = "main.js"
 
@@ -246,12 +246,17 @@ fullscreen = false
 alwaysOnTop = false
 confirmClose = false
 backgroundColor = "#FFFFFF"
+# Linux 显卡驱动导致白屏时可开启软件渲染
+softwareRendering = false
 
 [development]
 port = 5173
 
 [storage]
 filename = "storage.json"
+
+[application]
+singleInstance = true
 
 [applicationUpdate]
 enabled = false
@@ -263,8 +268,8 @@ javascriptApi = "6.0"
 dataSchema = "1"
 
 [framework]
-python = "6.0.0"
-javascript = "6.0.0"
+python = "6.0.1"
+javascript = "6.0.1"
 channel = "stable"
 releaseUrl = "https://api.github.com/repos/pangao1990/PPX/releases/latest"
 '''
@@ -276,8 +281,8 @@ lockVersion = 1
 projectFormat = 6
 
 [framework]
-python = "6.0.0"
-javascript = "6.0.0"
+python = "6.0.1"
+javascript = "6.0.1"
 
 [compatibility]
 pythonApi = "6.0"

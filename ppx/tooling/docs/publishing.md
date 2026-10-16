@@ -1,6 +1,6 @@
 # PPX 两包发布说明
 
-V6.0.0 最终只发布 `ppx-py` 和 `ppx-js`。旧的 `ppx-core`、`ppx-build`、`ppx-bridge` 已放弃，PyPI/npm 已发布版本不可覆盖，也不应再作为 V6 依赖。
+V6.0.1 最终只发布 `ppx-py` 和 `ppx-js`。旧的 `ppx-core`、`ppx-build`、`ppx-bridge` 已放弃，PyPI/npm 已发布版本不可覆盖，也不应再作为 V6 依赖。
 
 ## 发布闸门
 
@@ -24,12 +24,12 @@ python -m twine check dist/release/ppx_py-*
 
 ```bash
 python -m venv /tmp/ppx-v6-candidate
-/tmp/ppx-v6-candidate/bin/python -m pip install dist/release/ppx_py-6.0.0-py3-none-any.whl
+/tmp/ppx-v6-candidate/bin/python -m pip install dist/release/ppx_py-6.0.1-py3-none-any.whl
 /tmp/ppx-v6-candidate/bin/ppx --version
 /tmp/ppx-v6-candidate/bin/ppx new Smoke --directory /tmp/ppx-smoke
 
 mkdir -p /tmp/ppx-js-candidate
-npm install --prefix /tmp/ppx-js-candidate --ignore-scripts "$PWD/dist/release/ppx-js-6.0.0.tgz"
+npm install --prefix /tmp/ppx-js-candidate --ignore-scripts "$PWD/dist/release/ppx-js-6.0.1.tgz"
 (cd /tmp/ppx-js-candidate && node --input-type=module -e "import('ppx-js').then(m => console.log(typeof m.ppx.call))")
 ```
 
@@ -43,11 +43,11 @@ npm install --prefix /tmp/ppx-js-candidate --ignore-scripts "$PWD/dist/release/p
 6. 只有前两包和 Release 资产都能公开下载时，才允许把更新通道指向这个 Release。
 
 ```bash
-python -m twine upload dist/release/ppx_py-6.0.0*
+python -m twine upload dist/release/ppx_py-6.0.1*
 (cd ppx/packages/ppx-js && npm publish --access public --registry=https://registry.npmjs.org)
 ```
 
-PyPI 和 npm 同一版本均不能覆盖。正式上传前必须把 V6.0.0 当作一次不可撤销发布来检查；若上传后发现问题，只能发布更高版本，不能重新上传 6.0.0。
+PyPI 和 npm 同一版本均不能覆盖。正式上传前必须把 V6.0.1 当作一次不可撤销发布来检查；若上传后发现问题，只能发布更高版本，不能重新上传 6.0.1。
 
 ## 通过 GitHub Actions 发布到 PyPI
 

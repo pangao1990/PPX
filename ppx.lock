@@ -3,8 +3,8 @@ lockVersion = 1
 projectFormat = 6
 
 [framework]
-python = "6.0.0"
-javascript = "6.0.0"
+python = "6.0.1"
+javascript = "6.0.1"
 
 [compatibility]
 pythonApi = "6.0"

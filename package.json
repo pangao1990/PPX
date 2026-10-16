@@ -1,7 +1,7 @@
 {
   "name": "ppx",
   "private": true,
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "PPX：基于 pywebview、PyInstaller 和任意 Web 前端的跨平台桌面应用框架。",
   "author": "潘高 <pangao1990@qq.com>",
   "license": "AGPL-3.0-only",

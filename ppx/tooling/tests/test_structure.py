@@ -46,7 +46,7 @@ class ProjectStructureTests(unittest.TestCase):
                 package = json.loads((root / "gui/package.json").read_text(encoding="utf-8"))
                 self.assertTrue((root / "gui" / source).is_file())
                 self.assertEqual(set(package["dependencies"]) - {"ppx-js"}, framework_dependencies)
-                self.assertEqual(package["dependencies"]["ppx-js"], "6.0.0")
+                self.assertEqual(package["dependencies"]["ppx-js"], "6.0.1")
 
     def test_init_installs_only_business_dependencies_then_frontend(self):
         with tempfile.TemporaryDirectory() as directory:

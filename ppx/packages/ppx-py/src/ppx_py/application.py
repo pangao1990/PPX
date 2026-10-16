@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import mimetypes
+import os
+import platform
 from pathlib import Path
 from typing import Any, Union
 
@@ -11,6 +13,7 @@ from .services import SystemService
 from .settings import Settings
 from .storage import JsonStorage
 from .update import ApplicationUpdater
+from .instance import InstanceLock
 
 
 class Application:
@@ -18,6 +21,7 @@ class Application:
         self.settings = settings
         self.bridge = Bridge()
         self.window: Any = None
+        self.instance_lock = InstanceLock(settings.app_data_dir / ".instance.lock")
         self.storage = JsonStorage(settings.app_data_dir / settings.storage.filename)
         self.system = SystemService(settings, lambda: self.window)
         self.application_updater = ApplicationUpdater(
@@ -58,38 +62,62 @@ class Application:
             self.bridge.register(name, handler)
 
     def run(self, *, dev: bool = False, cef: bool = False) -> None:
+        if platform.system() == "Linux" and self.settings.window.software_rendering:
+            # WebKitGTK reads these before creating its renderer process.
+            os.environ.setdefault("WEBKIT_DISABLE_COMPOSITING_MODE", "1")
+            os.environ.setdefault("WEBKIT_DISABLE_DMABUF_RENDERER", "1")
+
         import webview
 
-        if dev:
-            url = f"http://127.0.0.1:{self.settings.development.port}/"
-        else:
-            url = str(self.settings.frontend_dir / "index.html")
-            if not Path(url).is_file():
-                raise FileNotFoundError(f"前端产物不存在，请先执行 ppx build: {url}")
-            mimetypes.add_type("application/javascript", ".js")
+        if self.settings.application.single_instance:
+            self.instance_lock.acquire()
 
-        screen = webview.screens[0]
-        width = int(screen.width * self.settings.window.width_ratio)
-        height = int(screen.height * self.settings.window.height_ratio)
-        self.window = webview.create_window(
-            title=self.settings.project.name,
-            url=url,
-            js_api=JavascriptAPI(self.bridge),
-            width=width,
-            height=height,
-            min_size=(
-                int(width * self.settings.window.min_width_ratio),
-                int(height * self.settings.window.min_height_ratio),
-            ),
-            resizable=self.settings.window.resizable,
-            fullscreen=self.settings.window.fullscreen,
-            on_top=self.settings.window.always_on_top,
-            confirm_close=self.settings.window.confirm_close,
-            background_color=self.settings.window.background_color,
-        )
-        self.bridge.set_window(self.window)
-        self.window.events.shown += self._on_shown
-        webview.start(debug=dev, http_server=True, gui="cef" if cef else None)
+        try:
+            if dev:
+                url = f"http://127.0.0.1:{self.settings.development.port}/"
+            else:
+                url = str(self.settings.frontend_dir / "index.html")
+                if not Path(url).is_file():
+                    raise FileNotFoundError(f"前端产物不存在，请先执行 ppx build: {url}")
+                mimetypes.add_type("application/javascript", ".js")
+
+            screen = webview.screens[0]
+            width = int(screen.width * self.settings.window.width_ratio)
+            height = int(screen.height * self.settings.window.height_ratio)
+            self.window = webview.create_window(
+                title=self.settings.project.name,
+                url=url,
+                js_api=JavascriptAPI(self.bridge),
+                width=width,
+                height=height,
+                min_size=(
+                    int(width * self.settings.window.min_width_ratio),
+                    int(height * self.settings.window.min_height_ratio),
+                ),
+                resizable=self.settings.window.resizable,
+                fullscreen=self.settings.window.fullscreen,
+                on_top=self.settings.window.always_on_top,
+                confirm_close=self.settings.window.confirm_close,
+                background_color=self.settings.window.background_color,
+            )
+            self.bridge.set_window(self.window)
+            if platform.system() == "Darwin" and platform.mac_ver()[0].startswith("26."):
+                self.window.events.before_show += self._layout_macos_titlebar
+            self.window.events.shown += self._on_shown
+            webview.start(debug=dev, http_server=True, gui="cef" if cef else None)
+        finally:
+            self.instance_lock.release()
+
+    def _layout_macos_titlebar(self) -> None:
+        import AppKit
+
+        # before_show runs on the Cocoa main thread. Ask AppKit to lay out the
+        # native title and traffic lights together before displaying the window.
+        native = self.window.native
+        native.setToolbarStyle_(AppKit.NSWindowToolbarStyleExpanded)
+        frame = native.contentView().superview()
+        frame.setNeedsLayout_(True)
+        frame.layoutSubtreeIfNeeded()
 
     def _on_shown(self, *_args: Any) -> None:
         self.storage.initialize()

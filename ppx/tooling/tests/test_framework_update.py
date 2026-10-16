@@ -20,7 +20,7 @@ class FrameworkUpdateTests(unittest.TestCase):
     def test_compatible_manifest_creates_plan(self):
         settings = Settings.load(ROOT / "ppx.toml")
         plan = make_plan(settings, read_lock(ROOT), MANIFEST)
-        self.assertEqual(plan.target, "6.0.0")
+        self.assertEqual(plan.target, "6.0.1")
         self.assertFalse(plan.needed)
 
     def test_same_release_repairs_package_version_drift(self):
@@ -50,7 +50,7 @@ class FrameworkUpdateTests(unittest.TestCase):
         release = SimpleNamespace(
             raise_for_status=lambda: None,
             json=lambda: {
-                "tag_name": "v6.0.0",
+                "tag_name": "v6.0.1",
                 "assets": [{
                     "name": "ppx-update.json",
                     "browser_download_url": "https://example.test/manifest",
@@ -65,7 +65,7 @@ class FrameworkUpdateTests(unittest.TestCase):
         release_without_digest = SimpleNamespace(
             raise_for_status=lambda: None,
             json=lambda: {
-                "tag_name": "v6.0.0",
+                "tag_name": "v6.0.1",
                 "assets": [{
                     "name": "ppx-update.json",
                     "browser_download_url": "https://example.test/manifest",

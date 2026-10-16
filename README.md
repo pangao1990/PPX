@@ -9,9 +9,9 @@ PPX 是一个用 Python、pywebview、PyInstaller 和 Web 前端构建 Windows�
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22.13%2B-339933.svg)](https://nodejs.org/)
 
-> **当前状态：** `main` 已提供 PPX 6.0.0 源码。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
+> **当前状态：** `main` 已提供 PPX 6.0.1 源码。V6 是全新架构，不兼容 V5，也不提供 V5 原地迁移。V5.3.4 源码保存在 [`V5.3.4` 标签](https://github.com/pangao1990/PPX/tree/V5.3.4)，旧项目请继续固定使用 V5。
 
-**安装与下载：** [ppx-py · PyPI](https://pypi.org/project/ppx-py/) · [ppx-js · npm](https://www.npmjs.com/package/ppx-js) · [桌面安装包](https://github.com/pangao1990/PPX/releases/tag/V6.0.0)
+**安装与下载：** [ppx-py · PyPI](https://pypi.org/project/ppx-py/) · [ppx-js · npm](https://www.npmjs.com/package/ppx-js) · [桌面安装包](https://github.com/pangao1990/PPX/releases/tag/V6.0.1)
 
 **快速入口：** [完整文档](https://blog.pangao.vip/docs-ppx/v6/guide/introduction) · [十分钟快速上手](https://blog.pangao.vip/docs-ppx/v6/guide/quick-start) · [V5 文档](https://blog.pangao.vip/docs-ppx/v5/) · [变更记录](CHANGELOG.md) · [问题反馈](https://github.com/pangao1990/PPX/issues)
 
@@ -183,7 +183,7 @@ source .venv/bin/activate
 
 ### 2. 安装框架并创建项目
 
-从官方 PyPI 安装：
+从官方 PyPI 安装已发布的 6.0.0 稳定包（本次 6.0.1 先发布 GitHub 源码与构建产物，PyPI/npm 版本尚未同步）：
 
 ```bash
 python -m pip install ppx-py==6.0.0
@@ -216,7 +216,7 @@ ppx dev --skip-frontend
 
 ### 4. 从源码运行本仓库
 
-参与框架开发、修改框架源码时：
+体验本次 6.0.1 修复或参与框架开发时，使用源码工作区：
 
 ```bash
 git clone https://github.com/pangao1990/PPX.git
@@ -446,12 +446,18 @@ fullscreen = false
 alwaysOnTop = false
 confirmClose = false
 backgroundColor = "#FFFFFF"
+# Linux 显卡驱动导致白屏时可开启软件渲染
+softwareRendering = false
 
 [development]
 port = 5173
 
 [storage]
 filename = "storage.json"
+
+[application]
+# 防止用户重复启动同一个桌面应用；需要多实例时改为 false
+singleInstance = true
 
 [applicationUpdate]
 enabled = false
@@ -463,8 +469,8 @@ javascriptApi = "6.0"
 dataSchema = "1"
 
 [framework]
-python = "6.0.0"
-javascript = "6.0.0"
+python = "6.0.1"
+javascript = "6.0.1"
 channel = "stable"
 releaseUrl = "https://api.github.com/repos/pangao1990/PPX/releases/latest"
 ```
@@ -481,6 +487,8 @@ releaseUrl = "https://api.github.com/repos/pangao1990/PPX/releases/latest"
 - 三个 `[paths]` 值必须是项目内相对路径；
 - `compatibility` 是框架更新判断依据，不要为了绕过冲突手工修改；
 - `framework.python/javascript` 应由 `ppx update` 更新。
+- `window.softwareRendering` 默认关闭，仅作用于 Linux WebKitGTK；遇到显卡驱动白屏时可设为 `true`，已有 WebKit 环境变量优先。
+- `application.singleInstance` 默认开启。第二次启动会收到“应用已经在运行”，进程退出或崩溃后由系统自动释放锁；需要多实例时可设为 `false`。
 
 所有字段和校验规则见 [ppx.toml 完整参考](https://blog.pangao.vip/docs-ppx/v6/reference/config)。
 
@@ -636,7 +644,7 @@ git diff --check
 
 当前回归套件包含 56 项 Python 测试和 11 项 JavaScript 测试，覆盖 RPC、存储、更新校验和取消、架构选择、开发端口冲突、脚手架及打包配置。2026-09-05，源码提交 `66ed38d` 已通过 [GitHub Actions](https://github.com/pangao1990/PPX/actions/runs/33963464721)：Python 3.10 / 3.11 / 3.13 × Node.js 22 / 24 六组质量检查、Python/前端依赖审计，以及 Windows、macOS、Linux 安装包构建与校验均成功。客户端仍需按[交互验收清单](ppx/tooling/docs/desktop-qa.md)完成目标系统的安装、升级和卸载验收，不能把 CI 构建成功当作三端真机全部验收完成。详细范围见[验证记录](ppx/tooling/docs/verification.md)。
 
-完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传 `6.0.0` 是不可撤销操作。
+完整上线顺序见[上线步骤与当前状态](ppx/tooling/docs/launch-checklist.md)。发布包前还必须执行 [两包发布说明](ppx/tooling/docs/publishing.md) 中的完整闸门。PyPI 和 npm 都不允许覆盖已发布的同版本文件，因此正式上传新版本 是不可撤销操作。
 
 ## 常见问题
 

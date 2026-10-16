@@ -26,7 +26,7 @@ class VersionTests(unittest.TestCase):
             json.loads((ROOT / "ppx/packages/ppx-js/package.json").read_text(encoding="utf-8"))["version"],
             python_version,
         }
-        self.assertEqual(versions, {"6.0.0"})
+        self.assertEqual(versions, {"6.0.1"})
 
 
 if __name__ == "__main__":

@@ -64,6 +64,8 @@ class SystemService:
             allow_multiple=multiple,
             file_types=tuple(file_types or ["全部文件 (*.*)"]),
         )
+        if isinstance(result, (str, Path)):
+            result = [result]
         return [
             {
                 "filename": Path(item).name,

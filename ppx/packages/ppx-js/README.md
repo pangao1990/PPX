@@ -51,3 +51,5 @@ await ppx.call('report.create', { id: 1 }, { timeoutMs: 60_000 })
 ## 开源协议
 
 本项目使用 [AGPL-3.0-only](https://github.com/pangao1990/PPX/blob/main/LICENSE) 协议。
+
+6.0.1 本次先发布至 GitHub，注册表安装示例暂保持已发布的 6.0.0。体验修复请使用仓库源码工作区或 Release 附件。

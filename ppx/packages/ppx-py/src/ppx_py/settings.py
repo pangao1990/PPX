@@ -53,6 +53,7 @@ class WindowSettings:
     always_on_top: bool = False
     confirm_close: bool = False
     background_color: str = "#FFFFFF"
+    software_rendering: bool = False
 
 
 @dataclass(frozen=True)
@@ -72,6 +73,11 @@ class ApplicationUpdateSettings:
 
 
 @dataclass(frozen=True)
+class ApplicationSettings:
+    single_instance: bool = True
+
+
+@dataclass(frozen=True)
 class CompatibilitySettings:
     python_api: str = "6.0"
     javascript_api: str = "6.0"
@@ -80,8 +86,8 @@ class CompatibilitySettings:
 
 @dataclass(frozen=True)
 class FrameworkSettings:
-    python: str = "6.0.0"
-    javascript: str = "6.0.0"
+    python: str = "6.0.1"
+    javascript: str = "6.0.1"
     channel: str = "stable"
     release_url: str = ""
 
@@ -107,6 +113,7 @@ class Settings:
     window: WindowSettings
     development: DevelopmentSettings
     storage: StorageSettings
+    application: ApplicationSettings
     application_update: ApplicationUpdateSettings
     compatibility: CompatibilitySettings
     framework: FrameworkSettings
@@ -144,6 +151,7 @@ class Settings:
         window = _table(raw, "window")
         development = _table(raw, "development")
         storage = _table(raw, "storage")
+        application = _table(raw, "application")
         updates = _table(raw, "applicationUpdate")
         compatibility = _table(raw, "compatibility")
         framework = _table(raw, "framework")
@@ -208,9 +216,9 @@ class Settings:
         python_api = _required_text(compatibility, "pythonApi", "[compatibility]")
         javascript_api = _required_text(compatibility, "javascriptApi", "[compatibility]")
         data_schema = _required_text(compatibility, "dataSchema", "[compatibility]")
-        python_version = _valid_version(framework.get("python", "6.0.0"), "framework.python")
+        python_version = _valid_version(framework.get("python", "6.0.1"), "framework.python")
         javascript_version = _valid_version(
-            framework.get("javascript", "6.0.0"), "framework.javascript"
+            framework.get("javascript", "6.0.1"), "framework.javascript"
         )
         modules_value = python.get("modules", ["api.api"])
         if not isinstance(modules_value, list) or not modules_value or not all(
@@ -251,9 +259,13 @@ class Settings:
                 always_on_top=always_on_top,
                 confirm_close=confirm_close,
                 background_color=background_color.upper(),
+                software_rendering=_boolean(window.get("softwareRendering", False), "window.softwareRendering"),
             ),
             development=DevelopmentSettings(port=port),
             storage=StorageSettings(filename=storage_filename),
+            application=ApplicationSettings(
+                single_instance=_boolean(application.get("singleInstance", True), "application.singleInstance")
+            ),
             application_update=ApplicationUpdateSettings(
                 enabled=_boolean(updates.get("enabled", True), "applicationUpdate.enabled"),
                 release_url=str(updates.get("releaseUrl", "")),

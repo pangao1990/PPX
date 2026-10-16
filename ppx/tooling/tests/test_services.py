@@ -1,5 +1,7 @@
 import sys
+import os
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -12,7 +14,11 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 class FakeEvent:
+    def __init__(self):
+        self.handlers = []
+
     def __iadd__(self, _handler):
+        self.handlers.append(_handler)
         return self
 
 
@@ -26,11 +32,11 @@ class FakeWindow:
     def __init__(self):
         self.actions = []
         self.dialog_options = None
-        self.events = SimpleNamespace(shown=FakeEvent())
+        self.events = SimpleNamespace(shown=FakeEvent(), before_show=FakeEvent())
 
     def create_file_dialog(self, **options):
         self.dialog_options = options
-        return ("/tmp/report.pdf",)
+        return "/tmp/report.pdf" if not options.get("allow_multiple", False) else ("/tmp/report.pdf",)
 
     def __getattr__(self, name):
         if name in {"minimize", "maximize", "restore", "toggle_fullscreen", "destroy"}:
@@ -65,6 +71,9 @@ class SystemServiceTests(unittest.TestCase):
             result = self.service.open_file_dialog(multiple=False)
         self.assertEqual(result[0]["filename"], "report.pdf")
         self.assertFalse(self.window.dialog_options["allow_multiple"])
+        self.assertEqual(len(result), 1)
+        with patch.dict(sys.modules, {"webview": fake_webview}):
+            self.assertEqual(len(self.service.open_file_dialog(multiple=True)), 1)
 
         with self.assertRaisesRegex(BridgeError, "multiple 必须是布尔值"):
             self.service.open_file_dialog(multiple="false")
@@ -126,6 +135,43 @@ class SystemServiceTests(unittest.TestCase):
         self.assertFalse(options["on_top"])
         self.assertFalse(options["confirm_close"])
         self.assertEqual(options["background_color"], "#FFFFFF")
+
+    def test_linux_software_rendering_is_opt_in_and_preserves_environment(self):
+        settings = Settings.load(ROOT / "ppx.toml")
+        settings = replace(settings, application=replace(settings.application, single_instance=False))
+        fake_webview = SimpleNamespace(
+            screens=[SimpleNamespace(width=1200, height=800)],
+            create_window=lambda **_kwargs: FakeWindow(), start=lambda **_kwargs: None,
+        )
+        for enabled in (False, True):
+            configured = replace(settings, window=replace(settings.window, software_rendering=enabled))
+            with patch.dict(sys.modules, {"webview": fake_webview}), patch(
+                "ppx_py.application.platform.system", return_value="Linux"
+            ), patch.dict(os.environ, {}, clear=True):
+                Application(configured).run(dev=True)
+                self.assertEqual(os.environ.get("WEBKIT_DISABLE_COMPOSITING_MODE"), "1" if enabled else None)
+                self.assertEqual(os.environ.get("WEBKIT_DISABLE_DMABUF_RENDERER"), "1" if enabled else None)
+        configured = replace(settings, window=replace(settings.window, software_rendering=True))
+        with patch.dict(sys.modules, {"webview": fake_webview}), patch(
+            "ppx_py.application.platform.system", return_value="Linux"
+        ), patch.dict(os.environ, {"WEBKIT_DISABLE_DMABUF_RENDERER": "0"}, clear=True):
+            Application(configured).run(dev=True)
+            self.assertEqual(os.environ["WEBKIT_DISABLE_DMABUF_RENDERER"], "0")
+
+    def test_titlebar_workaround_only_runs_before_show_on_macos_26(self):
+        settings = Settings.load(ROOT / "ppx.toml")
+        settings = replace(settings, application=replace(settings.application, single_instance=False))
+        for system, version, expected in (("Darwin", "26.5.2", 1), ("Darwin", "27.0.1", 0), ("Windows", "", 0)):
+            window = FakeWindow()
+            fake_webview = SimpleNamespace(
+                screens=[SimpleNamespace(width=1200, height=800)],
+                create_window=lambda **_kwargs: window, start=lambda **_kwargs: None,
+            )
+            with patch.dict(sys.modules, {"webview": fake_webview}), patch(
+                "ppx_py.application.platform.system", return_value=system
+            ), patch("ppx_py.application.platform.mac_ver", return_value=(version, (), "")):
+                Application(settings).run(dev=True)
+            self.assertEqual(len(window.events.before_show.handlers), expected)
 
 
 if __name__ == "__main__":

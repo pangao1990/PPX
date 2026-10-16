@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "releaseVersion": "6.0.0",
+  "releaseVersion": "6.0.1",
   "channel": "stable",
   "requires": {
     "projectFormat": 6,
@@ -14,7 +14,7 @@
     "dataSchema": "1"
   },
   "packages": {
-    "ppx-py": "6.0.0",
-    "ppx-js": "6.0.0"
+    "ppx-py": "6.0.1",
+    "ppx-js": "6.0.1"
   }
 }

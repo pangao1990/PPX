@@ -11,4 +11,5 @@ minimumReleaseAgeExclude:
 overrides:
   picomatch: 2.3.2
   postcss: 8.5.26
-  shell-quote: 1.10.0
+  shell-quote: 1.11.0
+  source-map-js: 1.2.2

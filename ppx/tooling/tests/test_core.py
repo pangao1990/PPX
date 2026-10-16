@@ -14,6 +14,7 @@ from ppx_py import Bridge, BridgeError, Settings, SettingsError, api_method, app
 from ppx_py.commands import doctor
 from ppx_py.commands.doctor import Check
 from ppx_py.storage import JsonStorage
+from ppx_py.instance import InstanceAlreadyRunning, InstanceLock
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -89,10 +90,25 @@ class BridgeTests(unittest.TestCase):
 class SettingsAndStorageTests(unittest.TestCase):
     def test_loads_v6_project(self):
         settings = Settings.load(ROOT / "ppx.toml")
-        self.assertEqual(settings.project.version, "6.0.0")
+        self.assertEqual(settings.project.version, "6.0.1")
         self.assertEqual(settings.project.project_format, 6)
         self.assertTrue(settings.window.resizable)
         self.assertEqual(settings.window.background_color, "#FFFFFF")
+        self.assertTrue(settings.application.single_instance)
+
+    def test_instance_lock_ignores_stale_pid_and_rejects_live_owner(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / ".instance.lock"
+            lock = InstanceLock(path)
+            lock.acquire()
+            with self.assertRaises(InstanceAlreadyRunning):
+                InstanceLock(path).acquire()
+            lock.release()
+            path.write_text("999999999\n", encoding="ascii")
+            recovered = InstanceLock(path)
+            recovered.acquire()
+            self.assertTrue(path.is_file())
+            recovered.release()
 
     def test_rejects_v5_project(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -112,17 +128,19 @@ class SettingsAndStorageTests(unittest.TestCase):
             ('identifier = "vip.pangao"', 'identifier = "../escape"'),
             ('developer = "PanGao"', 'developer = "bad\\nvalue"'),
             ('windowsAppId = "F35003AB-441A-C0A6-4527-937E6A02F789"', 'windowsAppId = ""'),
-            ('version = "6.0.0"', 'version = "not a version"'),
+            ('version = "6.0.1"', 'version = "not a version"'),
             ('widthRatio = 0.6667', 'widthRatio = 1.1'),
             ('widthRatio = 0.6667', 'widthRatio = true'),
             ('port = 5173', 'port = 70000'),
             ('filename = "storage-v6.json"', 'filename = "../storage.json"'),
             ('format = 6', 'format = "six"'),
-            ('python = "6.0.0"', 'python = "broken"'),
+            ('python = "6.0.1"', 'python = "broken"'),
             ('channel = "stable"', 'channel = "unknown"'),
             ('pythonApi = "6.0"', 'pythonApi = ""'),
             ('enabled = true', 'enabled = "false"'),
             ('backgroundColor = "#FFFFFF"', 'backgroundColor = "white"'),
+            ('backgroundColor = "#FFFFFF"', 'backgroundColor = "#FFFFFF"\nsoftwareRendering = "false"'),
+            ('singleInstance = true', 'singleInstance = "false"'),
         )
         for old, new in invalid_values:
             with self.subTest(value=new), tempfile.TemporaryDirectory() as directory:

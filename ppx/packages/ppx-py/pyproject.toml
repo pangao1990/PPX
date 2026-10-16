@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ppx-py"
-version = "6.0.0"
+version = "6.0.1"
 description = "PPX Python runtime, developer CLI and cross-platform packager"
 readme = "README.md"
 requires-python = ">=3.10"

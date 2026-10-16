@@ -123,3 +123,13 @@ V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress �
 文档提交 `8232e00` 已通过 [GitHub Pages Deploy](https://github.com/pangao1990/docs-ppx/actions/runs/33965082085)。本地构建检查 48 页、1605 个内链通过，线上浏览器逐页访问 47 个内容页面未发现 HTTP 或脚本错误。客户端发布后再通过 29 个常规交互和 9 个异常恢复检查点。一次外链断言因测试脚本写死旧开发端口而失败，修正脚本为检查当前页面地址后完整复跑通过；该改动未进入生产包。
 
 包介绍页复查：npm 实际加载了原版 LOGO、微信支付、支付宝与公众号四张图片。PyPI 已正确渲染介绍内容和图片引用，但本次网络访问其 `pypi-camo.freetls.fastly.net` 图片代理连接超时，导致图片及维护者头像未显示；原始图片地址返回 HTTP 200。这是当前检查网络下的外部图片加载限制，不影响 wheel/sdist 安装，不能写成 PyPI 图片展示已全部通过。
+
+
+## 6.0.1 本地验证（2026-10-16）
+
+- 本机 macOS 27.0.1 arm64、Python 3.13.5、Node.js 24.14.0、pnpm 11.25.0。
+- `pnpm check` 通过：17 项环境检查、60 项 Python 测试、11 项 JavaScript 测试、GUI 构建与发布版本一致性检查。
+- `pnpm audit --audit-level high --registry=https://registry.npmjs.org` 未发现已知漏洞；`python -m pip check` 与 `git diff --check` 通过。
+- 原生 pywebview 窗口加载本次标题栏处理后，有标题/无标题、400/800 像素宽窗口的原生按钮命中测试，以及最小化、恢复和关闭检查通过。
+- macOS 26 原始故障未在本机复现；#78 的兼容处理仍需报告者在 macOS 26 验证。Linux 软件渲染配置的自动化检查通过，显卡白屏是否消除仍需受影响设备确认。
+- 本次 GitHub 发布不等于 PyPI/npm 已发布；在两个注册表完成同步前，不把 6.0.1 更新清单作为 Release 资产启用，稳定自动更新通道继续保留 6.0.0。
