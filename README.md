@@ -183,10 +183,10 @@ source .venv/bin/activate
 
 ### 2. 安装框架并创建项目
 
-从官方 PyPI 安装已发布的 6.0.0 稳定包（本次 6.0.1 先发布 GitHub 源码与构建产物，PyPI/npm 版本尚未同步）：
+从官方 PyPI 安装：
 
 ```bash
-python -m pip install ppx-py==6.0.0
+python -m pip install ppx-py==6.0.1
 ppx new my-app --frontend vue
 cd my-app
 ppx init

@@ -11,7 +11,7 @@ PPX 由两个包配合工作：`ppx-py` 提供 Python 运行时、开发命令�
 PPX 的轻量 JavaScript RPC 客户端。它只负责 Web 页面与 `ppx-py` 之间的稳定调用和事件边界，不依赖 Vue、Element Plus 或其他 UI 框架。
 
 ```bash
-pnpm add ppx-js@6.0.0
+pnpm add ppx-js@6.0.1
 ```
 
 ```javascript
@@ -51,5 +51,3 @@ await ppx.call('report.create', { id: 1 }, { timeoutMs: 60_000 })
 ## 开源协议
 
 本项目使用 [AGPL-3.0-only](https://github.com/pangao1990/PPX/blob/main/LICENSE) 协议。
-
-6.0.1 本次先发布至 GitHub，注册表安装示例暂保持已发布的 6.0.0。体验修复请使用仓库源码工作区或 Release 附件。

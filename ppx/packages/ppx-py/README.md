@@ -15,7 +15,7 @@ PPX 的 Python 运行时、命令行与三端打包器。开发者通过 `ppx ne
 需要 Python 3.10+。前端工具链需要 Node.js 22.13+ 与 pnpm 11.x。
 
 ```bash
-python -m pip install ppx-py==6.0.0
+python -m pip install ppx-py==6.0.1
 ppx new my-app --frontend vue
 cd my-app
 ppx init
@@ -75,5 +75,3 @@ ppx build                        生成当前平台应用和安装包
 ## 开源协议
 
 本项目使用 [AGPL-3.0-only](https://github.com/pangao1990/PPX/blob/main/LICENSE) 协议。
-
-6.0.1 本次先发布至 GitHub，注册表安装示例暂保持已发布的 6.0.0。体验修复请使用仓库源码工作区或 Release 附件。

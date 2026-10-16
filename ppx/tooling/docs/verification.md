@@ -132,4 +132,4 @@ V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress �
 - `pnpm audit --audit-level high --registry=https://registry.npmjs.org` 未发现已知漏洞；`python -m pip check` 与 `git diff --check` 通过。
 - 原生 pywebview 窗口加载本次标题栏处理后，有标题/无标题、400/800 像素宽窗口的原生按钮命中测试，以及最小化、恢复和关闭检查通过。
 - macOS 26 原始故障未在本机复现；#78 的兼容处理仍需报告者在 macOS 26 验证。Linux 软件渲染配置的自动化检查通过，显卡白屏是否消除仍需受影响设备确认。
-- 本次 GitHub 发布不等于 PyPI/npm 已发布；在两个注册表完成同步前，不把 6.0.1 更新清单作为 Release 资产启用，稳定自动更新通道继续保留 6.0.0。
+- 两个注册表和三端构建成功后，再将 6.0.1 更新清单作为 Release 资产启用；远端结果以对应提交的 Actions 记录和注册表查询为准。
