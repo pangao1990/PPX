@@ -7,6 +7,7 @@
 - 新增 `application.singleInstance`（默认开启），使用操作系统文件锁阻止重复启动；进程崩溃后系统自动释放锁，避免 PID 锁清理与同时启动时的竞争。需要多实例可设为 `false`。
 - 针对 #77 增加 Linux 可选软件渲染配置 `window.softwareRendering`，在 WebKitGTK 初始化前设置兼容环境变量，默认关闭并尊重已有环境变量。
 - 更新前端间接依赖 shell-quote 至 1.11.0、source-map-js 至 1.2.2，修复依赖审计发现的命令注入和拒绝服务漏洞。
+- 修复 `ppx update --to` 只查询小写 v 标签的问题，404 时回退查询大写 V 标签，兼容现有 Release 命名。6.0.0 用户请使用 `ppx update` 读取最新版本升级。
 - 同步 Python/JavaScript 包、脚手架、配置、锁文件与更新清单为 6.0.1，兼容契约保持 6.0。
 
 ## 6.0.0

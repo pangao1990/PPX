@@ -68,16 +68,20 @@ def _sha256_from_digest(digest: str) -> Optional[str]:
 def fetch_manifest(release_url: str, target: Optional[str] = None) -> Dict[str, Any]:
     if not release_url:
         raise UpdateError("未配置 framework.releaseUrl")
-    url = release_url
-    if target and url.endswith("/latest"):
-        url = url[:-len("/latest")] + f"/tags/v{target.lstrip('Vv')}"
+    urls = [release_url]
+    if target and release_url.endswith("/latest"):
+        base = release_url[:-len("/latest")]
+        urls = [f"{base}/tags/{prefix}{target.lstrip('Vv')}" for prefix in ("v", "V")]
     try:
-        release_response = httpx.get(
-            url,
-            follow_redirects=True,
-            headers={"Accept": "application/vnd.github+json", "User-Agent": "ppx-py"},
-            timeout=httpx.Timeout(10.0, connect=5.0),
-        )
+        for url in urls:
+            release_response = httpx.get(
+                url,
+                follow_redirects=True,
+                headers={"Accept": "application/vnd.github+json", "User-Agent": "ppx-py"},
+                timeout=httpx.Timeout(10.0, connect=5.0),
+            )
+            if release_response.status_code != 404:
+                break
         release_response.raise_for_status()
         release = release_response.json()
         release_version = str(release.get("tag_name") or release.get("name") or "")

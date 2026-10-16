@@ -48,6 +48,7 @@ class FrameworkUpdateTests(unittest.TestCase):
         content = json.dumps(MANIFEST).encode("utf-8")
         digest = "sha256:" + hashlib.sha256(content).hexdigest()
         release = SimpleNamespace(
+            status_code=200,
             raise_for_status=lambda: None,
             json=lambda: {
                 "tag_name": "v6.0.1",
@@ -63,6 +64,7 @@ class FrameworkUpdateTests(unittest.TestCase):
             self.assertEqual(update.fetch_manifest("https://example.test/latest"), MANIFEST)
 
         release_without_digest = SimpleNamespace(
+            status_code=200,
             raise_for_status=lambda: None,
             json=lambda: {
                 "tag_name": "v6.0.1",
@@ -82,6 +84,25 @@ class FrameworkUpdateTests(unittest.TestCase):
         manifest["requires"] = dict(MANIFEST["requires"], pythonApi="7.0")
         with self.assertRaises(IncompatibleUpdate):
             make_plan(settings, read_lock(ROOT), manifest)
+
+    def test_target_release_falls_back_to_uppercase_tag_on_404(self):
+        content = json.dumps(MANIFEST).encode("utf-8")
+        release = SimpleNamespace(
+            status_code=200, raise_for_status=lambda: None,
+            json=lambda: {"tag_name": "V6.0.1", "assets": [{
+                "name": "ppx-update.json",
+                "browser_download_url": "https://example.test/manifest",
+                "digest": "sha256:" + hashlib.sha256(content).hexdigest(),
+            }]},
+        )
+        manifest = SimpleNamespace(raise_for_status=lambda: None, content=content)
+        for prefix in ("", "V", "v"):
+            with patch.object(update.httpx, "get", side_effect=[
+                SimpleNamespace(status_code=404), release, manifest,
+            ]) as get:
+                self.assertEqual(update.fetch_manifest("https://example.test/latest", prefix + "6.0.1"), MANIFEST)
+                self.assertEqual(get.call_args_list[0].args[0], "https://example.test/tags/v6.0.1")
+                self.assertEqual(get.call_args_list[1].args[0], "https://example.test/tags/V6.0.1")
 
     def test_check_and_dry_run_never_apply_plan(self):
         manifest = json.loads(json.dumps(MANIFEST))

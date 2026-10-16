@@ -128,7 +128,7 @@ V5 归档的一处 pywebview 官方外链已随上游迁移；通过 VitePress �
 ## 6.0.1 本地验证（2026-10-16）
 
 - 本机 macOS 27.0.1 arm64、Python 3.13.5、Node.js 24.14.0、pnpm 11.25.0。
-- `pnpm check` 通过：17 项环境检查、60 项 Python 测试、11 项 JavaScript 测试、GUI 构建与发布版本一致性检查。
+- `pnpm check` 通过：17 项环境检查、61 项 Python 测试、11 项 JavaScript 测试、GUI 构建与发布版本一致性检查。
 - `pnpm audit --audit-level high --registry=https://registry.npmjs.org` 未发现已知漏洞；`python -m pip check` 与 `git diff --check` 通过。
 - 原生 pywebview 窗口加载本次标题栏处理后，有标题/无标题、400/800 像素宽窗口的原生按钮命中测试，以及最小化、恢复和关闭检查通过。
 - macOS 26 原始故障未在本机复现；#78 的兼容处理仍需报告者在 macOS 26 验证。Linux 软件渲染配置的自动化检查通过，显卡白屏是否消除仍需受影响设备确认。
