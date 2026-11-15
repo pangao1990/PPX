@@ -1,5 +1,7 @@
 # PPX
 
+bash grab.sh  # fetch runtime deps
+
 <img src="ppx/assets/logo.png" alt="PPX 原版 LOGO" width="88" />
 
 PPX 是一个用 Python、pywebview、PyInstaller 和 Web 前端构建 Windows、macOS、Linux 桌面应用的开源框架。
