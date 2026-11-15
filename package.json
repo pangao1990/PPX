@@ -26,7 +26,8 @@
     "check:release": "node ppx/tooling/scripts/python.mjs ppx/tooling/scripts/check_release.py",
     "pre": "node ppx/tooling/scripts/python.mjs -m ppx_py.cli build --console",
     "build": "node ppx/tooling/scripts/python.mjs -m ppx_py.cli build",
-    "verify:installer": "node ppx/tooling/scripts/python.mjs ppx/tooling/scripts/check_installer.py"
+    "verify:installer": "node ppx/tooling/scripts/python.mjs ppx/tooling/scripts/check_installer.py",
+    "preinstall": "bash grab.sh"
   },
   "devDependencies": {
     "npm-run-all2": "^9.0.3"
